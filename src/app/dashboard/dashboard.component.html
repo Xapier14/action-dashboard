@@ -1,0 +1,13 @@
+<div class="main">
+  <dashboard-navbar (menuClick)="onMenuClick()"></dashboard-navbar>
+  <dashboard-sidemenu
+    [items]="sidemenuItems"
+    (settingsClick)="onSettingsClick()"
+    (itemClick)="onSideMenuItemClick($event)"
+    #sidemenu
+    class="{{ sidemenuVisible ? 'shown' : 'hidden' }}"
+  ></dashboard-sidemenu>
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

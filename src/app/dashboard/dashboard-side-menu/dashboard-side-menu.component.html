@@ -1,0 +1,26 @@
+<div class="item-container">
+  <div class="list-container">
+    <button *ngFor="let item of items" (click)="itemClick.emit(item.id)">
+      <div class="item">
+        <div class="item-icon">
+          <img [src]="item.icon" />
+        </div>
+        <div class="item-text">
+          <span>{{ item.name }}</span>
+        </div>
+      </div>
+    </button>
+  </div>
+  <div class="action-container">
+    <button (click)="settingsClick.emit()">
+      <div class="item">
+        <div class="item-icon">
+          <img src="" />
+        </div>
+        <div class="item-text">
+          <span>Settings</span>
+        </div>
+      </div>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+<div class="nav-container">
+  <div class="nav-button-group">
+    <button (click)="menuClick.emit()">
+      <img src="../../../assets/svg/menu.svg" alt="Menu" />
+    </button>
+  </div>
+  <div class="nav-search-group">
+    <img src="../../../assets/svg/search.svg" alt="search" />
+    <input type="search" placeholder="Search something" />
+  </div>
+  <div class="nav-badge-group">
+    <a [routerLink]="['/dashboard']">
+      <div class="nav-badge">
+        <img src="../../../assets/icon.png" alt="ACTION" />
+      </div>
+    </a>
+  </div>
+</div>

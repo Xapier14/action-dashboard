@@ -1,0 +1,53 @@
+<div class="parent-flex">
+  <div class="center-flex">
+    <div class="logo-container">
+      <img src="../../assets/BatStateU_NEU_Logo.png" alt="logo" />
+      <div class="title">
+        <span id="title">Batangas State University</span><br />
+        <span id="sub-title">The National Engineering University</span>
+      </div>
+      <div class="detail">
+        <span id="title">BatStateU <span>ACTION</span> Center</span><br />
+        <span id="sub-title">Online Dashboard Web App</span>
+      </div>
+    </div>
+    <div class="form-container">
+      <div class="banner-part">
+        <img src="../../assets/icon.png" alt="ACTION" />
+      </div>
+      <div class="login-part">
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <h2>Login</h2>
+          <span class="error" *ngIf="error != ''">{{ error }}</span>
+          <div class="form-group">
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              formControlName="email"
+              placeholder="Enter email"
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              formControlName="password"
+              placeholder="Password"
+            />
+          </div>
+          <div class="button-group">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="!loginForm.valid || loading"
+            >
+              {{ loading ? "Logging in..." : "Log in" }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
