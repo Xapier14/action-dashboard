@@ -49,6 +49,16 @@
   <div class="main-content">
     <div class="content-header">
       <span>{{ contentTitle ?? "Overview" }}</span>
+      <button
+        *ngIf="selectedCampus != undefined"
+        (click)="updateLocation(locationData?.locationId)"
+        [disabled]="locations === undefined"
+      >
+        <img
+          src="assets/svg/refresh.svg"
+          [class]="locations === undefined ? 'spinning' : ''"
+        />
+      </button>
     </div>
     <div class="separator-container">
       <div class="separator"></div>
@@ -56,7 +66,78 @@
     <div
       class="content-container"
       *ngIf="selectedCampus != undefined; else noCampus"
-    ></div>
+    >
+      <div
+        *ngIf="locationData?.buildings != undefined; else loadCards"
+        class="card-container"
+      >
+        <div class="card">
+          <div class="card-title">
+            <img src="assets/svg/statistics.svg" />
+            <span>Statistics</span>
+          </div>
+          <div class="card-divider"></div>
+          <div class="card-content">
+            <div class="card-content-item">
+              <div class="card-content-item-title">Total Max Capacity</div>
+              <div class="card-content-item-value">
+                {{ locationData?.maxCapacity ?? "n/a" }}
+              </div>
+            </div>
+            <div class="card-content-item">
+              <div class="card-content-item-title">Total Reports</div>
+              <div class="card-content-item-value">0</div>
+            </div>
+            <div class="card-content-item">
+              <div class="card-content-item-title">Total Buildings</div>
+              <div class="card-content-item-value">
+                {{ locationData?.buildings?.length ?? "0" }}
+              </div>
+            </div>
+            <div class="card-content-item">
+              <div class="card-content-item-title">Accounts Registered</div>
+              <div class="card-content-item-value">0</div>
+            </div>
+          </div>
+        </div>
+        <div class="card" *ngFor="let building of locationData?.buildings">
+          <div class="card-title">
+            <img src="assets/svg/building.svg" />
+            <span>{{ building.buildingName }}</span>
+          </div>
+          <div class="card-divider"></div>
+          <div class="card-content">
+            <div class="card-content-item">
+              <div class="card-content-item-title">Max Capacity</div>
+              <div class="card-content-item-value">
+                {{ building.maxCapacity }}
+              </div>
+            </div>
+            <div class="card-content-item">
+              <div class="card-content-item-title">Reports</div>
+              <div class="card-content-item-value">0</div>
+            </div>
+            <div class="card-content-item" [ngSwitch]="building.status">
+              <div class="card-content-item-title">Status</div>
+              <div class="card-content-item-value">
+                <div class="ok" *ngSwitchCase="0">OK</div>
+                <div class="minor" *ngSwitchCase="1">Minor</div>
+                <div class="moderate" *ngSwitchCase="2">Moderate</div>
+                <div class="severe" *ngSwitchCase="3">Severe</div>
+                <img src="assets/svg/missing.svg" *ngSwitchDefault />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #loadCards>
+        <div class="loading-container">
+          <div class="loading">
+            <span>Loading...</span>
+          </div>
+        </div>
+      </ng-template>
+    </div>
     <ng-template #noCampus>
       <div class="no-campus content-container">
         <img

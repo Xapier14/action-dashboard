@@ -14,15 +14,18 @@ export class OverviewComponent implements OnInit {
         locationName: string;
         locationId: string;
         status: number | undefined;
-        buildings: {
-          buildingName: string;
-          buildingId: string;
-          maxCapacity: number;
-          status: number | undefined;
-          lastIncidentId: string | undefined;
-          lastInspection: string | undefined;
-          otherInformation: string;
-        }[];
+        maxCapacity: number;
+        buildings:
+          | {
+              buildingName: string;
+              buildingId: string;
+              maxCapacity: number;
+              status: number | undefined;
+              lastIncidentId: string | undefined;
+              lastInspection: string | undefined;
+              otherInformation: string;
+            }[]
+          | undefined;
       };
   contentTitle: string | undefined;
   locations:
@@ -30,15 +33,18 @@ export class OverviewComponent implements OnInit {
         locationName: string;
         locationId: string;
         status: number | undefined;
-        buildings: {
-          buildingName: string;
-          buildingId: string;
-          maxCapacity: number;
-          status: number | undefined;
-          lastIncidentId: string | undefined;
-          lastInspection: string | undefined;
-          otherInformation: string;
-        }[];
+        maxCapacity: number;
+        buildings:
+          | {
+              buildingName: string;
+              buildingId: string;
+              maxCapacity: number;
+              status: number | undefined;
+              lastIncidentId: string | undefined;
+              lastInspection: string | undefined;
+              otherInformation: string;
+            }[]
+          | undefined;
       }[]
     | undefined;
 
@@ -50,19 +56,25 @@ export class OverviewComponent implements OnInit {
 
   async updateLocations() {
     this.locations = undefined;
+    this.selectedCampus = undefined;
+    this.contentTitle = undefined;
+    this.locationData = undefined;
     let newLocations: {
       locationName: string;
       locationId: string;
       status: number | undefined;
-      buildings: {
-        buildingName: string;
-        buildingId: string;
-        maxCapacity: number;
-        status: number | undefined;
-        lastIncidentId: string | undefined;
-        lastInspection: string | undefined;
-        otherInformation: string;
-      }[];
+      maxCapacity: number;
+      buildings:
+        | {
+            buildingName: string;
+            buildingId: string;
+            maxCapacity: number;
+            status: number | undefined;
+            lastIncidentId: string | undefined;
+            lastInspection: string | undefined;
+            otherInformation: string;
+          }[]
+        | undefined;
     }[] = [];
     await this.pushCampus(newLocations, 'Pablo Borbon', 'pablo-borbon');
     await this.pushCampus(newLocations, 'Alangilan', 'alangilan');
@@ -76,6 +88,58 @@ export class OverviewComponent implements OnInit {
     await this.pushCampus(newLocations, 'San Juan', 'san-juan');
     await this.pushCampus(newLocations, 'Lobo', 'lobo');
     this.locations = newLocations;
+  }
+
+  async updateLocation(locationId: string | undefined) {
+    if (this.locations == undefined) return;
+
+    //find
+    let location = this.locations.find(
+      (location) => location.locationId === locationId
+    );
+
+    if (!location) return;
+    location.buildings = undefined;
+
+    await this.buildingsService.updateBuildingCacheAsync(locationId);
+    const buildings = this.buildingsService.getBuildingIdList(locationId);
+    let status: number | undefined = undefined;
+    let maxCapacity = 0;
+    let buildingsData: {
+      buildingName: string;
+      buildingId: string;
+      maxCapacity: number;
+      status: number | undefined;
+      lastIncidentId: string | undefined;
+      lastInspection: string | undefined;
+      otherInformation: string;
+    }[] = [];
+    await Promise.all(
+      buildings.map(async (building) => {
+        const buildingStatus = await this.buildingsService.getBuildingInfoAsync(
+          building
+        );
+        if (status == undefined) status = buildingStatus.lastStatus;
+        else {
+          if (buildingStatus.lastStatus > status)
+            status = buildingStatus.lastStatus;
+        }
+        maxCapacity += buildingStatus.maxCapacity;
+        // console.log(buildingStatus);
+        buildingsData.push({
+          buildingName: buildingStatus.name,
+          buildingId: buildingStatus.id,
+          maxCapacity: buildingStatus.maxCapacity,
+          status: buildingStatus.lastStatus,
+          lastIncidentId: buildingStatus.lastIncidentId,
+          lastInspection: buildingStatus.lastInspection,
+          otherInformation: buildingStatus.otherInformation,
+        });
+      })
+    );
+    location.status = status;
+    location.maxCapacity = maxCapacity;
+    location.buildings = buildingsData;
   }
 
   async onLocationClick(locationId: string | undefined) {
@@ -97,15 +161,18 @@ export class OverviewComponent implements OnInit {
       locationName: string;
       locationId: string;
       status: number | undefined;
-      buildings: {
-        buildingName: string;
-        buildingId: string;
-        maxCapacity: number;
-        status: number | undefined;
-        lastIncidentId: string | undefined;
-        lastInspection: string | undefined;
-        otherInformation: string;
-      }[];
+      maxCapacity: number;
+      buildings:
+        | {
+            buildingName: string;
+            buildingId: string;
+            maxCapacity: number;
+            status: number | undefined;
+            lastIncidentId: string | undefined;
+            lastInspection: string | undefined;
+            otherInformation: string;
+          }[]
+        | undefined;
     }[],
     locationName: string,
     locationId: string
@@ -113,15 +180,18 @@ export class OverviewComponent implements OnInit {
     await this.buildingsService.updateBuildingCacheAsync(locationId);
     const buildings = this.buildingsService.getBuildingIdList(locationId);
     let status: number | undefined = undefined;
-    let buildingsData: {
-      buildingName: string;
-      buildingId: string;
-      maxCapacity: number;
-      status: number | undefined;
-      lastIncidentId: string | undefined;
-      lastInspection: string | undefined;
-      otherInformation: string;
-    }[] = [];
+    let maxCapacity = 0;
+    let buildingsData:
+      | {
+          buildingName: string;
+          buildingId: string;
+          maxCapacity: number;
+          status: number | undefined;
+          lastIncidentId: string | undefined;
+          lastInspection: string | undefined;
+          otherInformation: string;
+        }[]
+      | undefined = [];
     await Promise.all(
       buildings.map(async (building) => {
         const buildingStatus = await this.buildingsService.getBuildingInfoAsync(
@@ -132,8 +202,9 @@ export class OverviewComponent implements OnInit {
           if (buildingStatus.lastStatus > status)
             status = buildingStatus.lastStatus;
         }
+        maxCapacity += buildingStatus.maxCapacity;
         // console.log(buildingStatus);
-        buildingsData.push({
+        buildingsData!.push({
           buildingName: buildingStatus.name,
           buildingId: buildingStatus.id,
           maxCapacity: buildingStatus.maxCapacity,
@@ -148,6 +219,7 @@ export class OverviewComponent implements OnInit {
       locationName: locationName,
       locationId: locationId,
       status: status,
+      maxCapacity: maxCapacity,
       buildings: buildingsData,
     };
     console.log(location);
