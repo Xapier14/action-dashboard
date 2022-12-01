@@ -20,7 +20,7 @@
     left: 0;
     height: calc(100% - var(--navbar-height));
     width: var(--sidemenu-width);
-    background-color: #f8f8f8;
+    background-color: #f3f3f3;
     transition: transform 0.3s ease-in-out;
     z-index: 1;
   }
@@ -40,7 +40,7 @@
   box-shadow: 0 0 0.5rem 0.5rem #40404066;
 }
 .hidden {
-  transform: translateX(-300%);
+  transform: translateX(-150%);
   // no shadow
   box-shadow: none;
 }
@@ -51,6 +51,6 @@
     box-shadow: 0 0 0.5rem 0.5rem #40404066;
   }
   .hidden {
-    transform: translateY(calc(-300% - var(--navbar-height)));
+    transform: translateY(calc(-150% - var(--navbar-height)));
   }
 }

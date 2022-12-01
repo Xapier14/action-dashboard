@@ -12,11 +12,18 @@ export class HttpService {
     const headers: HeadersInit = new Headers();
     headers.append('Content-Type', 'application/json');
     if (token) headers.append('Authorization', token);
-    return await fetch(endpoint, {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify(data),
-    });
+    if (data) {
+      return await fetch(endpoint, {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify(data),
+      });
+    } else {
+      return await fetch(endpoint, {
+        method: 'POST',
+        headers: headers,
+      });
+    }
   }
 
   async postEncodedObjectAsync(route: string, data: object, token?: string) {

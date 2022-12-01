@@ -13,6 +13,7 @@ export class DashboardSideMenuComponent implements OnInit {
   }[] = [];
   @Output() itemClick = new EventEmitter();
   @Output() settingsClick = new EventEmitter();
+  @Output() logoutClick = new EventEmitter();
   constructor() {}
 
   ngOnInit(): void {}

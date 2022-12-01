@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 import { DashboardSideMenuComponent } from './dashboard-side-menu/dashboard-side-menu.component';
 
 @Component({
@@ -12,27 +14,27 @@ export class DashboardComponent implements OnInit {
   sidemenuItems = [
     {
       name: 'Overview',
-      icon: 'dashboard',
+      icon: 'assets/svg/home.svg',
       id: 'overview',
     },
     {
       name: 'Reports',
-      icon: 'reports',
+      icon: 'assets/svg/file.svg',
       id: 'reports',
     },
     {
       name: 'Accounts',
-      icon: 'accounts',
+      icon: 'assets/svg/users.svg',
       id: 'accounts',
     },
     {
       name: 'Attachments',
-      icon: 'attachments',
+      icon: 'assets/svg/attach.svg',
       id: 'attachments',
     },
   ];
 
-  constructor() {}
+  constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit(): void {}
 
@@ -42,11 +44,17 @@ export class DashboardComponent implements OnInit {
 
   onSideMenuItemClick(item: string) {
     console.log('item clicked', item);
-    this.sidemenuVisible = !this.sidemenuVisible;
+    this.router.navigate([`/dashboard/${item}`]);
+    this.sidemenuVisible = false;
   }
 
   onSettingsClick() {
     console.log('settings clicked');
-    this.sidemenuVisible = !this.sidemenuVisible;
+    this.sidemenuVisible = false;
+  }
+
+  async onLogoutClick() {
+    await this.authService.logout();
+    this.router.navigate([`/`]);
   }
 }

@@ -3,6 +3,7 @@
   <dashboard-sidemenu
     [items]="sidemenuItems"
     (settingsClick)="onSettingsClick()"
+    (logoutClick)="onLogoutClick()"
     (itemClick)="onSideMenuItemClick($event)"
     #sidemenu
     class="{{ sidemenuVisible ? 'shown' : 'hidden' }}"

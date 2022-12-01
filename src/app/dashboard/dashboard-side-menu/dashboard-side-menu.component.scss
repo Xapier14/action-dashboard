@@ -52,5 +52,24 @@
     align-items: center;
     justify-content: flex-start;
     text-align: left;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #000000;
+  }
+}
+
+button {
+  border-radius: 1rem;
+  border: none;
+  margin-bottom: 0.25rem;
+  background-color: #fff;
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(0, 0, 0, 0.5);
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: rgb(255, 215, 215);
+  }
+  &:active {
+    background-color: #f0dada;
   }
 }
