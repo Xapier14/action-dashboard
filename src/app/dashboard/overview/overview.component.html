@@ -3,7 +3,10 @@
     <div class="list-header">
       <span>Dashboard</span>
       <button (click)="updateLocations()" [disabled]="locations === undefined">
-        <img src="assets/svg/refresh.svg" />
+        <img
+          src="assets/svg/refresh.svg"
+          [class]="locations === undefined ? 'spinning' : ''"
+        />
       </button>
     </div>
     <div class="separator-container">
