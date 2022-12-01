@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
 import { OverviewComponent } from './overview/overview.component';
-import { CampusComponent } from './campus/campus.component';
 
 const routes: Routes = [
   {
@@ -18,10 +17,6 @@ const routes: Routes = [
       {
         path: 'overview',
         component: OverviewComponent,
-      },
-      {
-        path: 'campus',
-        component: CampusComponent,
       },
     ],
   },

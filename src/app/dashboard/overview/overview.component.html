@@ -19,7 +19,7 @@
           (click)="onLocationClick(undefined)"
         >
           <img src="assets/svg/globe.svg" />
-          <span>Overview</span>
+          <span>Location Map</span>
         </button>
         <button
           *ngFor="let location of locations"
@@ -48,7 +48,7 @@
   </div>
   <div class="main-content">
     <div class="content-header">
-      <span>{{ contentTitle ?? "Overview" }}</span>
+      <span>{{ contentTitle ?? "Location Map" }}</span>
       <button
         *ngIf="selectedCampus != undefined"
         (click)="updateLocation(locationData?.locationId)"
@@ -71,7 +71,7 @@
         *ngIf="locationData?.buildings != undefined; else loadCards"
         class="card-container"
       >
-        <div class="card">
+        <div class="card" style="flex-basis: 100% !important">
           <div class="card-title">
             <img src="assets/svg/statistics.svg" />
             <span>Statistics</span>
@@ -86,7 +86,9 @@
             </div>
             <div class="card-content-item">
               <div class="card-content-item-title">Total Reports</div>
-              <div class="card-content-item-value">0</div>
+              <div class="card-content-item-value">
+                {{ locationData?.reports ?? 0 }}
+              </div>
             </div>
             <div class="card-content-item">
               <div class="card-content-item-title">Total Buildings</div>
@@ -96,7 +98,9 @@
             </div>
             <div class="card-content-item">
               <div class="card-content-item-title">Accounts Registered</div>
-              <div class="card-content-item-value">0</div>
+              <div class="card-content-item-value">
+                {{ locationData?.accounts ?? 0 }}
+              </div>
             </div>
           </div>
         </div>
@@ -115,7 +119,7 @@
             </div>
             <div class="card-content-item">
               <div class="card-content-item-title">Reports</div>
-              <div class="card-content-item-value">0</div>
+              <div class="card-content-item-value">{{ building.reports }}</div>
             </div>
             <div class="card-content-item" [ngSwitch]="building.status">
               <div class="card-content-item-title">Status</div>

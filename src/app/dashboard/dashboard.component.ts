@@ -13,7 +13,7 @@ export class DashboardComponent implements OnInit {
   sidemenuVisible: boolean = false;
   sidemenuItems = [
     {
-      name: 'Overview',
+      name: 'Home',
       icon: 'assets/svg/home.svg',
       id: 'overview',
     },

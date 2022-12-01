@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AccountsService } from 'src/app/services/accounts.service';
 import { BuildingsService } from 'src/app/services/buildings.service';
+import { ReportsService } from 'src/app/services/reports.service';
 
 @Component({
   selector: 'app-overview',
@@ -15,12 +17,15 @@ export class OverviewComponent implements OnInit {
         locationId: string;
         status: number | undefined;
         maxCapacity: number;
+        accounts: number;
+        reports: number;
         buildings:
           | {
               buildingName: string;
               buildingId: string;
               maxCapacity: number;
               status: number | undefined;
+              reports: number;
               lastIncidentId: string | undefined;
               lastInspection: string | undefined;
               otherInformation: string;
@@ -34,12 +39,15 @@ export class OverviewComponent implements OnInit {
         locationId: string;
         status: number | undefined;
         maxCapacity: number;
+        accounts: number;
+        reports: number;
         buildings:
           | {
               buildingName: string;
               buildingId: string;
               maxCapacity: number;
               status: number | undefined;
+              reports: number;
               lastIncidentId: string | undefined;
               lastInspection: string | undefined;
               otherInformation: string;
@@ -48,7 +56,11 @@ export class OverviewComponent implements OnInit {
       }[]
     | undefined;
 
-  constructor(private buildingsService: BuildingsService) {}
+  constructor(
+    private buildingsService: BuildingsService,
+    private accountsService: AccountsService,
+    private reportsService: ReportsService
+  ) {}
 
   async ngOnInit(): Promise<void> {
     await this.updateLocations();
@@ -64,12 +76,15 @@ export class OverviewComponent implements OnInit {
       locationId: string;
       status: number | undefined;
       maxCapacity: number;
+      accounts: number;
+      reports: number;
       buildings:
         | {
             buildingName: string;
             buildingId: string;
             maxCapacity: number;
             status: number | undefined;
+            reports: number;
             lastIncidentId: string | undefined;
             lastInspection: string | undefined;
             otherInformation: string;
@@ -91,7 +106,7 @@ export class OverviewComponent implements OnInit {
   }
 
   async updateLocation(locationId: string | undefined) {
-    if (this.locations == undefined) return;
+    if (this.locations == undefined || locationId == undefined) return;
 
     //find
     let location = this.locations.find(
@@ -105,11 +120,13 @@ export class OverviewComponent implements OnInit {
     const buildings = this.buildingsService.getBuildingIdList(locationId);
     let status: number | undefined = undefined;
     let maxCapacity = 0;
+    let reports = 0;
     let buildingsData: {
       buildingName: string;
       buildingId: string;
       maxCapacity: number;
       status: number | undefined;
+      reports: number;
       lastIncidentId: string | undefined;
       lastInspection: string | undefined;
       otherInformation: string;
@@ -125,12 +142,18 @@ export class OverviewComponent implements OnInit {
             status = buildingStatus.lastStatus;
         }
         maxCapacity += buildingStatus.maxCapacity;
+        const buildingReports = await this.reportsService.countReportsAsync(
+          locationId,
+          building
+        );
+        reports += buildingReports;
         // console.log(buildingStatus);
         buildingsData.push({
           buildingName: buildingStatus.name,
           buildingId: buildingStatus.id,
           maxCapacity: buildingStatus.maxCapacity,
           status: buildingStatus.lastStatus,
+          reports: buildingReports,
           lastIncidentId: buildingStatus.lastIncidentId,
           lastInspection: buildingStatus.lastInspection,
           otherInformation: buildingStatus.otherInformation,
@@ -140,6 +163,10 @@ export class OverviewComponent implements OnInit {
     location.status = status;
     location.maxCapacity = maxCapacity;
     location.buildings = buildingsData;
+    location.reports = reports;
+    location.accounts = await this.accountsService.countAccountsAsync(
+      locationId
+    );
   }
 
   async onLocationClick(locationId: string | undefined) {
@@ -162,12 +189,15 @@ export class OverviewComponent implements OnInit {
       locationId: string;
       status: number | undefined;
       maxCapacity: number;
+      accounts: number;
+      reports: number;
       buildings:
         | {
             buildingName: string;
             buildingId: string;
             maxCapacity: number;
             status: number | undefined;
+            reports: number;
             lastIncidentId: string | undefined;
             lastInspection: string | undefined;
             otherInformation: string;
@@ -181,12 +211,14 @@ export class OverviewComponent implements OnInit {
     const buildings = this.buildingsService.getBuildingIdList(locationId);
     let status: number | undefined = undefined;
     let maxCapacity = 0;
+    let reports = 0;
     let buildingsData:
       | {
           buildingName: string;
           buildingId: string;
           maxCapacity: number;
           status: number | undefined;
+          reports: number;
           lastIncidentId: string | undefined;
           lastInspection: string | undefined;
           otherInformation: string;
@@ -202,6 +234,11 @@ export class OverviewComponent implements OnInit {
           if (buildingStatus.lastStatus > status)
             status = buildingStatus.lastStatus;
         }
+        const buildingReports = await this.reportsService.countReportsAsync(
+          locationId,
+          building
+        );
+        reports += buildingReports;
         maxCapacity += buildingStatus.maxCapacity;
         // console.log(buildingStatus);
         buildingsData!.push({
@@ -209,6 +246,7 @@ export class OverviewComponent implements OnInit {
           buildingId: buildingStatus.id,
           maxCapacity: buildingStatus.maxCapacity,
           status: buildingStatus.lastStatus,
+          reports: buildingReports,
           lastIncidentId: buildingStatus.lastIncidentId,
           lastInspection: buildingStatus.lastInspection,
           otherInformation: buildingStatus.otherInformation,
@@ -220,6 +258,8 @@ export class OverviewComponent implements OnInit {
       locationId: locationId,
       status: status,
       maxCapacity: maxCapacity,
+      accounts: await this.accountsService.countAccountsAsync(locationId),
+      reports: reports,
       buildings: buildingsData,
     };
     console.log(location);
