@@ -3,6 +3,8 @@
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.8.
 
 ![Login](.github/screenshots/login.png? "Login Screen")
+![Dashboard](.github/screenshots/dashboard.png? "Dashboard Location Map")
+![Campus Overview](.github/screenshots/campus-overview.png? "Alangilan Campus Overview")
 
 ## Development server
 
