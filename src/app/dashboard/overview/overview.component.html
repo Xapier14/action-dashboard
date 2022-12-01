@@ -1,6 +1,53 @@
 <div class="panel-container">
-  <div class="menu-column"></div>
+  <div class="menu-column">
+    <div class="list-header">
+      <span>Dashboard</span>
+    </div>
+    <div class="separator-container">
+      <div class="separator"></div>
+    </div>
+    <div class="item-list">
+      <div class="items">
+        <button
+          class="{{ selectedCampus == undefined ? 'selected' : '' }}"
+          (click)="onLocationClick(undefined)"
+        >
+          <img src="assets/svg/globe.svg" />
+          <span>Overview</span>
+        </button>
+        <button
+          *ngFor="let location of locations"
+          class="{{ selectedCampus == location.locationId ? 'selected' : '' }}"
+          (click)="onLocationClick(location.locationId)"
+        >
+          <img src="assets/svg/building.svg" />
+          <span>{{ location.locationName }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
   <div class="main-content">
-    <div class="content-container"></div>
+    <div class="content-header">
+      <span>{{ contentTitle ?? "" }}</span>
+    </div>
+    <div class="separator-container">
+      <div class="separator"></div>
+    </div>
+    <div
+      class="content-container"
+      *ngIf="selectedCampus != undefined; else noCampus"
+    ></div>
+    <ng-template #noCampus>
+      <div class="no-campus content-container">
+        <img
+          src="assets/svg/missing.svg"
+          alt="Missing"
+          class="no-campus-icon"
+        />
+        <div class="no-campus-text">
+          <span>Map not yet implemented</span>
+        </div>
+      </div>
+    </ng-template>
   </div>
 </div>

@@ -1,21 +1,115 @@
 .panel-container {
-  background-color: #b20100;
+  background-color: #fefefe;
   width: 100%;
   height: 100%;
+  max-height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-  * {
-    height: 100%;
-  }
   .menu-column {
     width: 30%;
     min-width: 10rem;
     max-width: 15rem;
-    background-color: blue;
+    border-right: 1px solid #cbcbcb;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    // background-color: blue;
   }
   .main-content {
     flex: 1;
-    background-color: yellow;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    // background-color: yellow;
+  }
+}
+.list-header,
+.content-header {
+  width: 100%;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+  // border-bottom: 1px solid #f0f0f0;
+  span {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #333;
+    margin-left: 0.5rem;
+  }
+}
+.separator-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  .separator {
+    width: calc(100% - 0.5rem);
+    height: 1px;
+    background-color: #f0f0f0;
+  }
+}
+
+.content-container {
+  flex: 1;
+  overflow-y: auto;
+}
+.item-list {
+  flex: 1;
+  overflow-y: auto;
+  background: none;
+  .items {
+    overflow-y: auto;
+    button {
+      width: 100%;
+      height: 2.5rem;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      border: none;
+      background: none;
+      transition: background-color 0.1s ease-in-out;
+      span {
+        text-align: left;
+        flex: 1;
+      }
+      img {
+        padding-left: 0.5rem;
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.75rem;
+      }
+      &:hover {
+        background-color: #ffefef;
+      }
+      &:active {
+        background-color: rgb(245, 233, 233);
+      }
+    }
+    .selected {
+      background-color: #ffd7d7;
+      &:hover {
+        background-color: #ffd7d7;
+      }
+    }
+  }
+}
+
+.no-campus {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: auto;
+  .no-campus-icon {
+    width: 2rem;
+    height: 2rem;
+    margin-bottom: 0.25rem;
+  }
+  .no-campus-text {
+    font-size: 1rem;
+    color: #444;
   }
 }

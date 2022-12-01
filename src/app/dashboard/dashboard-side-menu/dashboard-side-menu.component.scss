@@ -3,22 +3,22 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   .list-container {
     flex: 1;
-    width: 100%;
+    width: 95%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    margin-top: 0.25rem;
+    margin-top: 0.5rem;
     * {
       width: 100%;
     }
   }
   .action-container {
     margin-bottom: 0.25rem;
-    width: 100%;
+    width: 95%;
     * {
       width: 100%;
     }
@@ -61,15 +61,15 @@
 button {
   border-radius: 1rem;
   border: none;
-  margin-bottom: 0.25rem;
-  background-color: #fff;
-  box-shadow: 0 0.125rem 0.25rem 0 rgba(0, 0, 0, 0.5);
+  margin-bottom: 0.5rem;
+  background-color: rgb(255, 246, 246);
+  box-shadow: 0 0.125rem 0.25rem 0 rgba(0, 0, 0, 0.485);
   transition: background-color 0.3s ease-in-out;
 
   &:hover {
-    background-color: rgb(255, 215, 215);
+    background-color: rgb(255, 225, 225);
   }
   &:active {
-    background-color: #f0dada;
+    background-color: rgb(248, 216, 216);
   }
 }
