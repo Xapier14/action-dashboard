@@ -12,6 +12,7 @@ import { DashboardRoutingModule } from './dashboard/dashboard-routing.module';
 import { OverviewComponent } from './dashboard/overview/overview.component';
 import { DashboardSideMenuComponent } from './dashboard/dashboard-side-menu/dashboard-side-menu.component';
 import { CampusComponent } from './dashboard/campus/campus.component';
+import { UnauthorizedComponent } from './errors/unauthorized/unauthorized.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { CampusComponent } from './dashboard/campus/campus.component';
     OverviewComponent,
     DashboardSideMenuComponent,
     CampusComponent,
+    UnauthorizedComponent,
   ],
   imports: [
     BrowserModule,

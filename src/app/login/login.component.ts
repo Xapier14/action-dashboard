@@ -23,7 +23,11 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.authService.hasToken()) {
+      this.router.navigate(['/dashboard']);
+    }
+  }
 
   async onSubmit() {
     this.loading = true;
