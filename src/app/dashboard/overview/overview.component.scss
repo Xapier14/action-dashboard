@@ -27,6 +27,10 @@
 .list-header,
 .content-header {
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   padding-top: 1rem;
   padding-bottom: 0.5rem;
   // border-bottom: 1px solid #f0f0f0;
@@ -35,6 +39,29 @@
     font-weight: 500;
     color: #333;
     margin-left: 0.5rem;
+  }
+  button {
+    margin-right: 0.5rem;
+    height: 100%;
+    background-color: #d40000;
+    border-radius: 5px;
+    border: none;
+    color: #fefefe;
+    box-shadow: 0 0 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
+    img {
+      height: 100%;
+      aspect-ratio: 1 / 1;
+    }
+    &:hover {
+      background-color: #b20100;
+    }
+    &:disabled {
+      background-color: #f0f0f0;
+      color: #333;
+      img {
+        filter: invert(1);
+      }
+    }
   }
 }
 .separator-container {
@@ -54,6 +81,19 @@
   flex: 1;
   overflow-y: auto;
 }
+
+.loading-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .loading {
+    display: flex;
+    flex-direction: row;
+  }
+}
+
 .item-list {
   flex: 1;
   overflow-y: auto;
@@ -85,6 +125,59 @@
       }
       &:active {
         background-color: rgb(245, 233, 233);
+      }
+      .status {
+        width: 2rem;
+      }
+
+      .status-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 0.25rem;
+        padding-left: 0.25rem;
+        .status {
+          margin: 0;
+          padding: 0;
+          display: inline;
+          width: 0.75rem;
+          height: 0.75rem;
+          border-radius: 50%;
+          border: 1px solid #000;
+          // shadow
+          // box-shadow: 0 0.125rem 0.25rem 0 rgba(0, 0, 0, 0.485);
+        }
+        img {
+          margin: 0;
+          padding: 0;
+          width: 1rem;
+          height: 1rem;
+        }
+        .status-text {
+          flex: 1;
+          width: auto;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          text-align: left;
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: #000000;
+        }
+        .ok {
+          background-color: #00c853;
+        }
+        .minor {
+          background-color: #ffea00;
+        }
+        .moderate {
+          background-color: #ff9100;
+        }
+        .severe {
+          background-color: #d50000;
+        }
       }
     }
     .selected {

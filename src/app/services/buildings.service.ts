@@ -31,7 +31,7 @@ export class BuildingsService {
   async updateBuildingCacheAsync(location?: string) {
     const targetLocation = location ?? this.currentLocation;
     if (targetLocation == '') return;
-    console.log('Updating for location: ' + targetLocation);
+    // console.log('Updating for location: ' + targetLocation);
     if (!this.buildingMap.has(targetLocation))
       this.buildingMap.set(targetLocation, new Map<string, string>());
     const token: string = (await this.authService.getTokenAsync()) ?? '';
@@ -52,9 +52,9 @@ export class BuildingsService {
         buildingMap.set(buildings[i].name, buildings[i].id);
       }
       this.buildingMap.set(targetLocation, buildingMap);
-      console.log(
-        `Building cache updated for location ${targetLocation}, ${buildingMap.size} buildings found.`
-      );
+      // console.log(
+      //   `Building cache updated for location ${targetLocation}, ${buildingMap.size} buildings found.`
+      // );
     } else {
       console.log('Error updating building cache.');
     }

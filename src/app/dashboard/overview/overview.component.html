@@ -2,12 +2,15 @@
   <div class="menu-column">
     <div class="list-header">
       <span>Dashboard</span>
+      <button (click)="updateLocations()" [disabled]="locations === undefined">
+        <img src="assets/svg/refresh.svg" />
+      </button>
     </div>
     <div class="separator-container">
       <div class="separator"></div>
     </div>
     <div class="item-list">
-      <div class="items">
+      <div class="items" *ngIf="locations != undefined; else loadingLocations">
         <button
           class="{{ selectedCampus == undefined ? 'selected' : '' }}"
           (click)="onLocationClick(undefined)"
@@ -22,13 +25,27 @@
         >
           <img src="assets/svg/building.svg" />
           <span>{{ location.locationName }}</span>
+          <div class="status-container" [ngSwitch]="location.status">
+            <div class="status ok" *ngSwitchCase="0"></div>
+            <div class="status minor" *ngSwitchCase="1"></div>
+            <div class="status moderate" *ngSwitchCase="2"></div>
+            <div class="status severe" *ngSwitchCase="3"></div>
+            <img src="assets/svg/missing.svg" *ngSwitchDefault />
+          </div>
         </button>
       </div>
+      <ng-template #loadingLocations>
+        <div class="loading-container">
+          <div class="loading">
+            <span>Loading...</span>
+          </div>
+        </div>
+      </ng-template>
     </div>
   </div>
   <div class="main-content">
     <div class="content-header">
-      <span>{{ contentTitle ?? "" }}</span>
+      <span>{{ contentTitle ?? "Overview" }}</span>
     </div>
     <div class="separator-container">
       <div class="separator"></div>
