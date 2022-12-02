@@ -33,7 +33,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    console.log('Trying to access route: ' + state.url);
     if (!this.authService.hasToken()) {
       this.router.navigate(['/error/unauthorized']);
       return false;
@@ -42,7 +41,6 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     return new Promise(async (resolve) => {
       try {
         const isAuthenticated = await this.authService.isAuthenticated();
-        console.log(isAuthenticated);
         if (!isAuthenticated) {
           this.authService.clearToken();
           alert('Your session has expired. Please login again.');
