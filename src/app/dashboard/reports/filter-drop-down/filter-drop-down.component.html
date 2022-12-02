@@ -1,12 +1,18 @@
 <div class="filter-container">
-  <button (click)="toggleDropdown()" class="{{ visible ? 'active' : '' }}">
+  <button
+    (click)="toggleDropdown()"
+    class="{{ visible && !disabled ? 'active' : '' }}"
+    [disabled]="disabled"
+  >
     <div class="label-container">
       <img *ngIf="filterImg != ''" [src]="filterImg" />
       <span>{{ label }}</span>
       <img class="drop-icon" src="assets/svg/dropdown.svg" />
     </div>
   </button>
-  <div class="values-container {{ visible ? 'visible' : 'hidden' }}">
+  <div
+    class="values-container {{ visible && !disabled ? 'visible' : 'hidden' }}"
+  >
     <button (click)="toggleSelection(value)" *ngFor="let value of filter">
       <div class="item">
         <div class="check-container">

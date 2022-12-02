@@ -10,12 +10,20 @@
       <filter-dropdown
         [filter]="locationsFilter"
         [label]="'Location'"
-        (filterChange)="onFilterChange($event)"
+        (filterChange)="onLocationChange($event)"
+      ></filter-dropdown>
+      <filter-dropdown
+        [disabled]="buildingsFilter.length == 0"
+        [filter]="buildingsFilter"
+        [values]="buildingsValues"
+        [label]="'Building'"
+        (filterChange)="onBuildingChange($event)"
       ></filter-dropdown>
       <filter-dropdown
         [filter]="['OK', 'Minor', 'Moderate', 'Severe']"
-        [label]="'Status'"
-        (filterChange)="onFilterChange($event)"
+        [values]="[0, 1, 2, 3]"
+        [label]="'Severity'"
+        (filterChange)="onSeverityChange($event)"
       ></filter-dropdown>
     </div>
   </div>
@@ -26,6 +34,31 @@
     <div class="separator-container">
       <div class="separator"></div>
     </div>
-    <div class="content-container"></div>
+    <div class="content-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Inspector</th>
+            <th>Inspected Date</th>
+            <th>Location</th>
+            <th>Building</th>
+            <th class="td-center">Severity</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let report of reportsData">
+            <td>{{ report.inspector }}</td>
+            <td>{{ report.inspectedDateString }}</td>
+            <td>{{ report.locationString }}</td>
+            <td>{{ report.building }}</td>
+            <td class="td-center">{{ report.severity }}</td>
+            <td>
+              <button (click)="viewReport(report.id)">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

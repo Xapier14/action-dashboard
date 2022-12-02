@@ -1,7 +1,7 @@
 * {
   --label-height: 2rem;
   --badge-size: 1rem;
-  --item-height: 1.5rem;
+  --item-height: 1.75rem;
   --check-size: 1.25rem;
 }
 button {
@@ -16,14 +16,14 @@ button {
   button {
     width: 100%;
     border: none;
-    border-bottom: 1px solid #d3d3d3;
     background: none;
     &:hover {
       background-color: #ffefef;
     }
   }
   .active {
-    background-color: #f6e7e7;
+    border-bottom: 1px solid #d3d3d3;
+    background-color: #ffefef;
   }
 }
 .label-container {
@@ -91,7 +91,6 @@ button {
 
 .hidden {
   max-height: 0;
-  border: none;
 }
 .visible {
   max-height: 768px;

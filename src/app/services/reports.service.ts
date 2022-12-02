@@ -7,7 +7,9 @@ import { HttpService } from './http.service';
 })
 export class ReportsService {
   private currentPage: number = 0;
+  private cachedMax: number | undefined;
   private isEndOfList: boolean = false;
+  private autoIncrement: boolean = true;
   private filter = {};
 
   constructor(
@@ -19,8 +21,24 @@ export class ReportsService {
     return !this.isEndOfList;
   }
 
+  getAutoIncrement(): boolean {
+    return this.autoIncrement;
+  }
+  setAutoIncrement(autoIncrement: boolean) {
+    this.autoIncrement = autoIncrement;
+  }
+
   getCurrentPage(): number {
     return this.currentPage;
+  }
+  setCurrentPage(page: number) {
+    this.currentPage = Math.max(0, page);
+    if (this.cachedMax && this.currentPage > this.cachedMax) {
+      this.currentPage = this.cachedMax;
+    }
+    if (this.currentPage == this.cachedMax) {
+      this.isEndOfList = true;
+    }
   }
 
   setFilter(key: string, value: string) {
@@ -52,7 +70,8 @@ export class ReportsService {
       await this.httpService.getAsync('incidents/', params, token.token)
     ).json();
     if (response.e == 0) {
-      this.currentPage++;
+      if (this.autoIncrement) this.currentPage++;
+      this.cachedMax = response.maxPageOffset;
       if (this.currentPage > response.maxPageOffset) this.isEndOfList = true;
       return response.reports;
     }

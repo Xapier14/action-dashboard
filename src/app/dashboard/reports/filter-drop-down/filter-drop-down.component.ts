@@ -7,9 +7,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class FilterDropDownComponent implements OnInit {
   @Input('filter') filter: string[] = [];
+  @Input('values') values: any[] = [];
   @Input('label') label: string = 'Filter';
   @Input('filterImg') filterImg: string = '';
   @Input('canSelectAll') canSelectAll: boolean = false;
+  @Input('disabled') disabled: boolean = false;
   @Output() filterChange = new EventEmitter<string[]>();
 
   selected: string[] = [];
@@ -27,13 +29,22 @@ export class FilterDropDownComponent implements OnInit {
     } else {
       this.selected.push(item);
     }
-    this.filterChange.emit(this.selected);
+    let values: any[] = [];
+    this.selected.forEach((value) => {
+      const i = this.filter.indexOf(value);
+      if (i >= this.values.length) {
+        values.push(value);
+      }
+      values.push(this.values[i]);
+    });
+    this.filterChange.emit(values);
   }
 
   toggleDropdown() {
     this.visible = !this.visible;
     if (!this.visible) {
       this.selected = [];
+      this.filterChange.emit([]);
     }
   }
 
