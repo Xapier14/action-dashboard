@@ -10,6 +10,7 @@ import { ReportsService } from './reports.service';
 })
 export class DashboardService {
   private locations: Map<string, LocationData> | undefined;
+  private lastUpdated: string = 'Never';
   constructor(
     private httpService: HttpService,
     private buildingsService: BuildingsService,
@@ -21,6 +22,12 @@ export class DashboardService {
     if (this.locations == undefined) return false;
     if (locationId == undefined) return true;
     return this.locations.has(locationId);
+  }
+  getLastUpdateString(locationId?: string) {
+    if (locationId == undefined) return this.lastUpdated;
+    if (this.locations == undefined) return 'Never';
+    if (!this.locations.has(locationId)) return 'Never';
+    return this.locations.get(locationId)!.lastUpdated;
   }
   getLocations() {
     if (this.locations == undefined) return [];
@@ -41,7 +48,7 @@ export class DashboardService {
   }
   async updateLocationAsync(locationId: string, locationName?: string) {
     if (this.locations == undefined) this.locations = new Map();
-    if (locationName == undefined) return;
+    if (!this.locations.has(locationId) && locationName == undefined) return;
     await this.buildingsService.updateBuildingCacheAsync(locationId);
     const buildings = this.buildingsService.getBuildingIdList(locationId);
     let status: number | undefined = undefined;
@@ -77,16 +84,18 @@ export class DashboardService {
         });
       })
     );
+    const locName =
+      locationName ?? this.locations.get(locationId)?.locationName ?? 'Unknown';
     const location = {
-      locationName: locationName,
+      locationName: locName,
       locationId: locationId,
+      lastUpdated: new Date().toLocaleString(),
       status: status,
       maxCapacity: maxCapacity,
       accounts: await this.accountsService.countAccountsAsync(locationId),
       reports: reports,
       buildings: buildingsData,
     };
-    console.log(location);
     if (this.locations == undefined) this.locations = new Map();
     this.locations.set(locationId, location);
   }
@@ -95,6 +104,7 @@ export class DashboardService {
 export interface LocationData {
   locationName: string;
   locationId: string;
+  lastUpdated: string;
   status: number | undefined;
   maxCapacity: number;
   accounts: number;

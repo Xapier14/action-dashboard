@@ -49,16 +49,26 @@
   <div class="main-content">
     <div class="content-header">
       <span>{{ contentTitle ?? "Location Map" }}</span>
-      <button
-        *ngIf="selectedCampus != undefined"
-        (click)="updateLocation(locationData?.locationId)"
-        [disabled]="locations === undefined"
-      >
-        <img
-          src="assets/svg/refresh.svg"
-          [class]="locations === undefined ? 'spinning' : ''"
-        />
-      </button>
+      <div class="content-action-group" *ngIf="selectedCampus != undefined">
+        <span>{{
+          locationData != undefined
+            ? "Last Updated: " + locationData.lastUpdated
+            : "Updating..."
+        }}</span>
+        <button
+          (click)="updateLocation(locationData?.locationId)"
+          [disabled]="locations === undefined || locationData === undefined"
+        >
+          <img
+            src="assets/svg/refresh.svg"
+            [class]="
+              locations === undefined || locationData === undefined
+                ? 'spinning'
+                : ''
+            "
+          />
+        </button>
+      </div>
     </div>
     <div class="separator-container">
       <div class="separator"></div>

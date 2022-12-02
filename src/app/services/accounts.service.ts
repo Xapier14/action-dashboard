@@ -22,7 +22,6 @@ export class AccountsService {
           (await this.authService.getTokenAsync()) ?? ''
         )
       ).json();
-      console.log(response);
       return response.count ?? 0;
     } catch (error) {
       return 0;

@@ -37,7 +37,9 @@ export class OverviewComponent implements OnInit {
   }
 
   async updateLocation(locationId: string | undefined) {
-    if (!locationId) return;
+    console.log(locationId);
+    if (locationId == undefined) return;
+    this.locationData = undefined;
     await this.dashboardService.updateLocationAsync(locationId);
     let newLocations = this.dashboardService.getLocations();
     this.locations = newLocations;
