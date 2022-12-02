@@ -14,7 +14,7 @@ const routes: Routes = [
       import('./dashboard/dashboard-routing.module').then(
         (m) => m.DashboardRoutingModule
       ),
-    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
   },
   {
     path: 'error',
