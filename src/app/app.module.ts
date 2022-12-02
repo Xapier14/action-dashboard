@@ -13,6 +13,7 @@ import { OverviewComponent } from './dashboard/overview/overview.component';
 import { DashboardSideMenuComponent } from './dashboard/dashboard-side-menu/dashboard-side-menu.component';
 import { UnauthorizedComponent } from './errors/unauthorized/unauthorized.component';
 import { ReportsComponent } from './dashboard/reports/reports.component';
+import { FilterDropDownComponent } from './dashboard/reports/filter-drop-down/filter-drop-down.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ReportsComponent } from './dashboard/reports/reports.component';
     DashboardSideMenuComponent,
     UnauthorizedComponent,
     ReportsComponent,
+    FilterDropDownComponent,
   ],
   imports: [
     BrowserModule,

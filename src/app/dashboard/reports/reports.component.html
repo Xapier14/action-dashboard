@@ -1,4 +1,31 @@
 <div class="panel-container">
-  <div class="menu-column">test</div>
-  <div class="main-content">content</div>
+  <div class="menu-column">
+    <div class="list-header">
+      <span>Filters</span>
+    </div>
+    <div class="separator-container">
+      <div class="separator"></div>
+    </div>
+    <div class="item-list">
+      <filter-dropdown
+        [filter]="locationsFilter"
+        [label]="'Location'"
+        (filterChange)="onFilterChange($event)"
+      ></filter-dropdown>
+      <filter-dropdown
+        [filter]="['OK', 'Minor', 'Moderate', 'Severe']"
+        [label]="'Status'"
+        (filterChange)="onFilterChange($event)"
+      ></filter-dropdown>
+    </div>
+  </div>
+  <div class="main-content">
+    <div class="content-header">
+      <span>Reports</span>
+    </div>
+    <div class="separator-container">
+      <div class="separator"></div>
+    </div>
+    <div class="content-container"></div>
+  </div>
 </div>

@@ -14,6 +14,12 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    height: 100%;
+    .item-list {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
     // background-color: blue;
   }
   .main-content {
@@ -23,4 +29,97 @@
     justify-content: flex-start;
     // background-color: yellow;
   }
+}
+.list-header,
+.content-header {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+  // border-bottom: 1px solid #f0f0f0;
+  span {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #333;
+    margin-left: 0.5rem;
+  }
+  button {
+    margin-right: 0.5rem;
+    height: 100%;
+    background-color: #d40000;
+    border-radius: 5px;
+    border: none;
+    color: #fefefe;
+    box-shadow: 0 0 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
+    img {
+      height: 100%;
+      aspect-ratio: 1 / 1;
+    }
+    &:hover {
+      background-color: #b20100;
+    }
+    &:disabled {
+      background-color: #f0f0f0;
+      color: #333;
+      img {
+        filter: invert(1);
+      }
+    }
+  }
+}
+.content-action-group {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  span {
+    font-size: 0.55rem;
+    font-weight: 500;
+    color: rgb(90, 90, 90);
+    margin-right: 0.5rem;
+  }
+  button {
+    margin-right: 0.5rem;
+    height: 100%;
+    background-color: #d40000;
+    border-radius: 5px;
+    border: none;
+    color: #fefefe;
+    box-shadow: 0 0 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
+    img {
+      height: 100%;
+      aspect-ratio: 1 / 1;
+    }
+    &:hover {
+      background-color: #b20100;
+    }
+    &:disabled {
+      background-color: #f0f0f0;
+      color: #333;
+      img {
+        filter: invert(1);
+      }
+    }
+  }
+}
+.separator-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  .separator {
+    width: calc(100% - 0.5rem);
+    height: 1px;
+    background-color: #f0f0f0;
+  }
+}
+
+.content-container {
+  flex: 1;
+  overflow-y: auto;
 }

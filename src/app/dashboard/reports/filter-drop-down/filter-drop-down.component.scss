@@ -1,0 +1,98 @@
+* {
+  --label-height: 2rem;
+  --badge-size: 1rem;
+  --item-height: 1.5rem;
+  --check-size: 1.25rem;
+}
+button {
+  margin: 0;
+  padding: 0;
+}
+.filter-container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  button {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #d3d3d3;
+    background: none;
+    &:hover {
+      background-color: #ffefef;
+    }
+  }
+  .active {
+    background-color: #f6e7e7;
+  }
+}
+.label-container {
+  width: 100%;
+  height: var(--label-height);
+  padding-left: 0.5rem;
+  padding-right: 0.25rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  img {
+    width: var(--label-height);
+    height: var(--label-height);
+    margin-right: 0.25rem;
+  }
+  span {
+    flex: 1;
+    text-align: left;
+  }
+  .drop-icon {
+    height: 50%;
+    aspect-ratio: 1 / 1;
+  }
+}
+
+.values-container {
+  transition: max-height 0.25s ease-in-out;
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-bottom: 1px solid #d3d3d3;
+  button {
+    width: 100%;
+    background: none;
+    border: none;
+  }
+}
+.item {
+  width: 100%;
+  height: var(--item-height);
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  .check-container {
+    width: var(--check-size);
+    height: var(--check-size);
+    margin-right: 0.25rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    // border: 1px solid #8b0b0b;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.hidden {
+  max-height: 0;
+  border: none;
+}
+.visible {
+  max-height: 768px;
+}
