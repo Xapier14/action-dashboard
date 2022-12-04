@@ -7,9 +7,11 @@ import { HttpService } from './http.service';
 })
 export class ReportsService {
   private currentPage: number = 0;
+  private limit: number = 20;
   private cachedMax: number | undefined;
+  private cachedTotal: number | undefined;
   private isEndOfList: boolean = false;
-  private autoIncrement: boolean = true;
+  private autoIncrement: boolean = false;
   private filter = {};
 
   constructor(
@@ -41,6 +43,30 @@ export class ReportsService {
     }
   }
 
+  setLimit(limit: number) {
+    if (limit < 1) return;
+    this.limit = limit;
+  }
+
+  getLimit(): number {
+    return this.limit;
+  }
+
+  incrementPage() {
+    this.setCurrentPage(this.currentPage + 1);
+  }
+  decrementPage() {
+    this.setCurrentPage(this.currentPage - 1);
+  }
+
+  getCachedMax(): number {
+    return this.cachedMax ?? 0;
+  }
+
+  getCachedTotal(): number {
+    return this.cachedTotal ?? 0;
+  }
+
   setFilter(key: string, value: string) {
     this.filter[key] = value;
   }
@@ -54,14 +80,14 @@ export class ReportsService {
   }
 
   async getListDataAsync() {
-    if (this.isEndOfList) return [];
+    if (this.isEndOfList && this.autoIncrement) return [];
 
     const token = await this.authService.checkTokenFromPreferences();
     if (!token || token.sessionState != 'validSession') return [];
     // add filter to params
     let params = new URLSearchParams({
       pageOffset: this.currentPage.toString(),
-      limit: '15',
+      limit: this.limit.toString(),
     });
     for (let key in this.filter) {
       params.append(key, this.filter[key]);
@@ -72,6 +98,7 @@ export class ReportsService {
     if (response.e == 0) {
       if (this.autoIncrement) this.currentPage++;
       this.cachedMax = response.maxPageOffset;
+      this.cachedTotal = response.totalReportCount;
       if (this.currentPage > response.maxPageOffset) this.isEndOfList = true;
       return response.reports;
     }

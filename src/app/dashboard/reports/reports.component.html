@@ -34,7 +34,49 @@
     <div class="separator-container">
       <div class="separator"></div>
     </div>
-    <div class="content-container">
+    <div class="table-control">
+      <div class="table-control-end">
+        <span>Showing {{ displayedItems }} of {{ totalItems }} item(s)</span>
+      </div>
+      <div class="table-control-center">
+        <span>Page {{ currentPage }} / {{ pageCount }}</span>
+      </div>
+      <div class="table-control-end" style="justify-content: flex-end">
+        <div class="action-group">
+          <button
+            [disabled]="currentPage <= 1 || reportsData == undefined"
+            (click)="navFirstPage()"
+          >
+            |&lt;
+          </button>
+          <button
+            [disabled]="currentPage <= 1 || reportsData == undefined"
+            (click)="navPrevPage()"
+          >
+            &lt;
+          </button>
+          <button
+            [disabled]="currentPage >= pageCount || reportsData == undefined"
+            (click)="navNextPage()"
+          >
+            &gt;
+          </button>
+          <button
+            [disabled]="currentPage >= pageCount || reportsData == undefined"
+            (click)="navLastPage()"
+          >
+            &gt;|
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="separator-container">
+      <div class="separator"></div>
+    </div>
+    <div
+      *ngIf="reportsData != undefined; else loader"
+      class="content-container"
+    >
       <table>
         <thead>
           <tr>
@@ -43,7 +85,7 @@
             <th>Location</th>
             <th>Building</th>
             <th class="td-center">Severity</th>
-            <th>Actions</th>
+            <th class="td-center">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -53,12 +95,25 @@
             <td>{{ report.locationString }}</td>
             <td>{{ report.building }}</td>
             <td class="td-center">{{ report.severity }}</td>
-            <td>
-              <button (click)="viewReport(report.id)">View</button>
+            <td class="td-center item-action">
+              <button
+                (click)="viewReport(report.id)"
+                title="View report in another tab"
+              >
+                <img src="assets/svg/goto.svg" alt="View" />
+              </button>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+    <ng-template #loader>
+      <div class="loading-container">
+        <div class="loading">
+          <img src="assets/svg/refresh.svg" alt="" />
+          <span>Loading...</span>
+        </div>
+      </div>
+    </ng-template>
   </div>
 </div>

@@ -14,38 +14,43 @@ export class FilterDropDownComponent implements OnInit {
   @Input('disabled') disabled: boolean = false;
   @Output() filterChange = new EventEmitter<string[]>();
 
-  selected: string[] = [];
+  selectedKeys: string[] = [];
   visible: boolean = false;
 
   constructor() {}
 
-  isSelected(item: string) {
-    return this.selected.includes(item);
+  isSelected(key: string) {
+    return this.selectedKeys.includes(key);
   }
 
   toggleSelection(item: string) {
-    if (this.selected.includes(item)) {
-      this.selected = this.selected.filter((i) => i !== item);
+    if (this.selectedKeys.includes(item)) {
+      this.selectedKeys.splice(this.selectedKeys.indexOf(item), 1);
     } else {
-      this.selected.push(item);
+      this.selectedKeys.push(item);
     }
-    let values: any[] = [];
-    this.selected.forEach((value) => {
-      const i = this.filter.indexOf(value);
-      if (i >= this.values.length) {
-        values.push(value);
-      }
-      values.push(this.values[i]);
-    });
-    this.filterChange.emit(values);
+    this.filterChange.emit(this.keysToValues(this.selectedKeys));
   }
 
   toggleDropdown() {
     this.visible = !this.visible;
-    if (!this.visible) {
-      this.selected = [];
+    if (!this.visible && this.selectedKeys.length != 0) {
+      this.selectedKeys = [];
       this.filterChange.emit([]);
     }
+  }
+
+  private keysToValues(keys: string[]): any[] {
+    let values: any[] = [];
+    keys.forEach((key) => {
+      const index = this.filter.indexOf(key);
+      if (index >= 0 && index < this.values.length) {
+        values.push(this.values[index]);
+      } else {
+        values.push(key);
+      }
+    });
+    return values;
   }
 
   ngOnInit(): void {}

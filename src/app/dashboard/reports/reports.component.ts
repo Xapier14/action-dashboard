@@ -19,6 +19,12 @@ export class ReportsComponent implements OnInit {
   severitySelect: string[] = [];
 
   reportsData: ReportItem[] | undefined = [];
+
+  displayedItems: number = 0;
+  totalItems: number = 0;
+  currentPage: number = 1;
+  pageCount: number = 1;
+
   constructor(
     private buildingsService: BuildingsService,
     private reportsService: ReportsService
@@ -90,10 +96,28 @@ export class ReportsComponent implements OnInit {
     await this.updateDataview();
   }
 
+  navFirstPage() {
+    this.reportsService.setCurrentPage(0);
+    this.updateDataview();
+  }
+  navPrevPage() {
+    this.reportsService.decrementPage();
+    this.updateDataview();
+  }
+  navNextPage() {
+    this.reportsService.incrementPage();
+    this.updateDataview();
+  }
+  navLastPage() {
+    this.reportsService.setCurrentPage(this.pageCount - 1);
+    this.updateDataview();
+  }
+
   async updateDataview() {
     console.log('updateDataview');
     this.reportsData = undefined;
     let newData: ReportItem[] = [];
+
     const reports = await this.reportsService.getListDataAsync();
     reports.forEach((report: any) => {
       newData.push({
@@ -109,8 +133,12 @@ export class ReportsComponent implements OnInit {
         severity: report.severityStatus,
       });
     });
+    this.currentPage = this.reportsService.getCurrentPage() + 1;
+    this.pageCount = this.reportsService.getCachedMax() + 1;
+    this.displayedItems = newData.length;
+    this.totalItems = this.reportsService.getCachedTotal();
     this.reportsData = newData;
-    console.log(this.reportsData);
+    // console.log(this.reportsData);
   }
 
   async viewReport(id: string) {
