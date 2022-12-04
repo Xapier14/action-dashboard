@@ -222,6 +222,7 @@
   align-items: center;
   margin: 0;
   button {
+    transition: background-color 0.1s ease-in-out;
     background-color: #cd3333;
     border: none;
     border-radius: 5px;

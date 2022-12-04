@@ -32,6 +32,17 @@ export class FilterDropDownComponent implements OnInit {
     this.filterChange.emit(this.keysToValues(this.selectedKeys));
   }
 
+  close() {
+    this.visible = false;
+    if (!this.visible && this.selectedKeys.length != 0) {
+      this.selectedKeys = [];
+      this.filterChange.emit([]);
+    }
+  }
+  open() {
+    this.visible = true;
+  }
+
   toggleDropdown() {
     this.visible = !this.visible;
     if (!this.visible && this.selectedKeys.length != 0) {

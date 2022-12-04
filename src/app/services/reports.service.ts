@@ -67,8 +67,16 @@ export class ReportsService {
     return this.cachedTotal ?? 0;
   }
 
-  setFilter(key: string, value: string) {
+  setFilter(key: string, value: any) {
     this.filter[key] = value;
+  }
+
+  getFilter(key: string): any {
+    return this.filter[key];
+  }
+
+  hasFilter(key: string): boolean {
+    return this.filter[key] !== undefined;
   }
 
   removeFilter(key: string) {
@@ -90,7 +98,11 @@ export class ReportsService {
       limit: this.limit.toString(),
     });
     for (let key in this.filter) {
-      params.append(key, this.filter[key]);
+      if (typeof this.filter[key] == 'string') {
+        params.append(key, this.filter[key]);
+      } else {
+        params.append(key, JSON.stringify(this.filter[key]));
+      }
     }
     const response = await (
       await this.httpService.getAsync('incidents/', params, token.token)

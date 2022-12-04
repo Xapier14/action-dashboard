@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BuildingsService } from 'src/app/services/buildings.service';
 import { ReportsService } from 'src/app/services/reports.service';
+import { FilterDropDownComponent } from './filter-drop-down/filter-drop-down.component';
 
 @Component({
   selector: 'app-reports',
@@ -8,6 +9,7 @@ import { ReportsService } from 'src/app/services/reports.service';
   styleUrls: ['./reports.component.scss'],
 })
 export class ReportsComponent implements OnInit {
+  @ViewChild('buildingsDropdown') buildingsDropdown!: FilterDropDownComponent;
   locations: Map<string, string> = new Map();
   buildings: Map<string, string> = new Map();
   locationsFilter: string[] = [];
@@ -77,6 +79,9 @@ export class ReportsComponent implements OnInit {
     );
     this.buildingsFilter = Array.from(this.buildings.keys());
     this.buildingsValues = Array.from(this.buildings.values());
+    if (this.buildingsFilter.length == 0) {
+      this.buildingsDropdown.close();
+    }
   }
 
   async onLocationChange(event: string[]): Promise<void> {

@@ -13,6 +13,7 @@
         (filterChange)="onLocationChange($event)"
       ></filter-dropdown>
       <filter-dropdown
+        #buildingsDropdown
         [disabled]="buildingsFilter.length == 0"
         [filter]="buildingsFilter"
         [values]="buildingsValues"
@@ -100,7 +101,7 @@
                 (click)="viewReport(report.id)"
                 title="View report in another tab"
               >
-                <img src="assets/svg/goto.svg" alt="View" />
+                <img src="assets/svg/view.svg" alt="View" />
               </button>
             </td>
           </tr>
