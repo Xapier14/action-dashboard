@@ -12,7 +12,7 @@ export class ReportsService {
   private cachedTotal: number | undefined;
   private isEndOfList: boolean = false;
   private autoIncrement: boolean = false;
-  private filter = {};
+  private filter: [string, any][] = [];
 
   constructor(
     private authService: AuthService,
@@ -68,23 +68,26 @@ export class ReportsService {
   }
 
   setFilter(key: string, value: any) {
-    this.filter[key] = value;
+    this.removeFilter(key);
+    this.filter.push([key, value]);
   }
 
   getFilter(key: string): any {
-    return this.filter[key];
+    let value = this.filter.find((f) => f[0] == key);
+    return value ? value[1] : undefined;
   }
 
   hasFilter(key: string): boolean {
-    return this.filter[key] !== undefined;
+    return this.filter.find((f) => f[0] == key) != undefined;
   }
 
   removeFilter(key: string) {
-    delete this.filter[key];
+    let copy = this.filter.filter((f) => f[0] != key);
+    this.filter = copy;
   }
 
   clearFilter() {
-    this.filter = {};
+    this.filter = [];
   }
 
   async getListDataAsync() {
@@ -97,11 +100,13 @@ export class ReportsService {
       pageOffset: this.currentPage.toString(),
       limit: this.limit.toString(),
     });
-    for (let key in this.filter) {
-      if (typeof this.filter[key] == 'string') {
-        params.append(key, this.filter[key]);
+    for (let tuple of this.filter) {
+      let key = tuple[0];
+      let value = tuple[1];
+      if (typeof value == 'string') {
+        params.append(key, value);
       } else {
-        params.append(key, JSON.stringify(this.filter[key]));
+        params.append(key, JSON.stringify(value));
       }
     }
     const response = await (

@@ -13,6 +13,7 @@ export class ReportsComponent implements OnInit {
   locations: Map<string, string> = new Map();
   buildings: Map<string, string> = new Map();
   locationsFilter: string[] = [];
+  locationsValues: string[] = [];
   buildingsFilter: string[] = [];
   buildingsValues: string[] = [];
 
@@ -30,20 +31,7 @@ export class ReportsComponent implements OnInit {
   constructor(
     private buildingsService: BuildingsService,
     private reportsService: ReportsService
-  ) {
-    this.locations.set('Pablo Borbon', 'pablo-borbon');
-    this.locations.set('Alangilan', 'alangilan');
-    this.locations.set('ARASOF-Nasugbu', 'nasugbu');
-    this.locations.set('Balayan', 'balayan');
-    this.locations.set('Lemery', 'lemery');
-    this.locations.set('Mabini', 'mabini');
-    this.locations.set('JPLPC-Malvar', 'malvar');
-    this.locations.set('Lipa', 'lipa');
-    this.locations.set('Rosario', 'rosario');
-    this.locations.set('San Juan', 'san-juan');
-    this.locations.set('Lobo', 'lobo');
-    this.locationsFilter = Array.from(this.locations.keys());
-  }
+  ) {}
 
   getLocationFromId(id: string): string {
     let location = 'Unknown';
@@ -56,8 +44,23 @@ export class ReportsComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.locations.clear();
+    this.locations.set('Pablo Borbon', 'pablo-borbon');
+    this.locations.set('Alangilan', 'alangilan');
+    this.locations.set('ARASOF-Nasugbu', 'nasugbu');
+    this.locations.set('Balayan', 'balayan');
+    this.locations.set('Lemery', 'lemery');
+    this.locations.set('Mabini', 'mabini');
+    this.locations.set('JPLPC-Malvar', 'malvar');
+    this.locations.set('Lipa', 'lipa');
+    this.locations.set('Rosario', 'rosario');
+    this.locations.set('San Juan', 'san-juan');
+    this.locations.set('Lobo', 'lobo');
+    this.locationsFilter = Array.from(this.locations.keys());
+    this.locationsValues = Array.from(this.locations.values());
     await this.updateBuildingsFilter(this.locationsSelect);
     await this.updateDataview();
+    this.reportsService.clearFilter();
     this.reportsService.setAutoIncrement(false);
   }
 
@@ -66,12 +69,11 @@ export class ReportsComponent implements OnInit {
     this.buildingsSelect = [];
     await Promise.all(
       locations.map(async (location) => {
-        const locationId = this.locations.get(location);
-        await this.buildingsService.updateBuildingCacheAsync(locationId);
-        const buildingIds = this.buildingsService.getBuildingIdList(locationId);
+        await this.buildingsService.updateBuildingCacheAsync(location);
+        const buildingIds = this.buildingsService.getBuildingIdList(location);
         buildingIds.forEach((buildingId) => {
           this.buildings.set(
-            this.buildingsService.getBuildingName(buildingId, locationId),
+            this.buildingsService.getBuildingName(buildingId, location),
             buildingId
           );
         });
@@ -86,6 +88,13 @@ export class ReportsComponent implements OnInit {
 
   async onLocationChange(event: string[]): Promise<void> {
     this.locationsSelect = event;
+    console.log(this.locationsSelect);
+    if (this.locationsSelect.length > 0) {
+      this.reportsService.setFilter('location', this.locationsSelect.join(','));
+    } else {
+      this.reportsService.removeFilter('location');
+    }
+    this.reportsService.setCurrentPage(0);
     await this.updateBuildingsFilter(this.locationsSelect);
     await this.updateDataview();
   }
@@ -93,6 +102,15 @@ export class ReportsComponent implements OnInit {
   async onBuildingChange(event: string[]): Promise<void> {
     this.buildingsSelect = event;
     console.log(this.buildingsSelect);
+    if (this.buildingsSelect.length > 0) {
+      this.reportsService.setFilter(
+        'buildingId',
+        this.buildingsSelect.join(',')
+      );
+    } else {
+      this.reportsService.removeFilter('buildingId');
+    }
+    this.reportsService.setCurrentPage(0);
     await this.updateDataview();
   }
 

@@ -9,6 +9,7 @@
     <div class="item-list">
       <filter-dropdown
         [filter]="locationsFilter"
+        [values]="locationsValues"
         [label]="'Location'"
         (filterChange)="onLocationChange($event)"
       ></filter-dropdown>
