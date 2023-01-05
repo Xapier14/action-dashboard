@@ -37,11 +37,11 @@ export class LoginComponent implements OnInit {
     if (email && password) {
       const result = await this.authService.tryLogin(email, password, 1);
       this.checkLoginResult(result);
-      this.loading = false;
     } else {
-      this.loading = false;
       this.error = 'Please fill all fields.';
     }
+    this.loading = false;
+    console.log(this.error);
   }
 
   checkLoginResult(result: { e: any; status: string }) {

@@ -22,7 +22,7 @@ export class AuthService {
       }
       return response;
     } catch (error) {
-      return { e: 400, msg: 'Network error' };
+      return { e: 400, status: 'A network error occured.' };
     }
   }
 

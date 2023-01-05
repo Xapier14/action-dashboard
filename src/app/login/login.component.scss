@@ -124,9 +124,14 @@
     .error {
       margin: 0;
       color: #ff2929;
+      font-size: 0.75rem;
+      transform: translate(0.5rem, -0.75rem);
+      height: 0;
+      margin-bottom: 0.25rem;
       font-weight: 500;
       text-decoration: solid;
       transition: all 0.5s ease;
+      text-align: right;
     }
     h2 {
       margin: 0;

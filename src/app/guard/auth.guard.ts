@@ -43,15 +43,11 @@ export class AuthGuard implements CanActivate, CanActivateChild {
         const isAuthenticated = await this.authService.isAuthenticated();
         if (!isAuthenticated) {
           this.authService.clearToken();
-          alert('Your session has expired. Please login again.');
           this.router.navigate(['/login']);
           resolve(false);
         }
         resolve(true);
       } catch (error) {
-        alert(
-          'An error occured while checking your session. Please login again.'
-        );
         this.authService.clearToken();
         this.router.navigate(['/login']);
         resolve(false);

@@ -18,7 +18,7 @@
       <div class="login-part">
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <h2>Login</h2>
-          <span class="error" *ngIf="error != ''">{{ error }}</span>
+          <span class="error">{{ error }}</span>
           <div class="form-group">
             <input
               type="email"
