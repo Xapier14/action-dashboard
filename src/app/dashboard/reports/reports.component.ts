@@ -167,6 +167,10 @@ export class ReportsComponent implements OnInit {
   async viewReport(id: string) {
     console.log(id);
   }
+
+  async deleteReport(id: string) {
+    console.log(id);
+  }
 }
 interface ReportItem {
   id: string;

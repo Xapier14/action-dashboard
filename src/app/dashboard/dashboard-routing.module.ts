@@ -5,6 +5,8 @@ import { DashboardComponent } from './dashboard.component';
 import { OverviewComponent } from './overview/overview.component';
 import { ReportsComponent } from './reports/reports.component';
 import { AuthGuard } from '../guard/auth.guard';
+import { AccountsComponent } from './accounts/accounts.component';
+import { AttachmentsComponent } from './attachments/attachments.component';
 
 const routes: Routes = [
   {
@@ -23,6 +25,14 @@ const routes: Routes = [
       {
         path: 'reports',
         component: ReportsComponent,
+      },
+      {
+        path: 'accounts',
+        component: AccountsComponent,
+      },
+      {
+        path: 'attachments',
+        component: AttachmentsComponent,
       },
     ],
   },

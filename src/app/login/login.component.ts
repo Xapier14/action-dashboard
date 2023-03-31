@@ -36,6 +36,7 @@ export class LoginComponent implements OnInit {
     const password = this.loginForm.value.password;
     if (email && password) {
       const result = await this.authService.tryLogin(email, password, 1);
+      console.log(result);
       this.checkLoginResult(result);
     } else {
       this.error = 'Please fill all fields.';
