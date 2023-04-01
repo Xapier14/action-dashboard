@@ -166,6 +166,13 @@ export class ReportsComponent implements OnInit {
     // console.log(this.reportsData);
   }
 
+  async refresh(keepCurrentPage: boolean = true)
+  {
+    if (!keepCurrentPage)
+      this.reportsService.setCurrentPage(0);
+    await this.updateDataview();
+  }
+
   async viewReport(id: string) {
     console.log(id);
   }
