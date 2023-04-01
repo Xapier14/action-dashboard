@@ -31,7 +31,9 @@ export class ReportsComponent implements OnInit {
   constructor(
     private buildingsService: BuildingsService,
     private reportsService: ReportsService
-  ) {}
+  ) {
+    reportsService.reset();
+  }
 
   getLocationFromId(id: string): string {
     let location = 'Unknown';

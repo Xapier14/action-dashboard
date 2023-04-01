@@ -19,6 +19,14 @@ export class ReportsService {
     private httpService: HttpService
   ) {}
 
+  reset() {
+    this.clearFilter();
+    this.currentPage = 0;
+    this.limit = 20;
+    this.isEndOfList = false;
+    this.autoIncrement = false;
+  }
+
   hasMoreData(): boolean {
     return !this.isEndOfList;
   }
