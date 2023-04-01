@@ -16,6 +16,8 @@ import { ReportsComponent } from './dashboard/reports/reports.component';
 import { FilterDropDownComponent } from './dashboard/reports/filter-drop-down/filter-drop-down.component';
 import { AccountsComponent } from './dashboard/accounts/accounts.component';
 import { AttachmentsComponent } from './dashboard/attachments/attachments.component';
+import { ViewerComponent } from './viewer/viewer.component';
+import { ViewIncidentComponent } from './viewer/view-incident/view-incident.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { AttachmentsComponent } from './dashboard/attachments/attachments.compon
     FilterDropDownComponent,
     AccountsComponent,
     AttachmentsComponent,
+    ViewerComponent,
+    ViewIncidentComponent,
   ],
   imports: [
     BrowserModule,

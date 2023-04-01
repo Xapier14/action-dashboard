@@ -45,6 +45,20 @@ export class ReportsComponent implements OnInit {
     return location;
   }
 
+  parseSeverity(severity: number): string {
+    switch (severity) {
+      case 0:
+        return "OK";
+      case 1:
+        return "Minor";
+      case 2:
+        return "Moderate";
+      case 3:
+        return "Severe";
+    }
+    return "Unknown";
+  }
+
   async ngOnInit(): Promise<void> {
     this.locations.clear();
     this.locations.set('Pablo Borbon', 'pablo-borbon');
@@ -118,6 +132,16 @@ export class ReportsComponent implements OnInit {
 
   async onSeverityChange(event: string[]): Promise<void> {
     this.severitySelect = event;
+    console.log(this.severitySelect);
+    if (this.severitySelect.length > 0) {
+      this.reportsService.setFilter(
+        'severityStatus',
+        this.severitySelect.join(',')
+      );
+    } else {
+      this.reportsService.removeFilter('severityStatus');
+    }
+    this.reportsService.setCurrentPage(0);
     await this.updateDataview();
   }
 
@@ -174,6 +198,10 @@ export class ReportsComponent implements OnInit {
   }
 
   async viewReport(id: string) {
+    console.log(id);
+  }
+
+  async editReport(id: string) {
     console.log(id);
   }
 
