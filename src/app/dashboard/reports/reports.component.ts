@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { BuildingsService } from 'src/app/services/buildings.service';
 import { ReportsService } from 'src/app/services/reports.service';
 import { FilterDropDownComponent } from './filter-drop-down/filter-drop-down.component';
@@ -30,7 +31,8 @@ export class ReportsComponent implements OnInit {
 
   constructor(
     private buildingsService: BuildingsService,
-    private reportsService: ReportsService
+    private reportsService: ReportsService,
+    private router: Router
   ) {
     reportsService.reset();
   }
@@ -198,11 +200,19 @@ export class ReportsComponent implements OnInit {
   }
 
   async viewReport(id: string) {
-    console.log(id);
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`/viewer/incident/${id}`])
+    );
+
+    window.open(url, '_blank');
   }
 
   async editReport(id: string) {
-    console.log(id);
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`/editor/incident/${id}`])
+    );
+
+    window.open(url, '_blank');
   }
 
   async deleteReport(id: string) {

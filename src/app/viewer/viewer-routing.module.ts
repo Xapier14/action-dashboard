@@ -10,7 +10,7 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'incident',
+    path: 'incident/:id',
     component: ViewIncidentComponent
   }
 ];
