@@ -1,5 +1,9 @@
 .document {
-  margin: 1.5rem 3rem;
+  margin: 0.25rem;
+}
+.section-item, .section-group, .document-header, .document-section {
+  display: flex;
+  flex-direction: column;
 }
 .document-header, .document-section {
   border-radius: 0.75rem;
@@ -7,11 +11,24 @@
   border-color: #000;
   border-width: 2px;
   margin-bottom: 0.1rem;
+  .section-group {
+    flex-direction: row;
+  }
+}
+.document-section {
+  padding: 0.5rem 1rem;
+}
+.section-item {
+  max-width: 75%;
+}
+.section-group {
+  width: 100%
 }
 .document-header {
   width: auto;
   border-radius: 0.75rem;
   background-color: #000;
+  print-color-adjust: exact;
   padding: 0.25rem;
   h1 {
     text-align: center;
