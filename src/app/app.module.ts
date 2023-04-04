@@ -18,6 +18,8 @@ import { AccountsComponent } from './dashboard/accounts/accounts.component';
 import { AttachmentsComponent } from './dashboard/attachments/attachments.component';
 import { ViewerComponent } from './viewer/viewer.component';
 import { ViewIncidentComponent } from './viewer/view-incident/view-incident.component';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { LogsComponent } from './dashboard/logs/logs.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { ViewIncidentComponent } from './viewer/view-incident/view-incident.comp
     AttachmentsComponent,
     ViewerComponent,
     ViewIncidentComponent,
+    NotFoundComponent,
+    LogsComponent,
   ],
   imports: [
     BrowserModule,

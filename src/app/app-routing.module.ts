@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { UnauthorizedComponent } from './errors/unauthorized/unauthorized.component';
 import { AuthGuard } from './guard/auth.guard';
 import { LoginComponent } from './login/login.component';
@@ -27,10 +28,23 @@ const routes: Routes = [
     path: 'error',
     children: [
       {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'notfound',
+      },
+      {
         path: 'unauthorized',
         component: UnauthorizedComponent,
       },
+      {
+        path: 'notfound',
+        component: NotFoundComponent,
+      },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: 'error/notfound',
   },
 ];
 

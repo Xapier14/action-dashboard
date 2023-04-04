@@ -7,6 +7,7 @@ import { ReportsComponent } from './reports/reports.component';
 import { AuthGuard } from '../guard/auth.guard';
 import { AccountsComponent } from './accounts/accounts.component';
 import { AttachmentsComponent } from './attachments/attachments.component';
+import { LogsComponent } from './logs/logs.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,10 @@ const routes: Routes = [
       {
         path: 'attachments',
         component: AttachmentsComponent,
+      },
+      {
+        path: 'logs',
+        component: LogsComponent,
       },
     ],
   },
