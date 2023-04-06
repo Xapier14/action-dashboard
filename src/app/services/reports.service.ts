@@ -2,6 +2,38 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { HttpService } from './http.service';
 
+export interface FullReportData {
+  id: string;
+  inspectorId: string;
+  inspectedDateTime: Date;
+  location: string;
+  buildingId: string;
+  areasInspected: string;
+  collapsedStructure: number;
+  leaningOrOutOfPlumb: number;
+  damageToPrimaryStructure: number;
+  fallingHazards: number;
+  groundMovementOrSlope: number;
+  damagedSubmergedFixtures: number;
+  proximityRiskTitle: string;
+  proximityRisk: number;
+  evaluationComment: string;
+  estimatedBuildingDamage: number;
+  inspectedPlacard: boolean;
+  restrictedPlacard: boolean;
+  unsafePlacard: boolean;
+  doNotEnter: string;
+  briefEntryAllowed: string;
+  doNotUse: boolean;
+  otherRestrictions: string;
+  barricadeComment: string;
+  detailedEvaluationAreas: string[];
+  otherRecommendations: string;
+  furtherComments: string;
+  attachments: string[];
+  resolved: boolean;
+  severityStatus: number;
+}
 @Injectable({
   providedIn: 'root',
 })
@@ -18,6 +50,14 @@ export class ReportsService {
     private authService: AuthService,
     private httpService: HttpService
   ) {}
+
+  reset() {
+    this.clearFilter();
+    this.currentPage = 0;
+    this.limit = 30;
+    this.isEndOfList = false;
+    this.autoIncrement = false;
+  }
 
   hasMoreData(): boolean {
     return !this.isEndOfList;
@@ -88,6 +128,20 @@ export class ReportsService {
 
   clearFilter() {
     this.filter = [];
+  }
+
+  async tryGetReportAsync(id: string): Promise<FullReportData | null>
+  {
+    const token = await this.authService.checkTokenFromPreferences();
+    const response = await (
+      await this.httpService.getAsync(`incidents/${id}`, undefined, token?.token)
+    ).json();
+    if (response.e != 0)
+      return null;
+    const data : FullReportData = response.incident;
+    data.inspectedDateTime = new Date(response.incident.inspectedDateTime);
+    console.log(data);
+    return data;
   }
 
   async getListDataAsync() {

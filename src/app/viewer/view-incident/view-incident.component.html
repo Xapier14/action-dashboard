@@ -1,0 +1,71 @@
+<!-- if reportData is null then hide -->
+<div *ngIf="reportData && inspectorData && error == ''; else loading" class="document">
+  <div class="document-header">
+    <h1>Rapid Damage Assessment Form</h1>
+  </div>
+  <!-- inspection -->
+  <div class="document-section" id="inspection-group">
+    <h2>Inspection</h2>
+    <div class="row">
+      <span class="item">Inspector: <span class="value">{{inspectorData.firstName}} {{inspectorData.lastName}}</span></span>
+      <span class="item"
+        >Inspection Date: <span class="value">{{formatDateToShortDateString(reportData.inspectedDateTime)}}</span></span
+      >
+      <span class="item">Time: <span class="value">{{formatDateTo24TimeString(reportData.inspectedDateTime)}}</span></span>
+    </div>
+    <div class="row">
+      <span class="item"
+        >Agency/Campus: <span class="value">Alangilan</span></span
+      >
+      <span class="item"
+        >Areas inspected:
+        <div>
+          <span>
+            <input type="checkbox" name="e" id="e" disabled [checked]="reportData.areasInspected == 'exterior'"/>
+            <label for="e">Exterior Only</label>
+          </span>
+          <span>
+            <input type="checkbox" name="i" id="i" disabled [checked]="reportData.areasInspected == 'exterior&interior'" />
+            <label for="i">Exterior & Interior</label>
+          </span>
+        </div>
+      </span>
+    </div>
+    <div class="row"></div>
+  </div>
+  <!-- building description -->
+  <div class="document-section" id="description-group">
+    <div class="section-group">
+      <div class="section-item">
+        <h2>Building Descrption</h2>
+        <p>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sunt
+          voluptatum necessitatibus perferendis, sapiente voluptas ducimus,
+          reiciendis quam officiis perspiciatis, placeat at ex molestiae?
+          Quaerat, assumenda, nihil, reiciendis similique iste sint cumque neque
+          magni exercitationem temporibus sunt ullam. Earum, voluptatibus autem
+          aut vero modi eaque ex ea porro repudiandae sint numquam deleniti
+          minima architecto illum quas facilis. Impedit dolorem exercitationem,
+          fugiat, possimus expedita sint reprehenderit quidem debitis harum
+          omnis nostrum veniam aspernatur molestias soluta laudantium aperiam!
+          Suscipit facere saepe voluptatem, laborum quidem officiis tenetur ab
+          veritatis, dolor aperiam natus quas modi dolorem quos, eligendi
+          perspiciatis possimus neque rerum perferendis? Commodi, sapiente?
+        </p>
+      </div>
+      <div class="section-item">test 2</div>
+    </div>
+  </div>
+  <!-- evaluation -->
+  <div class="document-section" id="evaluation-group"></div>
+  <!-- posting -->
+  <div class="document-section" id="posting-group"></div>
+  <!-- further actions -->
+  <div class="document-secion" id="further-group"></div>
+  <!-- attachments -->
+  <div class="document-section" id="attachments-group "></div>
+  <p>Viewing {{ this.id }}</p>
+</div>
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>

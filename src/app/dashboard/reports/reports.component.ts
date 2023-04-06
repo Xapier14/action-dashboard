@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { BuildingsService } from 'src/app/services/buildings.service';
 import { ReportsService } from 'src/app/services/reports.service';
 import { FilterDropDownComponent } from './filter-drop-down/filter-drop-down.component';
@@ -30,8 +31,11 @@ export class ReportsComponent implements OnInit {
 
   constructor(
     private buildingsService: BuildingsService,
-    private reportsService: ReportsService
-  ) {}
+    private reportsService: ReportsService,
+    private router: Router
+  ) {
+    reportsService.reset();
+  }
 
   getLocationFromId(id: string): string {
     let location = 'Unknown';
@@ -41,6 +45,20 @@ export class ReportsComponent implements OnInit {
       }
     });
     return location;
+  }
+
+  parseSeverity(severity: number): string {
+    switch (severity) {
+      case 0:
+        return "OK";
+      case 1:
+        return "Minor";
+      case 2:
+        return "Moderate";
+      case 3:
+        return "Severe";
+    }
+    return "Unknown";
   }
 
   async ngOnInit(): Promise<void> {
@@ -116,6 +134,16 @@ export class ReportsComponent implements OnInit {
 
   async onSeverityChange(event: string[]): Promise<void> {
     this.severitySelect = event;
+    console.log(this.severitySelect);
+    if (this.severitySelect.length > 0) {
+      this.reportsService.setFilter(
+        'severityStatus',
+        this.severitySelect.join(',')
+      );
+    } else {
+      this.reportsService.removeFilter('severityStatus');
+    }
+    this.reportsService.setCurrentPage(0);
     await this.updateDataview();
   }
 
@@ -164,7 +192,30 @@ export class ReportsComponent implements OnInit {
     // console.log(this.reportsData);
   }
 
+  async refresh(keepCurrentPage: boolean = true)
+  {
+    if (!keepCurrentPage)
+      this.reportsService.setCurrentPage(0);
+    await this.updateDataview();
+  }
+
   async viewReport(id: string) {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`/viewer/incident/${id}`])
+    );
+
+    window.open(url, '_blank');
+  }
+
+  async editReport(id: string) {
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`/editor/incident/${id}`])
+    );
+
+    window.open(url, '_blank');
+  }
+
+  async deleteReport(id: string) {
     console.log(id);
   }
 }

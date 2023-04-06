@@ -14,6 +14,12 @@ import { DashboardSideMenuComponent } from './dashboard/dashboard-side-menu/dash
 import { UnauthorizedComponent } from './errors/unauthorized/unauthorized.component';
 import { ReportsComponent } from './dashboard/reports/reports.component';
 import { FilterDropDownComponent } from './dashboard/reports/filter-drop-down/filter-drop-down.component';
+import { AccountsComponent } from './dashboard/accounts/accounts.component';
+import { AttachmentsComponent } from './dashboard/attachments/attachments.component';
+import { ViewerComponent } from './viewer/viewer.component';
+import { ViewIncidentComponent } from './viewer/view-incident/view-incident.component';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { LogsComponent } from './dashboard/logs/logs.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +32,12 @@ import { FilterDropDownComponent } from './dashboard/reports/filter-drop-down/fi
     UnauthorizedComponent,
     ReportsComponent,
     FilterDropDownComponent,
+    AccountsComponent,
+    AttachmentsComponent,
+    ViewerComponent,
+    ViewIncidentComponent,
+    NotFoundComponent,
+    LogsComponent,
   ],
   imports: [
     BrowserModule,

@@ -96,13 +96,22 @@
             <td>{{ report.inspectedDateString }}</td>
             <td>{{ report.locationString }}</td>
             <td>{{ report.building }}</td>
-            <td class="td-center">{{ report.severity }}</td>
+            <td class="td-center">{{ parseSeverity(report.severity) }}</td>
             <td class="td-center item-action">
               <button
                 (click)="viewReport(report.id)"
                 title="View report in another tab"
               >
                 <img src="assets/svg/view.svg" alt="View" />
+              </button>
+              <button
+                (click)="editReport(report.id)"
+                title="Edit report in another tab"
+              >
+                <img src="assets/svg/edit.svg" alt="Edit" />
+              </button>
+              <button (click)="deleteReport(report.id)" title="Delete Report">
+                <img src="assets/svg/delete.svg" alt="Delete" />
               </button>
             </td>
           </tr>

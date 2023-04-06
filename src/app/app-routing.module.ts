@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { UnauthorizedComponent } from './errors/unauthorized/unauthorized.component';
 import { AuthGuard } from './guard/auth.guard';
 import { LoginComponent } from './login/login.component';
@@ -17,13 +17,34 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
   },
   {
+    path: 'viewer',
+    loadChildren: () =>
+      import('./viewer/viewer-routing.module').then(
+        (m) => m.ViewerRoutingModule
+      ),
+    canActivateChild: [AuthGuard],
+  },
+  {
     path: 'error',
     children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'notfound',
+      },
       {
         path: 'unauthorized',
         component: UnauthorizedComponent,
       },
+      {
+        path: 'notfound',
+        component: NotFoundComponent,
+      },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: 'error/notfound',
   },
 ];
 
