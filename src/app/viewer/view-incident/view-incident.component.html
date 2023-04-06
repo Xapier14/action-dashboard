@@ -9,9 +9,9 @@
     <div class="row">
       <span class="item">Inspector: <span class="value">{{inspectorData.firstName}} {{inspectorData.lastName}}</span></span>
       <span class="item"
-        >Inspection Date: <span class="value">14 MAR 23</span></span
+        >Inspection Date: <span class="value">{{formatDateToShortDateString(reportData.inspectedDateTime)}}</span></span
       >
-      <span class="item">Time: <span class="value">21:00</span></span>
+      <span class="item">Time: <span class="value">{{formatDateTo24TimeString(reportData.inspectedDateTime)}}</span></span>
     </div>
     <div class="row">
       <span class="item"
@@ -21,11 +21,11 @@
         >Areas inspected:
         <div>
           <span>
-            <input type="checkbox" name="e" id="e" disabled />
+            <input type="checkbox" name="e" id="e" disabled [checked]="reportData.areasInspected == 'exterior'"/>
             <label for="e">Exterior Only</label>
           </span>
           <span>
-            <input type="checkbox" name="i" id="i" disabled />
+            <input type="checkbox" name="i" id="i" disabled [checked]="reportData.areasInspected == 'exterior&interior'" />
             <label for="i">Exterior & Interior</label>
           </span>
         </div>

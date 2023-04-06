@@ -138,7 +138,10 @@ export class ReportsService {
     ).json();
     if (response.e != 0)
       return null;
-    return response.incident;
+    const data : FullReportData = response.incident;
+    data.inspectedDateTime = new Date(response.incident.inspectedDateTime);
+    console.log(data);
+    return data;
   }
 
   async getListDataAsync() {
