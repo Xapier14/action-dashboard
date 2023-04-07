@@ -1,7 +1,13 @@
+* {
+  font-size: 0.8rem;
+}
 .document {
   margin: 0.25rem;
 }
-.section-item, .section-group, .document-header, .document-section {
+.section-item,
+.section-group,
+.document-header,
+.document-section {
   display: flex;
   flex-direction: column;
   h2 {
@@ -10,7 +16,8 @@
     margin-bottom: 0.1rem;
   }
 }
-.document-header, .document-section {
+.document-header,
+.document-section {
   border-radius: 0.75rem;
   border-style: solid;
   border-color: #000;
@@ -60,7 +67,6 @@
         }
       }
     }
-    
   }
 }
 .document-header {
@@ -73,7 +79,86 @@
     text-align: center;
     font-weight: bold;
     vertical-align: middle;
-    color: #FFF;
+    color: #fff;
     margin: 0;
+  }
+}
+
+#evaluation-group {
+  display: flex;
+  flex-direction: column;
+  .data {
+    display: grid;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 1fr;
+    margin-top: 0.5rem;
+    .conditions {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(8, 1.5rem);
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 5rem 5rem 5rem;
+        span {
+          text-align: left;
+          span {
+            border-bottom: #000 1px solid;
+          }
+        }
+        span ~ span {
+          text-align: center;
+          vertical-align: middle;
+        }
+      }
+      .header-row {
+        span {
+          font-weight: bold;
+        }
+      }
+    }
+    .estimate {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      h2 {
+        font-size: 0.8rem;
+        text-align: center;
+        line-height: 1rem;
+        margin: 0;
+      }
+      h3 {
+        font-size: 0.6rem;
+        text-align: center;
+        line-height: 1rem;
+        margin: 0;
+      }
+      .values {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: left;
+        div {
+          input[type="checkbox"] {
+            margin-right: 0.5rem;
+            width: 0.8rem;
+            height: 0.8rem;
+          }
+        }
+      }
+    }
+    .comments {
+      margin-top: 0.5rem;
+      width: 100%;
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+  @media screen and (max-width: 767px) {
+    .data {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr 1fr;
+    }
   }
 }

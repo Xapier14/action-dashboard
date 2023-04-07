@@ -1,5 +1,11 @@
 <!-- if reportData is null then hide -->
-<div *ngIf="reportData && inspectorData && error == ''; else loading" class="document">
+<div
+  *ngIf="
+    reportData && inspectorData && observationData && error == '';
+    else loading
+  "
+  class="document"
+>
   <div class="document-header">
     <h1>Rapid Damage Assessment Form</h1>
   </div>
@@ -7,11 +13,24 @@
   <div class="document-section" id="inspection-group">
     <h2>Inspection</h2>
     <div class="row">
-      <span class="item">Inspector: <span class="value">{{inspectorData.firstName}} {{inspectorData.lastName}}</span></span>
       <span class="item"
-        >Inspection Date: <span class="value">{{formatDateToShortDateString(reportData.inspectedDateTime)}}</span></span
+        >Inspector:
+        <span class="value"
+          >{{ inspectorData.firstName }} {{ inspectorData.lastName }}</span
+        ></span
       >
-      <span class="item">Time: <span class="value">{{formatDateTo24TimeString(reportData.inspectedDateTime)}}</span></span>
+      <span class="item"
+        >Inspection Date:
+        <span class="value">{{
+          formatDateToShortDateString(reportData.inspectedDateTime)
+        }}</span></span
+      >
+      <span class="item"
+        >Time:
+        <span class="value">{{
+          formatDateTo24TimeString(reportData.inspectedDateTime)
+        }}</span></span
+      >
     </div>
     <div class="row">
       <span class="item"
@@ -21,11 +40,23 @@
         >Areas inspected:
         <div>
           <span>
-            <input type="checkbox" name="e" id="e" disabled [checked]="reportData.areasInspected == 'exterior'"/>
+            <input
+              type="checkbox"
+              name="e"
+              id="e"
+              disabled
+              [checked]="reportData.areasInspected == 'exterior'"
+            />
             <label for="e">Exterior Only</label>
           </span>
           <span>
-            <input type="checkbox" name="i" id="i" disabled [checked]="reportData.areasInspected == 'exterior&interior'" />
+            <input
+              type="checkbox"
+              name="i"
+              id="i"
+              disabled
+              [checked]="reportData.areasInspected == 'exterior&interior'"
+            />
             <label for="i">Exterior & Interior</label>
           </span>
         </div>
@@ -57,7 +88,54 @@
     </div>
   </div>
   <!-- evaluation -->
-  <div class="document-section" id="evaluation-group"></div>
+  <div class="document-section" id="evaluation-group">
+    <h2>Evaluation</h2>
+    <span
+      >Investigate the building and area around it for the conditions below and
+      check the appropriate column.</span
+    >
+    <div class="data">
+      <div class="conditions">
+        <div class="row header-row">
+          <span>Observed Conditions:</span>
+          <span>Minor/None</span>
+          <span>Moderate</span>
+          <span>Severe</span>
+        </div>
+        <div *ngFor="let observation of observationData" class="row">
+          <span
+            >{{ observation.label
+            }}<span>{{ observation.optionalLabel }}</span></span
+          >
+          <input type="checkbox" disabled [checked]="observation.value == 0" />
+          <input type="checkbox" disabled [checked]="observation.value == 1" />
+          <input type="checkbox" disabled [checked]="observation.value == 2" />
+        </div>
+      </div>
+      <div class="estimate">
+        <h2>Estimated Building Damage</h2>
+        <h3>(excluding contents)</h3>
+        <div class="values">
+          <div><input type="checkbox" disabled /> <span>None</span></div>
+          <div><input type="checkbox" disabled /> <span>1 - 10%</span></div>
+          <div><input type="checkbox" disabled /> <span>11 - 30%</span></div>
+          <div><input type="checkbox" disabled /> <span>31 - 60%</span></div>
+          <div><input type="checkbox" disabled /> <span>61 - 99%</span></div>
+          <div><input type="checkbox" disabled /> <span>100%</span></div>
+        </div>
+      </div>
+      <div class="comments">
+        <span>Comments:</span>
+        <p>
+          {{
+            reportData.evaluationComment.length == 0
+              ? "-n/a-"
+              : reportData.evaluationComment
+          }}
+        </p>
+      </div>
+    </div>
+  </div>
   <!-- posting -->
   <div class="document-section" id="posting-group"></div>
   <!-- further actions -->
