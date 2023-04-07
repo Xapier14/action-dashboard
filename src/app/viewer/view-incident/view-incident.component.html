@@ -116,12 +116,54 @@
         <h2>Estimated Building Damage</h2>
         <h3>(excluding contents)</h3>
         <div class="values">
-          <div><input type="checkbox" disabled /> <span>None</span></div>
-          <div><input type="checkbox" disabled /> <span>1 - 10%</span></div>
-          <div><input type="checkbox" disabled /> <span>11 - 30%</span></div>
-          <div><input type="checkbox" disabled /> <span>31 - 60%</span></div>
-          <div><input type="checkbox" disabled /> <span>61 - 99%</span></div>
-          <div><input type="checkbox" disabled /> <span>100%</span></div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="reportData.estimatedBuildingDamage == 0"
+            />
+            <span>None</span>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="reportData.estimatedBuildingDamage == 1"
+            />
+            <span>1 - 10%</span>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="reportData.estimatedBuildingDamage == 2"
+            />
+            <span>11 - 30%</span>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="reportData.estimatedBuildingDamage == 3"
+            />
+            <span>31 - 60%</span>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="reportData.estimatedBuildingDamage == 4"
+            />
+            <span>61 - 99%</span>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="reportData.estimatedBuildingDamage == 5"
+            />
+            <span>100%</span>
+          </div>
         </div>
       </div>
       <div class="comments">
