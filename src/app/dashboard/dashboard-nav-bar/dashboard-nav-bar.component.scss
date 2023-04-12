@@ -1,5 +1,8 @@
 * {
   --navbar-height: 3rem;
+  &:focus {
+    outline: none;
+  }
 }
 .nav-container {
   position: sticky;
