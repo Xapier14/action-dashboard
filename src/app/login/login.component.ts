@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { HttpService } from '../services/http.service';
 
 @Component({
   selector: 'app-login',
@@ -12,9 +13,15 @@ export class LoginComponent implements OnInit {
   loginForm;
   loading = false;
   error = '';
+  connected = false;
+  serverNotAvailable = false;
+  connectionStatus = 'Contacting server...';
+  statusCode = 'working';
+
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private httpService: HttpService,
     private router: Router
   ) {
     this.loginForm = this.formBuilder.group({
@@ -23,7 +30,19 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    const connected = await this.httpService.testConnection();
+    if (connected) {
+      this.connectionStatus = 'Connected.';
+      this.statusCode = 'success';
+      setTimeout(() => {
+        this.connected = true;
+      }, 1500);
+    } else {
+      this.serverNotAvailable = true;
+      this.connectionStatus = 'Server could not be reached.';
+      this.statusCode = 'error';
+    }
     if (this.authService.hasToken()) {
       this.router.navigate(['/dashboard']);
     }

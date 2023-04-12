@@ -1,3 +1,13 @@
+<div *ngIf="!this.connected" id="status-overlay">
+  <h1 *ngIf="!this.serverNotAvailable && this.connectionStatus != 'Connected.'">
+    Checking your connection with the server, please wait...
+  </h1>
+  <h1 *ngIf="!this.serverNotAvailable && this.connectionStatus == 'Connected.'">
+    Connection established with the server.
+  </h1>
+  <h1 *ngIf="this.serverNotAvailable">Service unavailable.</h1>
+  <h2 class="{{ this.statusCode }}">{{ this.connectionStatus }}</h2>
+</div>
 <div class="parent-flex">
   <div class="center-flex">
     <div class="logo-container">
