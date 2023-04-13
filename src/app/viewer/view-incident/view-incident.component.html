@@ -1,5 +1,29 @@
 <!-- if reportData is null then hide -->
 <div
+  *ngIf="reportData && inspectorData && observationData && error == ''"
+  class="print-controls"
+>
+  <div class="options">
+    <h2>Print Options:</h2>
+    <div class="option-item">
+      <input
+        type="checkbox"
+        name="hide-attachments"
+        id="hide-attachments"
+        (change)="updateHideAttachmentsOption($event)"
+      />
+      <label for="hide-attachments">Hide attachments section?</label>
+    </div>
+    <div class="option-item">
+      <input type="checkbox" name="show-images-only" id="show-images-only" />
+      <label for="show-images-only">Hide non-images with print?</label>
+    </div>
+  </div>
+  <div class="actions">
+    <button (click)="print()">Print</button>
+  </div>
+</div>
+<div
   *ngIf="
     reportData && inspectorData && observationData && error == '';
     else loading
@@ -337,15 +361,123 @@
   <!-- further actions -->
   <div class="document-section" id="further-group">
     <h2>Further Actions</h2>
-    <span>Check the boxes below only if further actions are needed</span>
+    <span>Check the boxes below only if further actions are needed.</span>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="barricadeComment"
+            id="barricadeComment"
+            disabled
+            [checked]="reportData.barricadeComment.length != 0"
+          />
+        </div>
+        <label for="barricadeComment"
+          >Barricades needed in the following areas:
+        </label>
+        <p class="underline">
+          {{
+            reportData.barricadeComment.length > 0
+              ? reportData.barricadeComment
+              : "-n/a-"
+          }}
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="detailedEvaluation"
+            id="detailedEvaluation"
+            disabled
+            [checked]="reportData.detailedEvaluationAreas.length != 0"
+          />
+        </div>
+        <label for="detailedEvaluation">Detailed Evaluation recommended </label>
+        <div class="other-items">
+          <div class="sub-item">
+            <div class="checkbox-container">
+              <input
+                type="checkbox"
+                name="structural"
+                id="structural"
+                disabled
+                [checked]="reportData.detailedEvaluationAreas.includes('1')"
+              />
+            </div>
+            <label for="structural">Structural</label>
+          </div>
+          <div class="sub-item">
+            <div class="checkbox-container">
+              <input
+                type="checkbox"
+                name="geotechnical"
+                id="geotechnical"
+                disabled
+                [checked]="reportData.detailedEvaluationAreas.includes('2')"
+              />
+            </div>
+            <label for="geotechnical">Geotechnical</label>
+          </div>
+          <div class="sub-item">
+            <div class="checkbox-container">
+              <input
+                type="checkbox"
+                name="other"
+                id="other"
+                disabled
+                [checked]="reportData.detailedEvaluationAreas.includes('3')"
+              />
+            </div>
+            <label for="other">Other</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="otherRecommendations"
+            id="otherRecommendations"
+            disabled
+            [checked]="reportData.otherRecommendations.length != 0"
+          />
+        </div>
+        <label for="otherRecommendations">Other recommendations:</label>
+        <p class="underline">
+          {{
+            reportData.otherRecommendations.length > 0
+              ? reportData.otherRecommendations
+              : "-n/a-"
+          }}
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <span>Comments: </span>
+        <p class="underline">
+          {{
+            reportData.furtherComments.length > 0
+              ? reportData.furtherComments
+              : "-n/a-"
+          }}
+        </p>
+      </div>
+    </div>
   </div>
   <!-- attachments -->
   <div class="document-section" id="attachments-group">
     <h2>Attachments</h2>
     test
   </div>
-  <p>Viewing {{ this.id }}</p>
 </div>
+
 <ng-template #loading>
   <div *ngIf="error.length == 0" class="loading">
     <img src="assets/svg/refresh.svg" alt="" />

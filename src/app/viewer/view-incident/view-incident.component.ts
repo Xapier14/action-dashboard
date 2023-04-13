@@ -16,6 +16,13 @@ interface ObservationData {
   value: number;
 }
 
+interface AttachmentData {
+  type: 'image' | 'video';
+  id: string;
+  thumbnailUrl: string;
+  url: string;
+}
+
 @Component({
   selector: 'app-view-incident',
   templateUrl: './view-incident.component.html',
@@ -39,12 +46,14 @@ export class ViewIncidentComponent {
   ngOnInit() {
     this.route.params.subscribe(async (params) => {
       this.id = params['id'];
+
       this.currentLoading = 'Retrieving report data...';
       this.reportData = await this.reportsService.tryGetReportAsync(this.id);
       if (!this.reportData) {
         this.router.navigate(['errors', 'notfound']);
         return;
       }
+
       this.currentLoading = 'Retrieving inspector data...';
       this.inspectorData = await this.accountsService.getAccountDataAsync(
         this.reportData?.inspectorId ?? ''
@@ -53,8 +62,12 @@ export class ViewIncidentComponent {
         this.error = 'Inspector user data could not be retrieved';
         return;
       }
+
       this.currentLoading = 'Generating observation data...';
       this.observationData = this.generateObservationData(this.reportData);
+
+      this.currentLoading = 'Fetching attachments...';
+
       this.title.setTitle('Report Viewer - ACTION Dashboard Web App');
     });
   }
@@ -122,5 +135,21 @@ export class ViewIncidentComponent {
     var m = date.getMinutes().toString();
     if (m.length == 1) m = '0' + m;
     return `${h}:${m}`;
+  }
+
+  updateHideAttachmentsOption(event: any) {
+    const attachmentsSection = document.getElementById('attachments-group');
+    if (!attachmentsSection) return;
+    if (event.target.checked) {
+      attachmentsSection.classList.add('hide-on-print');
+    } else {
+      attachmentsSection.classList.remove('hide-on-print');
+    }
+  }
+
+  updateShowImagesOption() {}
+
+  print() {
+    window.print();
   }
 }

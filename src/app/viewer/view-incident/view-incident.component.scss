@@ -12,6 +12,48 @@
   line-height: 1rem;
   font-family: "Tinos", serif;
 }
+
+.print-controls {
+  margin: 0;
+  padding: 0.5rem;
+  width: auto;
+  background-color: #005cb2;
+  color: #fff;
+  label,
+  button {
+    font-family: sans-serif;
+  }
+  h2 {
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    button {
+      margin-left: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: #fff;
+      color: #000;
+      border: none;
+      border-radius: 0.25rem;
+      transition: 0.2s;
+      &:hover {
+        background-color: #b20100;
+        color: #fff;
+      }
+    }
+  }
+}
+
 .document {
   margin: 0.25rem;
 }
@@ -84,6 +126,12 @@
 @media print {
   .document-section {
     break-inside: avoid;
+  }
+  .print-controls {
+    display: none;
+  }
+  .hide-on-print {
+    display: none;
   }
 }
 .document-header {
@@ -211,10 +259,14 @@
   }
 }
 
-#posting-group {
+#posting-group,
+#further-group {
   padding-bottom: 1rem;
   .row {
     .item {
+      span {
+        margin-right: 0.5rem;
+      }
       .checkbox-container {
         display: flex;
         flex-direction: column;
@@ -225,8 +277,36 @@
       label {
         margin-right: 0.2rem;
       }
+      .other-items {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        flex-grow: 1;
+        .sub-item {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          margin-right: 0.5rem;
+          .checkbox-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            flex-grow: 0;
+          }
+          label {
+            margin-right: 0.2rem;
+          }
+        }
+      }
     }
   }
+}
+
+.item p {
+  white-space: pre-wrap;
 }
 
 .underline {
