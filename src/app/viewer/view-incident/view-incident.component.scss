@@ -1,5 +1,6 @@
 * {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
+  line-height: 1rem;
 }
 .document {
   margin: 0.25rem;
@@ -11,9 +12,10 @@
   display: flex;
   flex-direction: column;
   h2 {
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-weight: bold;
     margin-bottom: 0.1rem;
+    height: 1.5rem;
   }
 }
 .document-header,
@@ -25,12 +27,12 @@
   margin-bottom: 0.1rem;
 }
 .document-section {
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0.8rem;
   .row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 0.25rem;
+    // margin-bottom: 0.25rem;
     .item {
       flex-grow: 1;
       display: flex;
@@ -76,6 +78,7 @@
   print-color-adjust: exact;
   padding: 0.25rem;
   h1 {
+    font-size: 1.5rem;
     text-align: center;
     font-weight: bold;
     vertical-align: middle;
@@ -137,6 +140,7 @@
         font-size: 0.8rem;
         text-align: center;
         line-height: 1rem;
+        height: auto;
         margin: 0;
       }
       h3 {
@@ -151,6 +155,7 @@
         justify-content: flex-start;
         align-items: left;
         div {
+          height: 1rem;
           input[type="checkbox"] {
             margin-right: 0.5rem;
             width: 0.8rem;
@@ -187,5 +192,12 @@
       display: flex;
       flex-direction: column;
     }
+  }
+}
+
+@media print {
+  #further-group {
+    clear: both;
+    page-break-after: always;
   }
 }
