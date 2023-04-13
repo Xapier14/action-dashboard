@@ -199,17 +199,162 @@
   <!-- posting -->
   <div class="document-section" id="posting-group">
     <h2>Posting</h2>
+    <span>
+      Severe conditions endangering the overall building are grounds for an
+      Unsafe posting. Localised Severe and overall Moderate conditions may allow
+      a Restricted Use posting. Where required, ensure that RESTRICTED USE and
+      UNSAFE placards are posted at all entrances.
+    </span>
+    <div class="row">
+      <div class="item">
+        <div>
+          <span>
+            <input
+              type="checkbox"
+              name="inspected"
+              id="inspected"
+              disabled
+              [checked]="reportData.inspectedPlacard"
+            />
+            <label for="inspected">INSPECTED</label>
+          </span>
+        </div>
+      </div>
+      <div class="item">
+        <div>
+          <span>
+            <input
+              type="checkbox"
+              name="restricted"
+              id="restricted"
+              disabled
+              [checked]="reportData.restrictedPlacard"
+            />
+            <label for="restricted">RESTRICTED USE</label>
+          </span>
+        </div>
+      </div>
+      <div class="item">
+        <div>
+          <span>
+            <input
+              type="checkbox"
+              name="unsafe"
+              id="unsafe"
+              disabled
+              [checked]="reportData.unsafePlacard"
+            />
+            <label for="unsafe">UNSAFE</label>
+          </span>
+        </div>
+      </div>
+    </div>
+    <span>
+      Record any use and entry restrictions exactly as written on placard:
+    </span>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="doNotEnter"
+            id="doNotEnter"
+            disabled
+            [checked]="reportData.doNotEnter.length > 0"
+          />
+        </div>
+        <label for="doNotEnter"
+          >Do not enter or use the following areas:
+        </label>
+        <p class="underline">
+          {{
+            reportData.doNotEnter.length > 0 ? reportData.doNotEnter : "-n/a-"
+          }}
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="briefEntry"
+            id="briefEntry"
+            disabled
+            [checked]="reportData.briefEntryAllowed.length > 0"
+          />
+        </div>
+        <label for="briefEntry"
+          >Brief entry allowed for access to contents:
+        </label>
+        <p class="underline">
+          {{
+            reportData.briefEntryAllowed.length > 0
+              ? reportData.briefEntryAllowed
+              : "-n/a-"
+          }}
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="doNotUse"
+            id="doNotUse"
+            disabled
+            [checked]="reportData.doNotUse"
+          />
+        </div>
+        <label for="doNotUse"
+          >Do not use flooded/damaged appliances, devices or services (electric,
+          gas) until specified by a licensed contractor
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="otherRestrictions"
+            id="otherRestrictions"
+            disabled
+            [checked]="
+              reportData.otherRestrictions.length != 0 &&
+              reportData.otherRestrictions != '-n/a-'
+            "
+          />
+        </div>
+        <label for="otherRestrictions">Other restrictions: </label>
+        <p class="underline">
+          {{ reportData.otherRestrictions }}
+        </p>
+      </div>
+    </div>
   </div>
   <!-- further actions -->
   <div class="document-section" id="further-group">
     <h2>Further Actions</h2>
+    <span>Check the boxes below only if further actions are needed</span>
   </div>
   <!-- attachments -->
-  <div class="document-section" id="attachments-group ">
+  <div class="document-section" id="attachments-group">
     <h2>Attachments</h2>
+    test
   </div>
   <p>Viewing {{ this.id }}</p>
 </div>
 <ng-template #loading>
-  <p>Loading...</p>
+  <div *ngIf="error.length == 0" class="loading">
+    <img src="assets/svg/refresh.svg" alt="" />
+    <h2>Loading...</h2>
+    <h3>{{ currentLoading }}</h3>
+  </div>
+  <div *ngIf="error.length > 0" class="error">
+    <img src="assets/svg/error.svg" alt="" />
+    <h2>An error occured while loading the report. Please try again later.</h2>
+    <h3>{{ error }}</h3>
+  </div>
 </ng-template>
