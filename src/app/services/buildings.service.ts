@@ -2,6 +2,23 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { HttpService } from './http.service';
 
+export interface BuildingData {
+  id: string;
+  name: string;
+  location: string;
+  maxCapacity: number;
+  otherInformation: string;
+  address: string;
+  buildingMarshal: string;
+  storyAboveGround: number;
+  storyBelowGround: number;
+  typeOfConstruction: string;
+  primaryOccupancy: string;
+  lastStatus: number | undefined;
+  lastInspection: Date | undefined;
+  lastIncidentId: string | undefined;
+}
+
 @Injectable({
   providedIn: 'root',
 })

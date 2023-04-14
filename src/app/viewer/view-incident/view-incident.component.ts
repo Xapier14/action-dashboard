@@ -5,6 +5,8 @@ import {
   AccountData,
   AccountsService,
 } from 'src/app/services/accounts.service';
+import { BuildingsService } from 'src/app/services/buildings.service';
+import { BuildingData } from 'src/app/services/dashboard.service';
 import {
   FullReportData,
   ReportsService,
@@ -33,6 +35,7 @@ export class ViewIncidentComponent {
   reportData: FullReportData | null = null;
   inspectorData: AccountData | null = null;
   observationData: ObservationData[] | null = null;
+  buildingData: BuildingData | null = null;
   error: string = '';
   currentLoading: string = 'Initializing...';
   constructor(
@@ -40,7 +43,8 @@ export class ViewIncidentComponent {
     private router: Router,
     private title: Title,
     private reportsService: ReportsService,
-    private accountsService: AccountsService
+    private accountsService: AccountsService,
+    private buildingsService: BuildingsService
   ) {}
 
   ngOnInit() {
@@ -60,6 +64,15 @@ export class ViewIncidentComponent {
       );
       if (!this.inspectorData) {
         this.error = 'Inspector user data could not be retrieved';
+        return;
+      }
+
+      this.currentLoading = 'Retrieving building data...';
+      this.buildingData = await this.buildingsService.getBuildingInfoAsync(
+        this.reportData?.buildingId ?? ''
+      );
+      if (!this.buildingData) {
+        this.error = 'Building data could not be retrieved';
         return;
       }
 

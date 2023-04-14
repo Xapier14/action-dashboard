@@ -130,17 +130,18 @@ export class ReportsService {
     this.filter = [];
   }
 
-  async tryGetReportAsync(id: string): Promise<FullReportData | null>
-  {
+  async tryGetReportAsync(id: string): Promise<FullReportData | null> {
     const token = await this.authService.checkTokenFromPreferences();
     const response = await (
-      await this.httpService.getAsync(`incidents/${id}`, undefined, token?.token)
+      await this.httpService.getAsync(
+        `incidents/${id}`,
+        undefined,
+        token?.token
+      )
     ).json();
-    if (response.e != 0)
-      return null;
-    const data : FullReportData = response.incident;
+    if (response.e != 0) return null;
+    const data: FullReportData = response.incident;
     data.inspectedDateTime = new Date(response.incident.inspectedDateTime);
-    console.log(data);
     return data;
   }
 
