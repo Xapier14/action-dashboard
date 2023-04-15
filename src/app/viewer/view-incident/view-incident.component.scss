@@ -107,6 +107,24 @@
         text-align: center;
         flex-grow: 1;
       }
+      p.value {
+        margin: 0;
+        margin-left: 0.25rem;
+        padding: 0;
+        text-align: justify;
+        flex-grow: 1;
+
+        border-bottom: 1px solid black;
+        text-align: justify;
+        #u1 {
+          overflow: hidden;
+          display: block;
+          margin-bottom: -1px;
+          #u2 {
+            border-bottom: 1px solid black;
+          }
+        }
+      }
     }
   }
   // if mobile and is viewed on screen
@@ -148,6 +166,93 @@
     vertical-align: middle;
     color: #fff;
     margin: 0;
+  }
+}
+
+#description-group {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  #block-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 0.5rem;
+    #left-block,
+    #right-block {
+      width: 50%;
+    }
+    #right-block {
+      .check-type-container {
+        .checklist-container {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: flex-start;
+          .checksplit-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            .item {
+              width: 100%;
+              div {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: flex-start;
+                width: 100%;
+                label {
+                  font-size: 0.7rem;
+                  display: flex;
+                  flex-direction: row;
+                  justify-content: flex-start;
+                  align-items: flex-start;
+                  p.value {
+                    overflow: hidden;
+                    border-bottom: 1px solid black;
+                    text-align: justify;
+                    margin-left: 0.25rem;
+                    #u1 {
+                      display: block;
+                      margin-bottom: -1px;
+                      #u2 {
+                        border-bottom: 1px solid black;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        .two-split {
+          .checksplit-container {
+            width: 50%;
+          }
+        }
+        .three-split {
+          .checksplit-container {
+            width: 33.33%;
+          }
+        }
+      }
+    }
+  }
+
+  // if mobile and is viewed on screen
+  @media screen and (max-width: 767px) {
+    #block-container {
+      flex-direction: column;
+      #left-block,
+      #right-block {
+        flex-grow: 0;
+        width: auto;
+      }
+    }
   }
 }
 

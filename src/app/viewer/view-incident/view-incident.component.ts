@@ -6,7 +6,7 @@ import {
   AccountsService,
 } from 'src/app/services/accounts.service';
 import { BuildingsService } from 'src/app/services/buildings.service';
-import { BuildingData } from 'src/app/services/dashboard.service';
+import { BuildingData } from 'src/app/services/buildings.service';
 import {
   FullReportData,
   ReportsService,
@@ -75,6 +75,7 @@ export class ViewIncidentComponent {
         this.error = 'Building data could not be retrieved';
         return;
       }
+      console.log(this.buildingData);
 
       this.currentLoading = 'Generating observation data...';
       this.observationData = this.generateObservationData(this.reportData);
@@ -150,6 +151,26 @@ export class ViewIncidentComponent {
     return `${h}:${m}`;
   }
 
+  isOtherConstructionType(data: string | undefined) {
+    if (!data) return false;
+    const types = ['wood', 'steel', 'concrete', 'masonry'];
+    return !types.includes(data);
+  }
+
+  isOtherOccupancyType(data: string | undefined) {
+    if (!data) return false;
+    const types = [
+      'singleFamily',
+      'multiResidential',
+      'emergencyServices',
+      'industrial',
+      'offices',
+      'commercial',
+      'school',
+      'government',
+    ];
+    return !types.includes(data);
+  }
   updateHideAttachmentsOption(event: any) {
     const attachmentsSection = document.getElementById('attachments-group');
     if (!attachmentsSection) return;
