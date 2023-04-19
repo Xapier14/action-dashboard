@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { HttpService } from '../services/http.service';
+import { load } from 'recaptcha-v3';
+import { environment } from 'src/environments/environment';
+import { RecaptchaService } from '../services/recaptcha.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm;
   loading = false;
   error = '';
@@ -18,10 +21,13 @@ export class LoginComponent implements OnInit {
   connectionStatus = 'Contacting server...';
   statusCode = 'working';
 
+  private recaptcha: any;
+
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private httpService: HttpService,
+    private recaptchaService: RecaptchaService,
     private router: Router
   ) {
     this.loginForm = this.formBuilder.group({
@@ -32,6 +38,8 @@ export class LoginComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     const connected = await this.httpService.testConnection();
+    this.recaptchaService.showBadge();
+    await this.recaptchaService.load();
     if (connected) {
       this.connectionStatus = 'Connected.';
       this.statusCode = 'success';
@@ -48,20 +56,36 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  async ngOnDestroy(): Promise<void> {
+    this.recaptchaService.hideBadge();
+  }
+
   async onSubmit() {
     this.loading = true;
     this.error = '';
-    const email = this.loginForm.value.email;
-    const password = this.loginForm.value.password;
-    if (email && password) {
-      const result = await this.authService.tryLogin(email, password, 1);
-      console.log(result);
-      this.checkLoginResult(result);
-    } else {
-      this.error = 'Please fill all fields.';
-    }
-    this.loading = false;
-    console.log(this.error);
+    this.recaptchaService.ready(async () => {
+      const email = this.loginForm.value.email;
+      const password = this.loginForm.value.password;
+      const token = await this.recaptchaService.getToken('login');
+      if (!token) {
+        this.error = 'ReCaptcha failed.';
+        this.loading = false;
+        return;
+      }
+      if (email && password) {
+        const result = await this.authService.tryLogin(
+          email,
+          password,
+          token,
+          1
+        );
+        this.checkLoginResult(result);
+      } else {
+        this.error = 'Please fill all fields.';
+      }
+      this.loading = false;
+      console.log(this.error);
+    });
   }
 
   checkLoginResult(result: { e: any; status: string }) {
