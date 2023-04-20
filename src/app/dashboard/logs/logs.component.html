@@ -1,1 +1,133 @@
-<p>logs works!</p>
+<div class="panel-container">
+  <!-- <div class="menu-column">
+    <div class="list-header">
+      <span>Filters</span>
+    </div>
+    <div class="separator-container">
+      <div class="separator"></div>
+    </div>
+    <div class="item-list">
+      <filter-dropdown
+        [filter]="locationsFilter"
+        [values]="locationsValues"
+        [label]="'Location'"
+        (filterChange)="onLocationChange($event)"
+      ></filter-dropdown>
+      <filter-dropdown
+        #buildingsDropdown
+        [disabled]="buildingsFilter.length == 0"
+        [filter]="buildingsFilter"
+        [values]="buildingsValues"
+        [label]="'Building'"
+        (filterChange)="onBuildingChange($event)"
+      ></filter-dropdown>
+      <filter-dropdown
+        [filter]="['OK', 'Minor', 'Moderate', 'Severe']"
+        [values]="[0, 1, 2, 3]"
+        [label]="'Severity'"
+        (filterChange)="onSeverityChange($event)"
+      ></filter-dropdown>
+    </div>
+  </div> -->
+  <div class="main-content">
+    <div class="content-header">
+      <span>Logs</span>
+    </div>
+    <div class="separator-container">
+      <div class="separator"></div>
+    </div>
+    <div class="table-control">
+      <div class="table-control-end">
+        <span>Showing {{ displayedItems }} of {{ totalItems }} item(s)</span>
+      </div>
+      <div class="table-control-center">
+        <span>Page {{ currentPage }} / {{ pageCount }}</span>
+      </div>
+      <div class="table-control-end" style="justify-content: flex-end">
+        <div class="action-group">
+          <button
+            [disabled]="currentPage <= 1 || logsData == undefined"
+            (click)="navFirstPage()"
+          >
+            |&lt;
+          </button>
+          <button
+            [disabled]="currentPage <= 1 || logsData == undefined"
+            (click)="navPrevPage()"
+          >
+            &lt;
+          </button>
+          <button
+            [disabled]="currentPage >= pageCount || logsData == undefined"
+            (click)="navNextPage()"
+          >
+            &gt;
+          </button>
+          <button
+            [disabled]="currentPage >= pageCount || logsData == undefined"
+            (click)="navLastPage()"
+          >
+            &gt;|
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="separator-container">
+      <div class="separator"></div>
+    </div>
+    <div *ngIf="logsData != undefined; else loader" class="content-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Date & Time</th>
+            <th>Source IP</th>
+            <th>Level</th>
+            <th>Action</th>
+            <th>Message</th>
+            <th>User ID</th>
+            <th>Session ID</th>
+            <!-- <th class="td-center">Severity</th>
+            <th class="td-center">Actions</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let log of logsData">
+            <td>{{ log.dateTime.toLocaleString() }}</td>
+            <td>{{ log.sourceIp }}</td>
+            <td>{{ log.level }}</td>
+            <td>{{ log.action }}</td>
+            <td>{{ log.message }}</td>
+            <td>{{ log.userId }}</td>
+            <td>{{ log.sessionId }}</td>
+            <!-- <td class="td-center">{{ parseSeverity(report.severity) }}</td>
+            <td class="td-center item-action">
+              <button
+                (click)="viewReport(report.id)"
+                title="View report in another tab"
+              >
+                <img src="assets/svg/view.svg" alt="View" />
+              </button>
+              <button
+                (click)="editReport(report.id)"
+                title="Edit report in another tab"
+              >
+                <img src="assets/svg/edit.svg" alt="Edit" />
+              </button>
+              <button (click)="deleteReport(report.id)" title="Delete Report">
+                <img src="assets/svg/delete.svg" alt="Delete" />
+              </button>
+            </td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #loader>
+      <div class="loading-container">
+        <div class="loading">
+          <img src="assets/svg/refresh.svg" alt="" />
+          <span>Loading...</span>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

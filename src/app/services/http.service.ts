@@ -86,4 +86,14 @@ export class HttpService {
       .map((key) => key + '=' + query[key])
       .join('&');
   }
+
+  async deleteAsync(route: string, token?: string) {
+    const endpoint = environment.apiHost + '/' + route;
+    const headers: HeadersInit = new Headers();
+    if (token) headers.append('Authorization', token);
+    return await fetch(endpoint, {
+      method: 'DELETE',
+      headers: headers,
+    });
+  }
 }
