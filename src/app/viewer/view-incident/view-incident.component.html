@@ -1,5 +1,35 @@
 <!-- if reportData is null then hide -->
-<div *ngIf="reportData && inspectorData && error == ''; else loading" class="document">
+<div
+  *ngIf="reportData && inspectorData && observationData && error == ''"
+  class="print-controls"
+>
+  <div class="options">
+    <h2>Print Options:</h2>
+    <div class="option-item">
+      <input
+        type="checkbox"
+        name="hide-attachments"
+        id="hide-attachments"
+        (change)="updateHideAttachmentsOption($event)"
+      />
+      <label for="hide-attachments">Hide attachments section?</label>
+    </div>
+    <div class="option-item">
+      <input type="checkbox" name="show-images-only" id="show-images-only" />
+      <label for="show-images-only">Hide non-images with print?</label>
+    </div>
+  </div>
+  <div class="actions">
+    <button (click)="print()">Print</button>
+  </div>
+</div>
+<div
+  *ngIf="
+    reportData && inspectorData && observationData && error == '';
+    else loading
+  "
+  class="document"
+>
   <div class="document-header">
     <h1>Rapid Damage Assessment Form</h1>
   </div>
@@ -7,11 +37,24 @@
   <div class="document-section" id="inspection-group">
     <h2>Inspection</h2>
     <div class="row">
-      <span class="item">Inspector: <span class="value">{{inspectorData.firstName}} {{inspectorData.lastName}}</span></span>
       <span class="item"
-        >Inspection Date: <span class="value">{{formatDateToShortDateString(reportData.inspectedDateTime)}}</span></span
+        >Inspector:
+        <span class="value"
+          >{{ inspectorData.firstName }} {{ inspectorData.lastName }}</span
+        ></span
       >
-      <span class="item">Time: <span class="value">{{formatDateTo24TimeString(reportData.inspectedDateTime)}}</span></span>
+      <span class="item"
+        >Inspection Date:
+        <span class="value">{{
+          formatDateToShortDateString(reportData.inspectedDateTime)
+        }}</span></span
+      >
+      <span class="item"
+        >Time:
+        <span class="value">{{
+          formatDateTo24TimeString(reportData.inspectedDateTime)
+        }}</span></span
+      >
     </div>
     <div class="row">
       <span class="item"
@@ -21,51 +64,679 @@
         >Areas inspected:
         <div>
           <span>
-            <input type="checkbox" name="e" id="e" disabled [checked]="reportData.areasInspected == 'exterior'"/>
+            <input
+              type="checkbox"
+              name="e"
+              id="e"
+              disabled
+              [checked]="reportData.areasInspected == 'exterior'"
+            />
             <label for="e">Exterior Only</label>
           </span>
           <span>
-            <input type="checkbox" name="i" id="i" disabled [checked]="reportData.areasInspected == 'exterior&interior'" />
+            <input
+              type="checkbox"
+              name="i"
+              id="i"
+              disabled
+              [checked]="reportData.areasInspected == 'exterior&interior'"
+            />
             <label for="i">Exterior & Interior</label>
           </span>
         </div>
       </span>
     </div>
-    <div class="row"></div>
   </div>
   <!-- building description -->
   <div class="document-section" id="description-group">
-    <div class="section-group">
-      <div class="section-item">
-        <h2>Building Descrption</h2>
-        <p>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sunt
-          voluptatum necessitatibus perferendis, sapiente voluptas ducimus,
-          reiciendis quam officiis perspiciatis, placeat at ex molestiae?
-          Quaerat, assumenda, nihil, reiciendis similique iste sint cumque neque
-          magni exercitationem temporibus sunt ullam. Earum, voluptatibus autem
-          aut vero modi eaque ex ea porro repudiandae sint numquam deleniti
-          minima architecto illum quas facilis. Impedit dolorem exercitationem,
-          fugiat, possimus expedita sint reprehenderit quidem debitis harum
-          omnis nostrum veniam aspernatur molestias soluta laudantium aperiam!
-          Suscipit facere saepe voluptatem, laborum quidem officiis tenetur ab
-          veritatis, dolor aperiam natus quas modi dolorem quos, eligendi
-          perspiciatis possimus neque rerum perferendis? Commodi, sapiente?
-        </p>
+    <div id="block-container">
+      <div id="left-block">
+        <h2>Building Description</h2>
+        <div class="row">
+          <span class="item"
+            >Building Name:
+            <span class="value">{{ buildingData?.name }}</span></span
+          >
+        </div>
+        <div class="row">
+          <span class="item"
+            >Address:
+            <p class="value">
+              <span id="u1">
+                <span id="u2">
+                  {{ buildingData?.address }}
+                </span>
+              </span>
+            </p>
+          </span>
+        </div>
+        <div class="row">
+          <div class="item">
+            Building Marshal:
+            <span class="value">
+              {{ buildingData?.buildingMarshal }}
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="item">
+            Number of story above ground:
+            <span class="value">
+              {{ buildingData?.storyAboveGround }}
+            </span>
+          </div>
+          <div class="item">
+            below ground:
+            <span class="value">
+              {{ buildingData?.storyBelowGround }}
+            </span>
+          </div>
+        </div>
       </div>
-      <div class="section-item">test 2</div>
+      <div id="right-block">
+        <div class="check-type-container">
+          <h2>Type of Construction</h2>
+          <div class="checklist-container two-split">
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData?.typeOfConstruction == 'wood'"
+                  />
+                  <label for="i">Wood Frame</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData?.typeOfConstruction == 'steel'"
+                  />
+                  <label for="i">Steel Frame</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData?.typeOfConstruction == 'concrete'"
+                  />
+                  <label for="i">Concrete Frame</label>
+                </div>
+              </div>
+            </div>
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData?.typeOfConstruction == 'masonry'"
+                  />
+                  <label for="i">Masonry</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="
+                      isOtherConstructionType(buildingData?.typeOfConstruction)
+                    "
+                  />
+                  <label for="i"
+                    >Other:
+                    <p class="value">
+                      <span id="u1">
+                        <span id="u2">
+                          {{
+                            isOtherConstructionType(
+                              buildingData?.typeOfConstruction
+                            )
+                              ? buildingData?.typeOfConstruction
+                              : "-n/a-"
+                          }}
+                        </span>
+                      </span>
+                    </p>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="check-type-container">
+          <h2>Primary Occupancy</h2>
+          <div class="checklist-container three-split">
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData?.primaryOccupancy == 'singleFamily'"
+                  />
+                  <label for="i">Single Family</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="
+                      buildingData?.primaryOccupancy == 'multiResidential'
+                    "
+                  />
+                  <label for="i">Multi-residential</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="
+                      buildingData?.primaryOccupancy == 'emergencyServices'
+                    "
+                  />
+                  <label for="i">Emergency Services</label>
+                </div>
+              </div>
+            </div>
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData?.primaryOccupancy == 'industrial'"
+                  />
+                  <label for="i">Industrial</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData?.primaryOccupancy == 'offices'"
+                  />
+                  <label for="i">Offices</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData?.primaryOccupancy == 'commercial'"
+                  />
+                  <label for="i">Commercial</label>
+                </div>
+              </div>
+            </div>
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData?.primaryOccupancy == 'school'"
+                  />
+                  <label for="i">School</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData?.primaryOccupancy == 'goverment'"
+                  />
+                  <label for="i">Government</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="
+                      isOtherOccupancyType(buildingData?.primaryOccupancy)
+                    "
+                  />
+                  <label for="i"
+                    >Other:
+                    <p class="value">
+                      <span id="u1">
+                        <span id="u2">
+                          {{
+                            isOtherOccupancyType(buildingData?.primaryOccupancy)
+                              ? buildingData?.primaryOccupancy
+                              : "-n/a-"
+                          }}
+                        </span>
+                      </span>
+                    </p>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <!-- evaluation -->
-  <div class="document-section" id="evaluation-group"></div>
+  <div class="document-section" id="evaluation-group">
+    <h2>Evaluation</h2>
+    <span
+      >Investigate the building and area around it for the conditions below and
+      check the appropriate column.</span
+    >
+    <div class="data">
+      <div class="conditions">
+        <div class="row header-row">
+          <span>Observed Conditions:</span>
+          <span>Minor/None</span>
+          <span>Moderate</span>
+          <span>Severe</span>
+        </div>
+        <div *ngFor="let observation of observationData" class="row">
+          <span
+            >{{ observation.label
+            }}<span>{{ observation.optionalLabel }}</span></span
+          >
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="observation.value == 0"
+            />
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="observation.value == 1"
+            />
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="observation.value == 2"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="estimate">
+        <h2>Estimated Building Damage</h2>
+        <h3>(excluding contents)</h3>
+        <div class="values">
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="reportData.estimatedBuildingDamage == 0"
+            />
+            <span>None</span>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="reportData.estimatedBuildingDamage == 1"
+            />
+            <span>1 - 10%</span>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="reportData.estimatedBuildingDamage == 2"
+            />
+            <span>11 - 30%</span>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="reportData.estimatedBuildingDamage == 3"
+            />
+            <span>31 - 60%</span>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="reportData.estimatedBuildingDamage == 4"
+            />
+            <span>61 - 99%</span>
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              disabled
+              [checked]="reportData.estimatedBuildingDamage == 5"
+            />
+            <span>100%</span>
+          </div>
+        </div>
+      </div>
+      <div class="comments">
+        <span>Comments:</span>
+        <p>
+          {{
+            reportData.evaluationComment.length == 0
+              ? "-n/a-"
+              : reportData.evaluationComment
+          }}
+        </p>
+      </div>
+    </div>
+  </div>
   <!-- posting -->
-  <div class="document-section" id="posting-group"></div>
+  <div class="document-section" id="posting-group">
+    <h2>Posting</h2>
+    <span>
+      Severe conditions endangering the overall building are grounds for an
+      Unsafe posting. Localised Severe and overall Moderate conditions may allow
+      a Restricted Use posting. Where required, ensure that RESTRICTED USE and
+      UNSAFE placards are posted at all entrances.
+    </span>
+    <div class="row">
+      <div class="item">
+        <div>
+          <span>
+            <input
+              type="checkbox"
+              name="inspected"
+              id="inspected"
+              disabled
+              [checked]="reportData.inspectedPlacard"
+            />
+            <label for="inspected">INSPECTED (Green placard)</label>
+          </span>
+        </div>
+      </div>
+      <div class="item">
+        <div>
+          <span>
+            <input
+              type="checkbox"
+              name="restricted"
+              id="restricted"
+              disabled
+              [checked]="reportData.restrictedPlacard"
+            />
+            <label for="restricted">RESTRICTED USE (Yellow placard)</label>
+          </span>
+        </div>
+      </div>
+      <div class="item">
+        <div>
+          <span>
+            <input
+              type="checkbox"
+              name="unsafe"
+              id="unsafe"
+              disabled
+              [checked]="reportData.unsafePlacard"
+            />
+            <label for="unsafe">UNSAFE (Red placard)</label>
+          </span>
+        </div>
+      </div>
+    </div>
+    <span>
+      Record any use and entry restrictions exactly as written on placard:
+    </span>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="doNotEnter"
+            id="doNotEnter"
+            disabled
+            [checked]="reportData.doNotEnter.length > 0"
+          />
+        </div>
+        <label for="doNotEnter"
+          >Do not enter or use the following areas:
+        </label>
+        <p class="underline">
+          {{
+            reportData.doNotEnter.length > 0 ? reportData.doNotEnter : "-n/a-"
+          }}
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="briefEntry"
+            id="briefEntry"
+            disabled
+            [checked]="reportData.briefEntryAllowed.length > 0"
+          />
+        </div>
+        <label for="briefEntry"
+          >Brief entry allowed for access to contents:
+        </label>
+        <p class="underline">
+          {{
+            reportData.briefEntryAllowed.length > 0
+              ? reportData.briefEntryAllowed
+              : "-n/a-"
+          }}
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="doNotUse"
+            id="doNotUse"
+            disabled
+            [checked]="reportData.doNotUse"
+          />
+        </div>
+        <label for="doNotUse"
+          >Do not use flooded/damaged appliances, devices or services (electric,
+          gas) until specified by a licensed contractor
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="otherRestrictions"
+            id="otherRestrictions"
+            disabled
+            [checked]="
+              reportData.otherRestrictions.length != 0 &&
+              reportData.otherRestrictions != '-n/a-'
+            "
+          />
+        </div>
+        <label for="otherRestrictions">Other restrictions: </label>
+        <p class="underline">
+          {{ reportData.otherRestrictions }}
+        </p>
+      </div>
+    </div>
+  </div>
   <!-- further actions -->
-  <div class="document-secion" id="further-group"></div>
+  <div class="document-section" id="further-group">
+    <h2>Further Actions</h2>
+    <span>Check the boxes below only if further actions are needed.</span>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="barricadeComment"
+            id="barricadeComment"
+            disabled
+            [checked]="reportData.barricadeComment.length != 0"
+          />
+        </div>
+        <label for="barricadeComment"
+          >Barricades needed in the following areas:
+        </label>
+        <p class="underline">
+          {{
+            reportData.barricadeComment.length > 0
+              ? reportData.barricadeComment
+              : "-n/a-"
+          }}
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="detailedEvaluation"
+            id="detailedEvaluation"
+            disabled
+            [checked]="reportData.detailedEvaluationAreas.length != 0"
+          />
+        </div>
+        <label for="detailedEvaluation">Detailed Evaluation recommended </label>
+        <div class="other-items">
+          <div class="sub-item">
+            <div class="checkbox-container">
+              <input
+                type="checkbox"
+                name="structural"
+                id="structural"
+                disabled
+                [checked]="reportData.detailedEvaluationAreas.includes('1')"
+              />
+            </div>
+            <label for="structural">Structural</label>
+          </div>
+          <div class="sub-item">
+            <div class="checkbox-container">
+              <input
+                type="checkbox"
+                name="geotechnical"
+                id="geotechnical"
+                disabled
+                [checked]="reportData.detailedEvaluationAreas.includes('2')"
+              />
+            </div>
+            <label for="geotechnical">Geotechnical</label>
+          </div>
+          <div class="sub-item">
+            <div class="checkbox-container">
+              <input
+                type="checkbox"
+                name="other"
+                id="other"
+                disabled
+                [checked]="reportData.detailedEvaluationAreas.includes('3')"
+              />
+            </div>
+            <label for="other">Other</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <div class="checkbox-container">
+          <input
+            type="checkbox"
+            name="otherRecommendations"
+            id="otherRecommendations"
+            disabled
+            [checked]="reportData.otherRecommendations.length != 0"
+          />
+        </div>
+        <label for="otherRecommendations">Other recommendations:</label>
+        <p class="underline">
+          {{
+            reportData.otherRecommendations.length > 0
+              ? reportData.otherRecommendations
+              : "-n/a-"
+          }}
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="item">
+        <span>Comments: </span>
+        <p class="underline">
+          {{
+            reportData.furtherComments.length > 0
+              ? reportData.furtherComments
+              : "-n/a-"
+          }}
+        </p>
+      </div>
+    </div>
+  </div>
   <!-- attachments -->
-  <div class="document-section" id="attachments-group "></div>
-  <p>Viewing {{ this.id }}</p>
+  <div class="document-section" id="attachments-group">
+    <h2>Attachments</h2>
+    Under Construction.
+  </div>
 </div>
+
 <ng-template #loading>
-  <p>Loading...</p>
+  <div *ngIf="error.length == 0" class="loading">
+    <img src="assets/svg/refresh.svg" alt="" />
+    <h2>Loading...</h2>
+    <h3>{{ currentLoading }}</h3>
+  </div>
+  <div *ngIf="error.length > 0" class="error">
+    <img src="assets/svg/error.svg" alt="" />
+    <h2>An error occured while loading the report. Please try again later.</h2>
+    <h3>{{ error }}</h3>
+  </div>
 </ng-template>

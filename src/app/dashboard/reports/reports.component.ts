@@ -50,15 +50,15 @@ export class ReportsComponent implements OnInit {
   parseSeverity(severity: number): string {
     switch (severity) {
       case 0:
-        return "OK";
+        return 'OK';
       case 1:
-        return "Minor";
+        return 'Minor';
       case 2:
-        return "Moderate";
+        return 'Moderate';
       case 3:
-        return "Severe";
+        return 'Severe';
     }
-    return "Unknown";
+    return 'Unknown';
   }
 
   async ngOnInit(): Promise<void> {
@@ -192,10 +192,8 @@ export class ReportsComponent implements OnInit {
     // console.log(this.reportsData);
   }
 
-  async refresh(keepCurrentPage: boolean = true)
-  {
-    if (!keepCurrentPage)
-      this.reportsService.setCurrentPage(0);
+  async refresh(keepCurrentPage: boolean = true) {
+    if (!keepCurrentPage) this.reportsService.setCurrentPage(0);
     await this.updateDataview();
   }
 
@@ -216,7 +214,10 @@ export class ReportsComponent implements OnInit {
   }
 
   async deleteReport(id: string) {
-    console.log(id);
+    if (confirm('Are you sure you want to delete this report?')) {
+      await this.reportsService.deleteReportAsync(id);
+      await this.refresh();
+    }
   }
 }
 interface ReportItem {

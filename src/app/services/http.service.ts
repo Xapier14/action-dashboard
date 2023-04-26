@@ -7,6 +7,15 @@ import { environment } from 'src/environments/environment';
 export class HttpService {
   constructor() {}
 
+  async testConnection() {
+    try {
+      const res = await fetch(environment.apiHost.replace('/api/v1', ''));
+      return res.status === 200;
+    } catch (e) {
+      return false;
+    }
+  }
+
   async postJsonAsync(route: string, data: object | null, token?: string) {
     const endpoint = environment.apiHost + '/' + route;
     const headers: HeadersInit = new Headers();
@@ -76,5 +85,15 @@ export class HttpService {
     return Object.keys(query)
       .map((key) => key + '=' + query[key])
       .join('&');
+  }
+
+  async deleteAsync(route: string, token?: string) {
+    const endpoint = environment.apiHost + '/' + route;
+    const headers: HeadersInit = new Headers();
+    if (token) headers.append('Authorization', token);
+    return await fetch(endpoint, {
+      method: 'DELETE',
+      headers: headers,
+    });
   }
 }

@@ -2,42 +2,20 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { HttpService } from './http.service';
 
-export interface FullReportData {
-  id: string;
-  inspectorId: string;
-  inspectedDateTime: Date;
-  location: string;
-  buildingId: string;
-  areasInspected: string;
-  collapsedStructure: number;
-  leaningOrOutOfPlumb: number;
-  damageToPrimaryStructure: number;
-  fallingHazards: number;
-  groundMovementOrSlope: number;
-  damagedSubmergedFixtures: number;
-  proximityRiskTitle: string;
-  proximityRisk: number;
-  evaluationComment: string;
-  estimatedBuildingDamage: number;
-  inspectedPlacard: boolean;
-  restrictedPlacard: boolean;
-  unsafePlacard: boolean;
-  doNotEnter: string;
-  briefEntryAllowed: string;
-  doNotUse: boolean;
-  otherRestrictions: string;
-  barricadeComment: string;
-  detailedEvaluationAreas: string[];
-  otherRecommendations: string;
-  furtherComments: string;
-  attachments: string[];
-  resolved: boolean;
-  severityStatus: number;
+export interface LogData {
+  sourceIp: string;
+  dateTime: Date;
+  message: string;
+  level: string;
+  sessionId: string;
+  userId: string;
+  action: string;
 }
+
 @Injectable({
   providedIn: 'root',
 })
-export class ReportsService {
+export class LogsService {
   private currentPage: number = 0;
   private limit: number = 20;
   private cachedMax: number | undefined;
@@ -130,21 +108,6 @@ export class ReportsService {
     this.filter = [];
   }
 
-  async tryGetReportAsync(id: string): Promise<FullReportData | null> {
-    const token = await this.authService.checkTokenFromPreferences();
-    const response = await (
-      await this.httpService.getAsync(
-        `incidents/${id}`,
-        undefined,
-        token?.token
-      )
-    ).json();
-    if (response.e != 0) return null;
-    const data: FullReportData = response.incident;
-    data.inspectedDateTime = new Date(response.incident.inspectedDateTime);
-    return data;
-  }
-
   async getListDataAsync() {
     if (this.isEndOfList && this.autoIncrement) return [];
 
@@ -165,14 +128,14 @@ export class ReportsService {
       }
     }
     const response = await (
-      await this.httpService.getAsync('incidents/', params, token.token)
+      await this.httpService.getAsync('logs', params, token.token)
     ).json();
     if (response.e == 0) {
       if (this.autoIncrement) this.currentPage++;
       this.cachedMax = response.maxPageOffset;
-      this.cachedTotal = response.totalReportCount;
+      this.cachedTotal = response.totalLogCount;
       if (this.currentPage > response.maxPageOffset) this.isEndOfList = true;
-      return response.reports;
+      return response.logs;
     }
     return [];
   }
@@ -180,41 +143,5 @@ export class ReportsService {
   refreshList() {
     this.currentPage = 0;
     this.isEndOfList = false;
-  }
-
-  async getReportAsync(id: string) {
-    const token = await this.authService.checkTokenFromPreferences();
-    if (!token || token.sessionState != 'validSession') return undefined;
-    const response = await (
-      await this.httpService.getAsync(`incidents/${id}`, undefined, token.token)
-    ).json();
-    if (response.e != 0) return undefined;
-    return response.incident;
-  }
-
-  async countReportsAsync(
-    location: string,
-    buildingId?: string
-  ): Promise<number> {
-    try {
-      const token = await this.authService.getTokenAsync();
-      let params = new URLSearchParams({
-        location: location,
-      });
-      if (buildingId) params.append('building', buildingId);
-      const response = await (
-        await this.httpService.getAsync('misc/reports', params, token ?? '')
-      ).json();
-      if (response.e != 0) return 0;
-      return response.count;
-    } catch (error) {
-      return 0;
-    }
-  }
-
-  async deleteReportAsync(id: string) {
-    const token = await this.authService.checkTokenFromPreferences();
-    if (!token || token.sessionState != 'validSession') return;
-    await this.httpService.deleteAsync(`incidents/${id}`, token.token);
   }
 }

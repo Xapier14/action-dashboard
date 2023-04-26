@@ -7,12 +7,18 @@ import { HttpService } from './http.service';
 export class AuthService {
   constructor(private httpService: HttpService) {}
 
-  async tryLogin(email: string, password: string, accessLevel: number = 1) {
+  async tryLogin(
+    email: string,
+    password: string,
+    recaptchaToken: string,
+    accessLevel: number = 1
+  ) {
     try {
       const response = await (
         await this.httpService.postEncodedObjectAsync('login', {
           email: email,
           password: password,
+          'g-recaptcha-token': recaptchaToken,
           accessLevel: accessLevel,
         })
       ).json();
