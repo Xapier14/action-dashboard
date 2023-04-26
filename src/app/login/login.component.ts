@@ -3,10 +3,8 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { HttpService } from '../services/http.service';
-import { load } from 'recaptcha-v3';
 import { environment } from 'src/environments/environment';
 import { RecaptchaService } from '../services/recaptcha.service';
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -38,9 +36,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     const connected = await this.httpService.testConnection();
-    this.recaptchaService.showBadge();
-    await this.recaptchaService.load();
     if (connected) {
+      await this.recaptchaService.showBadge();
       this.connectionStatus = 'Connected.';
       this.statusCode = 'success';
       setTimeout(() => {
@@ -53,6 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     if (this.authService.hasToken()) {
       this.router.navigate(['/dashboard']);
+      await this.recaptchaService.hideBadge();
     }
   }
 
@@ -91,7 +89,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   checkLoginResult(result: { e: any; status: string }) {
     switch (result.e) {
       case 0:
-        // login successfull
+        // login successful
         this.router.navigate(['/dashboard']);
         // clear fields
         this.loginForm.reset();
@@ -99,14 +97,26 @@ export class LoginComponent implements OnInit, OnDestroy {
       case 1:
         // invalid email
         this.error = 'Invalid credentials.';
+        this.loginForm.setValue({
+          email: this.loginForm.value.email ?? '',
+          password: '',
+        });
         break;
       case 5:
-        // invalid email
+        // insufficient permissions
         this.error = 'Account unauthorized.';
+        this.loginForm.setValue({
+          email: this.loginForm.value.email ?? '',
+          password: '',
+        });
         break;
       case 8:
-        // invalid email
-        this.error = 'Too many login attempts. Please try again later.';
+        // too many requests
+        this.error = 'Too many requests. Please try again later.';
+        this.loginForm.setValue({
+          email: this.loginForm.value.email ?? '',
+          password: '',
+        });
         break;
       default:
         this.error = result.status;
