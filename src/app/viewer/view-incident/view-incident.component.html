@@ -725,6 +725,19 @@
   <div class="document-section" id="attachments-group">
     <h2>Attachments</h2>
     Under Construction.
+    <div *ngIf="attachmentUrls.length > 0; else noAttachments">
+      <div
+        class="attachment-container"
+        *ngFor="let attachment of attachmentUrls"
+      >
+        <img *ngIf="attachment.type" [src]="attachment.url" alt="" />
+        <video
+          *ngIf="attachment.type == 'video'"
+          [src]="attachment.url"
+          controls
+        ></video>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -740,3 +753,4 @@
     <h3>{{ error }}</h3>
   </div>
 </ng-template>
+<ng-template #noAttachments> No Attachments. </ng-template>

@@ -5,6 +5,10 @@ import {
   AccountData,
   AccountsService,
 } from 'src/app/services/accounts.service';
+import {
+  Attachment,
+  AttachmentsService,
+} from 'src/app/services/attachments.service';
 import { BuildingsService } from 'src/app/services/buildings.service';
 import { BuildingData } from 'src/app/services/buildings.service';
 import {
@@ -38,13 +42,19 @@ export class ViewIncidentComponent {
   buildingData: BuildingData | null = null;
   error: string = '';
   currentLoading: string = 'Initializing...';
+  attachmentUrls: {
+    type: 'image' | 'video';
+    url: string;
+    thumbnail: string;
+  }[] = [];
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private title: Title,
     private reportsService: ReportsService,
     private accountsService: AccountsService,
-    private buildingsService: BuildingsService
+    private buildingsService: BuildingsService,
+    private attachmentsService: AttachmentsService
   ) {}
 
   ngOnInit() {
@@ -81,6 +91,30 @@ export class ViewIncidentComponent {
       this.observationData = this.generateObservationData(this.reportData);
 
       this.currentLoading = 'Fetching attachments...';
+      const attachments =
+        await this.attachmentsService.GetAttachmentsFromReportAsync(this.id);
+      if (!attachments) {
+        this.error = 'Attachments could not be retrieved';
+        return;
+      }
+      const promise = attachments.map(async (attachmentId) => {
+        const fullsize = await this.attachmentsService.GetAttachmentAsync(
+          attachmentId,
+          false
+        );
+        const thumbnail = await this.attachmentsService.GetAttachmentAsync(
+          attachmentId,
+          true
+        );
+        return {
+          type: fullsize.contentType.split('/')[0] as 'image' | 'video',
+          url: await this.attachmentsService.GetAttachmentUrlAsync(fullsize),
+          thumbnail: await this.attachmentsService.GetAttachmentUrlAsync(
+            thumbnail
+          ),
+        };
+      });
+      this.attachmentUrls = await Promise.all(promise);
 
       this.title.setTitle('Report Viewer - ACTION Dashboard Web App');
     });
