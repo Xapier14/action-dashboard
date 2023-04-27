@@ -42,11 +42,13 @@ export class ViewIncidentComponent {
   buildingData: BuildingData | null = null;
   error: string = '';
   currentLoading: string = 'Initializing...';
-  attachmentUrls: {
-    type: 'image' | 'video';
-    url: string;
-    thumbnail: string;
-  }[] = [];
+  attachmentUrls:
+    | {
+        type: 'image' | 'video';
+        url: string;
+        thumbnail: string;
+      }[]
+    | null = null;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -85,7 +87,6 @@ export class ViewIncidentComponent {
         this.error = 'Building data could not be retrieved';
         return;
       }
-      console.log(this.buildingData);
 
       this.currentLoading = 'Generating observation data...';
       this.observationData = this.generateObservationData(this.reportData);
@@ -106,6 +107,7 @@ export class ViewIncidentComponent {
           attachmentId,
           true
         );
+        if (!fullsize || !thumbnail || !fullsize.contentType) return null;
         return {
           type: fullsize.contentType.split('/')[0] as 'image' | 'video',
           url: await this.attachmentsService.GetAttachmentUrlAsync(fullsize),
@@ -114,7 +116,14 @@ export class ViewIncidentComponent {
           ),
         };
       });
-      this.attachmentUrls = await Promise.all(promise);
+      const results = await Promise.all(promise);
+      this.attachmentUrls = results.filter(
+        (attachment) => attachment !== null
+      ) as {
+        type: 'image' | 'video';
+        url: string;
+        thumbnail: string;
+      }[];
 
       this.title.setTitle('Report Viewer - ACTION Dashboard Web App');
     });
@@ -212,6 +221,19 @@ export class ViewIncidentComponent {
       attachmentsSection.classList.add('hide-on-print');
     } else {
       attachmentsSection.classList.remove('hide-on-print');
+    }
+  }
+  updateHideNonImagesOption(event: any) {
+    const attachmentsSection = document.getElementsByClassName('non-image');
+    if (!attachmentsSection) return;
+    if (event.target.checked) {
+      for (let i = 0; i < attachmentsSection.length; i++) {
+        attachmentsSection[i].classList.add('hide-on-print');
+      }
+    } else {
+      for (let i = 0; i < attachmentsSection.length; i++) {
+        attachmentsSection[i].classList.remove('hide-on-print');
+      }
     }
   }
 

@@ -23,6 +23,7 @@ import { LogsComponent } from './dashboard/logs/logs.component';
 import { ListViewComponent } from './dashboard/accounts/list-view/list-view.component';
 import { CreateViewComponent } from './dashboard/accounts/create-view/create-view.component';
 import { ModifyViewComponent } from './dashboard/accounts/modify-view/modify-view.component';
+import { AttachmentComponent } from './viewer/view-incident/attachment/attachment.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { ModifyViewComponent } from './dashboard/accounts/modify-view/modify-vie
     ListViewComponent,
     CreateViewComponent,
     ModifyViewComponent,
+    AttachmentComponent,
   ],
   imports: [
     BrowserModule,

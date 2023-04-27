@@ -23,7 +23,7 @@ export class AttachmentsService {
   async GetAttachmentAsync(
     id: string,
     isThumbnail: boolean
-  ): Promise<Attachment> {
+  ): Promise<Attachment | undefined> {
     const localId = `${id}-${isThumbnail}`;
     if (this.cache.has(localId)) {
       return this.cache.get(localId)!;
@@ -33,24 +33,30 @@ export class AttachmentsService {
       if (isThumbnail) requestData.append('thumbnail', 'true');
       const token = await this.authService.getTokenAsync();
       if (!token) throw new Error('No token available.');
-      const response = await (
-        await this.httpService.getAsync(requestUrl, requestData, token)
-      ).json();
+      try {
+        const response = await (
+          await this.httpService.getAsync(requestUrl, requestData, token)
+        ).json();
 
-      const attachment = {
-        fileName: response.fileName,
-        contentType: response.contentType,
-        accessToken: response.accessToken,
-        expiresAt: response.expires,
-      };
-      this.cache.set(localId, attachment);
+        const attachment = {
+          fileName: response.fileName,
+          contentType: response.contentType,
+          accessToken: response.accessToken,
+          expiresAt: response.expires,
+        };
+        this.cache.set(localId, attachment);
 
-      const dateOffset = new Date(attachment.expiresAt).getTime() - Date.now();
-      setTimeout(() => {
-        this.cache.delete(localId);
-      }, dateOffset - 60000);
+        const dateOffset =
+          new Date(attachment.expiresAt).getTime() - Date.now();
+        setTimeout(() => {
+          this.cache.delete(localId);
+        }, dateOffset - 60000);
 
-      return attachment;
+        return attachment;
+      } catch (error) {
+        console.log(error);
+        return undefined;
+      }
     }
   }
 
@@ -65,6 +71,10 @@ export class AttachmentsService {
 
   async GetAttachmentUrlAsyncById(id: string, isThumbnail: boolean) {
     const attachment = await this.GetAttachmentAsync(id, isThumbnail);
+    if (!attachment) {
+      console.log('Attachment not found.');
+      return '';
+    }
     return await this.GetAttachmentUrlAsync(attachment);
   }
 
@@ -75,6 +85,8 @@ export class AttachmentsService {
     const response = await (
       await this.httpService.getAsync(requestUrl, undefined, token)
     ).json();
-    return response;
+    return response.filter(
+      (attachment: string) => attachment !== null && attachment != ''
+    );
   }
 }

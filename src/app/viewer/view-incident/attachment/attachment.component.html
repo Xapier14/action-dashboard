@@ -1,0 +1,28 @@
+<div class="container">
+  <div *ngIf="!activated; else media" (mouseover)="hover()" class="thumbnail">
+    <img [src]="thumbnail" alt="Missing thumbnail." />
+    <div
+      *ngIf="hovered"
+      class="overlay hide-on-print"
+      (mouseout)="leave()"
+      (click)="activate()"
+    >
+      {{
+        type == "image"
+          ? "Click to view full resolution."
+          : "Click to load video."
+      }}
+    </div>
+  </div>
+</div>
+
+<ng-template #media class="container">
+  <img
+    *ngIf="type == 'image'; else video"
+    [src]="url"
+    alt="Image not loaded."
+  />
+  <ng-template #video>
+    <video [src]="url" controls></video>
+  </ng-template>
+</ng-template>
