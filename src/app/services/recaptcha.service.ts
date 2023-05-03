@@ -15,6 +15,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 })
 export class RecaptchaService {
   isLoaded = false;
+  hasError = false;
   constructor() {}
 
   load(): void {
@@ -29,6 +30,10 @@ export class RecaptchaService {
       this.isLoaded = true;
       console.log('Recaptcha loaded');
     };
+    script.onerror = () => {
+      this.hasError = true;
+      console.error('Recaptcha failed to load');
+    };
   }
 
   async getToken(action: string): Promise<string> {
@@ -37,13 +42,13 @@ export class RecaptchaService {
 
   async showBadge(): Promise<void> {
     // wait
-    while (!this.isLoaded) {
+    while (!this.isLoaded && !this.hasError) {
       await sleep(300);
     }
     const divs = document.body.getElementsByTagName('div');
     let recaptcha = null;
 
-    while (recaptcha == null) {
+    while (recaptcha == null && !this.hasError) {
       await sleep(300);
       for (let i = 0; i < divs.length; i++) {
         const length = divs
@@ -56,7 +61,7 @@ export class RecaptchaService {
       }
       await sleep(300);
     }
-    if (recaptcha) {
+    if (recaptcha && !this.hasError) {
       recaptcha.style.visibility = 'visible';
     }
   }

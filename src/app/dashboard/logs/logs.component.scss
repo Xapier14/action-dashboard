@@ -166,6 +166,48 @@
       .td-center {
         text-align: center;
       }
+      .log-level {
+        font-size: 0.75rem;
+        font-weight: 400;
+        color: #333;
+        padding: 0.125rem 0.5rem;
+        text-align: center;
+        border-radius: 5px;
+        border: 1px solid #333;
+        background-color: #f0f0f0;
+      }
+      .level-system {
+        background-color: #f0f0f0;
+        border-color: #d9d9d9;
+        color: #595959;
+      }
+      .level-info {
+        background-color: #e6f7ff;
+        border-color: #91d5ff;
+        color: #1890ff;
+      }
+      .level-warn {
+        background-color: #fffbe6;
+        border-color: #d3b860;
+        color: #d89a1f;
+      }
+      .level-admin {
+        background-color: #fff7e6;
+        border-color: #ffc069;
+        color: #d46b08;
+      }
+      .level-error,
+      .level-crit {
+        background-color: #fff1f0;
+        border-color: #ffa39e;
+        color: #f5222d;
+      }
+      .level-misc {
+        background-color: #f9f0ff;
+        border-color: #d3adf7;
+        color: #722ed1;
+      }
+
       border-bottom: 1px solid #f0f0f0;
     }
     tbody {

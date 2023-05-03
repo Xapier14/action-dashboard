@@ -24,7 +24,7 @@ export class AccountsService {
       if (location) params = { location: location };
       const response = await (
         await this.httpService.getAsyncParams(
-          'misc/accounts',
+          'accounts/count',
           params,
           (await this.authService.getTokenAsync()) ?? ''
         )
@@ -36,19 +36,14 @@ export class AccountsService {
   }
 
   async getAccountDataAsync(id: string): Promise<AccountData | null> {
-    if (this.cachedAccounts.has(id))
-      return this.cachedAccounts.get(id) ?? null;
+    if (this.cachedAccounts.has(id)) return this.cachedAccounts.get(id) ?? null;
     try {
-      const token = await this.authService.getTokenAsync() ?? '';
+      const token = (await this.authService.getTokenAsync()) ?? '';
       const params = new URLSearchParams({
-        id : id
+        id: id,
       });
       const response = await (
-        await this.httpService.getAsync(
-          `misc/resolve`,
-          params,
-          token
-        )
+        await this.httpService.getAsync(`misc/resolve`, params, token)
       ).json();
       const accountData: AccountData = {
         id: response.userId,

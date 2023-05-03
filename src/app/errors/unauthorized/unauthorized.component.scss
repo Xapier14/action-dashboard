@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  line-height: normal;
+  h1 {
+    line-height: normal;
+    display: block;
+    font-size: 6rem;
+    font-weight: 900;
+    margin: 0;
+  }
+  h2 {
+    line-height: normal;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 1rem;
+  }
+  p {
+    line-height: normal;
+    font-size: 1rem;
+    margin: 0;
+    text-align: center;
+  }
+}

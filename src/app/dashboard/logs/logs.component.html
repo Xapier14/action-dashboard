@@ -1,34 +1,4 @@
 <div class="panel-container">
-  <!-- <div class="menu-column">
-    <div class="list-header">
-      <span>Filters</span>
-    </div>
-    <div class="separator-container">
-      <div class="separator"></div>
-    </div>
-    <div class="item-list">
-      <filter-dropdown
-        [filter]="locationsFilter"
-        [values]="locationsValues"
-        [label]="'Location'"
-        (filterChange)="onLocationChange($event)"
-      ></filter-dropdown>
-      <filter-dropdown
-        #buildingsDropdown
-        [disabled]="buildingsFilter.length == 0"
-        [filter]="buildingsFilter"
-        [values]="buildingsValues"
-        [label]="'Building'"
-        (filterChange)="onBuildingChange($event)"
-      ></filter-dropdown>
-      <filter-dropdown
-        [filter]="['OK', 'Minor', 'Moderate', 'Severe']"
-        [values]="[0, 1, 2, 3]"
-        [label]="'Severity'"
-        (filterChange)="onSeverityChange($event)"
-      ></filter-dropdown>
-    </div>
-  </div> -->
   <div class="main-content">
     <div class="content-header">
       <span>Logs</span>
@@ -79,44 +49,28 @@
       <table>
         <thead>
           <tr>
+            <th class="td-center">Level</th>
             <th>Date & Time</th>
             <th>Source IP</th>
-            <th>Level</th>
             <th>Action</th>
             <th>Message</th>
             <th>User ID</th>
             <th>Session ID</th>
-            <!-- <th class="td-center">Severity</th>
-            <th class="td-center">Actions</th> -->
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let log of logsData">
+            <td class="td-center">
+              <span class="log-level level-{{ log.level }}">{{
+                log.level
+              }}</span>
+            </td>
             <td>{{ log.dateTime.toLocaleString() }}</td>
             <td>{{ log.sourceIp }}</td>
-            <td>{{ log.level }}</td>
             <td>{{ log.action }}</td>
             <td>{{ log.message }}</td>
             <td>{{ log.userId }}</td>
             <td>{{ log.sessionId }}</td>
-            <!-- <td class="td-center">{{ parseSeverity(report.severity) }}</td>
-            <td class="td-center item-action">
-              <button
-                (click)="viewReport(report.id)"
-                title="View report in another tab"
-              >
-                <img src="assets/svg/view.svg" alt="View" />
-              </button>
-              <button
-                (click)="editReport(report.id)"
-                title="Edit report in another tab"
-              >
-                <img src="assets/svg/edit.svg" alt="Edit" />
-              </button>
-              <button (click)="deleteReport(report.id)" title="Delete Report">
-                <img src="assets/svg/delete.svg" alt="Delete" />
-              </button>
-            </td> -->
           </tr>
         </tbody>
       </table>
