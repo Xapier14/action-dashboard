@@ -41,7 +41,9 @@
       color: #333;
       img {
         filter: invert(1);
+        cursor: not-allowed;
       }
+      cursor: not-allowed;
     }
   }
 }
@@ -108,6 +110,9 @@
     justify-content: flex-start;
     align-items: center;
     min-width: 15%;
+  }
+  .back-action {
+    margin-right: 0.5rem;
   }
 }
 .content-container {

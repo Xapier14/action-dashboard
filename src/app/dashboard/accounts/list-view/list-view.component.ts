@@ -1,15 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
-interface AccountData {
-  id: string;
-  name: string;
-  email: string;
-  location: string;
-  maxAccessLevel: number;
-  createdAt: Date;
-  isLocked: boolean;
-  lastLocked: Date | undefined;
-}
+import { Router } from '@angular/router';
+import {
+  AccountsService,
+  FullAccountInfo,
+} from 'src/app/services/accounts.service';
 
 @Component({
   selector: 'app-list-view',
@@ -21,7 +15,12 @@ export class ListViewComponent implements OnInit {
   totalItems: number = 0;
   currentPage: number = 1;
   pageCount: number = 1;
-  accountsData: AccountData[] | undefined = [];
+  accountsData: FullAccountInfo[] | undefined = [];
+
+  constructor(
+    private accountsService: AccountsService,
+    private router: Router
+  ) {}
 
   async ngOnInit(): Promise<void> {
     await this.updateDataview();
@@ -45,12 +44,28 @@ export class ListViewComponent implements OnInit {
     // this.logsService.setCurrentPage(this.pageCount - 1);
     this.updateDataview();
   }
-  editAccount(id: string) {}
-  deleteAccount(id: string) {}
-  unlockAccount(id: string) {}
+  async editAccount(id: string) {
+    await this.router.navigate(['dashboard', 'accounts', 'edit', id]);
+  }
+  async deleteAccount(id: string) {
+    if (confirm('Are you sure you want to delete this account?')) {
+      await this.accountsService.deleteAccountAsync(id);
+      await this.updateDataview();
+    }
+  }
+  async lockAccount(id: string) {
+    await this.accountsService.lockLoginRestrictionAsync(id);
+    await this.updateDataview();
+  }
+  async unlockAccount(id: string) {
+    await this.accountsService.unlockLoginRestrictionAsync(id);
+    await this.updateDataview();
+  }
 
   async updateDataview() {
     console.log('updateDataview');
+    const accounts = await this.accountsService.getAccountsFromLocation();
+    this.accountsData = accounts;
     // this.logsData = undefined;
     // let newData: LogData[] = [];
 

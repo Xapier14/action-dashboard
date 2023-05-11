@@ -1,38 +1,10 @@
 <div class="main-content">
   <div class="table-control">
     <div class="table-control-end">
-      <span>Showing {{ displayedItems }} of {{ totalItems }} item(s)</span>
-    </div>
-    <div class="table-control-center">
-      <span>Page {{ currentPage }} / {{ pageCount }}</span>
-    </div>
-    <div class="table-control-end" style="justify-content: flex-end">
-      <div class="action-group">
-        <button
-          [disabled]="currentPage <= 1 || accountsData == undefined"
-          (click)="navFirstPage()"
-        >
-          |&lt;
-        </button>
-        <button
-          [disabled]="currentPage <= 1 || accountsData == undefined"
-          (click)="navPrevPage()"
-        >
-          &lt;
-        </button>
-        <button
-          [disabled]="currentPage >= pageCount || accountsData == undefined"
-          (click)="navNextPage()"
-        >
-          &gt;
-        </button>
-        <button
-          [disabled]="currentPage >= pageCount || accountsData == undefined"
-          (click)="navLastPage()"
-        >
-          &gt;|
-        </button>
+      <div class="back-action">
+        <button disabled>Back</button>
       </div>
+      <span>Account List</span>
     </div>
   </div>
   <div class="separator-container">
@@ -45,39 +17,52 @@
           <th>Account Name</th>
           <th>Email</th>
           <th>Location</th>
-          <th>Max Access Level</th>
+          <th class="td-center">Max Access Level</th>
           <th>Created At</th>
-          <th>Is Locked</th>
+          <th class="td-center">Is Locked</th>
           <th>Last Locked</th>
           <th class="td-center">Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let account of accountsData">
-          <!-- <td class="td-center">
-            <span class="log-level level-{{ account.level }}">{{
-              account.level
-            }}</span>
-          </td> -->
-          <td>{{ account.name }}</td>
+          <td>{{ account.firstName }} {{ account.lastName }}</td>
           <td>{{ account.email }}</td>
           <td>{{ account.location }}</td>
-          <td class="td-center">{{ account.isLocked }}</td>
-          <td>{{ account.lastLocked }}</td>
+          <td class="td-center">
+            {{ account.maxAccessLevel == 1 ? "Admin" : "User" }}
+          </td>
+          <td>{{ account.createdAt.toLocaleString() }}</td>
+
+          <td
+            class="td-center {{
+              account.isLocked ? 'td-locked' : 'td-unlocked'
+            }}"
+          >
+            {{ account.isLocked }}
+          </td>
+          <td>
+            {{ account.lastLocked?.toLocaleString() ?? "n/a" }}
+          </td>
           <td class="td-center item-action">
-            <button
-              (click)="editAccount(account.id)"
-              title="Edit report in another tab"
-            >
+            <button (click)="editAccount(account.id)" title="Edit account">
               <img src="assets/svg/edit.svg" alt="Edit" />
+            </button>
+            <button
+              (click)="lockAccount(account.id)"
+              [disabled]="account.isLocked"
+              title="Lock account login restrictions"
+            >
+              <img src="assets/svg/lock.svg" alt="Lock" />
             </button>
             <button
               (click)="unlockAccount(account.id)"
+              [disabled]="!account.isLocked"
               title="Unlock account login restrictions"
             >
-              <img src="assets/svg/edit.svg" alt="Edit" />
+              <img src="assets/svg/unlock.svg" alt="Unlock" />
             </button>
-            <button (click)="deleteAccount(account.id)" title="Delete Report">
+            <button (click)="deleteAccount(account.id)" title="Delete Accouunt">
               <img src="assets/svg/delete.svg" alt="Delete" />
             </button>
           </td>

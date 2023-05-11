@@ -27,16 +27,16 @@ export class DashboardComponent implements OnInit {
       icon: 'assets/svg/users.svg',
       id: 'accounts',
     },
-    {
-      name: 'Attachments',
-      icon: 'assets/svg/attach.svg',
-      id: 'attachments',
-    },
+    // {
+    //   name: 'Attachments',
+    //   icon: 'assets/svg/attach.svg',
+    //   id: 'attachments',
+    // },
     {
       name: 'Logs',
       icon: 'assets/svg/logs.svg',
       id: 'logs',
-    }
+    },
   ];
 
   constructor(private router: Router, private authService: AuthService) {}

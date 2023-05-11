@@ -87,6 +87,16 @@ export class HttpService {
       .join('&');
   }
 
+  // async deleteAsync(route: string, token?: string) {
+  //   const endpoint = environment.apiHost + '/' + route;
+  //   const headers: HeadersInit = new Headers();
+  //   if (token) headers.append('Authorization', token);
+  //   return await fetch(endpoint, {
+  //     method: 'DELETE',
+  //     headers: headers,
+  //   });
+  // }
+
   async deleteAsync(route: string, token?: string) {
     const endpoint = environment.apiHost + '/' + route;
     const headers: HeadersInit = new Headers();
