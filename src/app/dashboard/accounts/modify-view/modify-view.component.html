@@ -1,16 +1,15 @@
 <div class="main-content">
-  <div class="table-control">
-    <div class="table-control-end">
-      <div class="back-action">
-        <button (click)="goBack()">Back</button>
-      </div>
-      <span>Edit account</span>
+  <div class="content-header">
+    <div class="back-action">
+      <button (click)="goBack()">Back</button>
     </div>
+    <span>Edit account</span>
   </div>
   <div class="separator-container">
     <div class="separator"></div>
   </div>
   <div *ngIf="accountData != undefined; else loader" class="content-container">
+    <h2>Basic Information</h2>
     <div class="three-item">
       <div class="item">
         <span>First Name</span>
@@ -64,6 +63,26 @@
           [ngModelOptions]="{ standalone: true }"
         />
       </div>
+    </div>
+    <div class="action-buttons">
+      <button (click)="saveChanges()">Save Changes</button>
+      <button (click)="revertChanges()">Revert Changes</button>
+    </div>
+    <h2>Change Password</h2>
+    <div class="change-password">
+      <div class="item">
+        <span>New Password</span>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          [(ngModel)]="password"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+    </div>
+    <div class="action-buttons">
+      <button (click)="changePassword()">Change Password</button>
     </div>
   </div>
   <ng-template #loader>

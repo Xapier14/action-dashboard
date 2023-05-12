@@ -61,6 +61,9 @@ export class ListViewComponent implements OnInit {
     await this.accountsService.unlockLoginRestrictionAsync(id);
     await this.updateDataview();
   }
+  async newAccount() {
+    await this.router.navigate(['dashboard', 'accounts', 'create']);
+  }
 
   async updateDataview() {
     console.log('updateDataview');

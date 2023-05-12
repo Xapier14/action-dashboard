@@ -59,7 +59,17 @@ export class ModifyViewComponent {
       location: this.location,
       maxAccessLevel: this.maxAccessLevel,
     };
-    await this.accountsService.editAccountAsync(this.accountData.id, account);
+    const result = await this.accountsService.editAccountAsync(
+      this.accountData.id,
+      account
+    );
+    if (!result) {
+      alert('Account update failed!');
+      return;
+    }
+    this.accountData = (await this.accountsService.getAccountDataAsync(
+      this.accountData.id
+    ))!;
     alert('Account updated!');
   }
 
@@ -74,11 +84,8 @@ export class ModifyViewComponent {
       this.accountData.id,
       this.password
     );
-    if (result) {
-      alert('Password changed!');
-    } else {
-      alert('Password change failed!');
-    }
+    this.password = '';
+    alert(result);
   }
 
   async goBack() {

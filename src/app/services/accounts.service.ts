@@ -3,9 +3,11 @@ import { AuthService } from './auth.service';
 import { HttpService } from './http.service';
 
 export interface AccountData {
-  id: string;
+  id: string | undefined;
+  email: string;
   firstName: string;
   lastName: string;
+  maxAccessLevel: number;
   location: string;
 }
 export interface FullAccountInfo extends AccountData {
@@ -55,7 +57,7 @@ export class AccountsService {
         await this.httpService.getAsync(`accounts/${id}`, undefined, token)
       ).json();
       const accountData: FullAccountInfo = {
-        id: response.account.userId,
+        id: response.account.id,
         firstName: response.account.firstName,
         lastName: response.account.lastName,
         location: response.account.location,
@@ -111,6 +113,7 @@ export class AccountsService {
         null,
         token
       );
+      this.cachedAccounts.delete(id);
       return response.ok;
     } catch (error) {
       return false;
@@ -124,6 +127,7 @@ export class AccountsService {
         null,
         token
       );
+      this.cachedAccounts.delete(id);
       return response.ok;
     } catch (error) {
       return false;
@@ -133,27 +137,55 @@ export class AccountsService {
     try {
       const token = (await this.authService.getTokenAsync()) ?? '';
       await this.httpService.deleteAsync(`accounts/delete/${id}`, token);
+      this.cachedAccounts.delete(id);
     } catch (error) {}
   }
 
-  async changePasswordAsync(id: string, newPassword: string): Promise<Boolean> {
+  async changePasswordAsync(id: string, newPassword: string): Promise<string> {
     try {
       const token = (await this.authService.getTokenAsync()) ?? '';
+      console.log(newPassword);
       const response = await this.httpService.postJsonAsync(
         `accounts/change-password/${id}`,
-        new URLSearchParams({ password: newPassword }),
+        { newPassword: newPassword },
         token
       );
-      return response.ok;
+      return (await response.json()).status ?? 'Password changed.';
+    } catch (error) {
+      return 'General error occurred.';
+    }
+  }
+
+  async editAccountAsync(id: string, data: any): Promise<Boolean> {
+    try {
+      const token = (await this.authService.getTokenAsync()) ?? '';
+      await this.httpService.postJsonAsync(`accounts/edit/${id}`, data, token);
+      this.cachedAccounts.delete(id);
+      return true;
     } catch (error) {
       return false;
     }
   }
 
-  async editAccountAsync(id: string, data: any): Promise<void> {
+  async createAccountAsync(
+    account: AccountData,
+    password: string
+  ): Promise<Boolean> {
     try {
       const token = (await this.authService.getTokenAsync()) ?? '';
-      await this.httpService.postJsonAsync(`accounts/edit/${id}`, data, token);
-    } catch (error) {}
+      const data = {
+        ...account,
+        password: password,
+      };
+      const response = await this.httpService.postJsonAsync(
+        `signup`,
+        data,
+        token
+      );
+      if (!response.ok) return false;
+      return (await response.json()).e === 0;
+    } catch (error) {
+      return false;
+    }
   }
 }
