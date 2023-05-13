@@ -5,6 +5,10 @@ import {
   AccountData,
   AccountsService,
 } from 'src/app/services/accounts.service';
+import {
+  Attachment,
+  AttachmentsService,
+} from 'src/app/services/attachments.service';
 import { BuildingsService } from 'src/app/services/buildings.service';
 import { BuildingData } from 'src/app/services/buildings.service';
 import {
@@ -38,13 +42,21 @@ export class ViewIncidentComponent {
   buildingData: BuildingData | null = null;
   error: string = '';
   currentLoading: string = 'Initializing...';
+  attachmentUrls:
+    | {
+        type: 'image' | 'video';
+        url: string;
+        thumbnail: string;
+      }[]
+    | null = null;
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private title: Title,
     private reportsService: ReportsService,
     private accountsService: AccountsService,
-    private buildingsService: BuildingsService
+    private buildingsService: BuildingsService,
+    private attachmentsService: AttachmentsService
   ) {}
 
   ngOnInit() {
@@ -75,12 +87,43 @@ export class ViewIncidentComponent {
         this.error = 'Building data could not be retrieved';
         return;
       }
-      console.log(this.buildingData);
 
       this.currentLoading = 'Generating observation data...';
       this.observationData = this.generateObservationData(this.reportData);
 
       this.currentLoading = 'Fetching attachments...';
+      const attachments =
+        await this.attachmentsService.GetAttachmentsFromReportAsync(this.id);
+      if (!attachments) {
+        this.error = 'Attachments could not be retrieved';
+        return;
+      }
+      const promise = attachments.map(async (attachmentId) => {
+        const fullsize = await this.attachmentsService.GetAttachmentAsync(
+          attachmentId,
+          false
+        );
+        const thumbnail = await this.attachmentsService.GetAttachmentAsync(
+          attachmentId,
+          true
+        );
+        if (!fullsize || !thumbnail || !fullsize.contentType) return null;
+        return {
+          type: fullsize.contentType.split('/')[0] as 'image' | 'video',
+          url: await this.attachmentsService.GetAttachmentUrlAsync(fullsize),
+          thumbnail: await this.attachmentsService.GetAttachmentUrlAsync(
+            thumbnail
+          ),
+        };
+      });
+      const results = await Promise.all(promise);
+      this.attachmentUrls = results.filter(
+        (attachment) => attachment !== null
+      ) as {
+        type: 'image' | 'video';
+        url: string;
+        thumbnail: string;
+      }[];
 
       this.title.setTitle('Report Viewer - ACTION Dashboard Web App');
     });
@@ -178,6 +221,19 @@ export class ViewIncidentComponent {
       attachmentsSection.classList.add('hide-on-print');
     } else {
       attachmentsSection.classList.remove('hide-on-print');
+    }
+  }
+  updateHideNonImagesOption(event: any) {
+    const attachmentsSection = document.getElementsByClassName('non-image');
+    if (!attachmentsSection) return;
+    if (event.target.checked) {
+      for (let i = 0; i < attachmentsSection.length; i++) {
+        attachmentsSection[i].classList.add('hide-on-print');
+      }
+    } else {
+      for (let i = 0; i < attachmentsSection.length; i++) {
+        attachmentsSection[i].classList.remove('hide-on-print');
+      }
     }
   }
 

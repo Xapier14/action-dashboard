@@ -37,7 +37,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     const connected = await this.httpService.testConnection();
     if (connected) {
+      this.connectionStatus = 'Waiting for reCAPTCHA to load...';
       await this.recaptchaService.showBadge();
+      if (this.recaptchaService.hasError) {
+        this.serverNotAvailable = true;
+        this.connectionStatus = 'reCAPTCHA failed to load.';
+        this.statusCode = 'error';
+        return;
+      }
       this.connectionStatus = 'Connected.';
       this.statusCode = 'success';
       setTimeout(() => {

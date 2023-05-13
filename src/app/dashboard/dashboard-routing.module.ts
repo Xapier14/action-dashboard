@@ -8,6 +8,9 @@ import { AuthGuard } from '../guard/auth.guard';
 import { AccountsComponent } from './accounts/accounts.component';
 import { AttachmentsComponent } from './attachments/attachments.component';
 import { LogsComponent } from './logs/logs.component';
+import { ListViewComponent } from './accounts/list-view/list-view.component';
+import { CreateViewComponent } from './accounts/create-view/create-view.component';
+import { ModifyViewComponent } from './accounts/modify-view/modify-view.component';
 
 const routes: Routes = [
   {
@@ -30,6 +33,25 @@ const routes: Routes = [
       {
         path: 'accounts',
         component: AccountsComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'list',
+            pathMatch: 'full',
+          },
+          {
+            path: 'list',
+            component: ListViewComponent,
+          },
+          {
+            path: 'create',
+            component: CreateViewComponent,
+          },
+          {
+            path: 'edit/:id',
+            component: ModifyViewComponent,
+          },
+        ],
       },
       {
         path: 'attachments',

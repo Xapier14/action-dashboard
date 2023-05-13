@@ -1,34 +1,9 @@
-.panel-container {
-  background-color: #fefefe;
-  width: 100%;
-  height: 100%;
-  max-height: 100%;
+.main-content {
+  flex: 1;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
-  .menu-column {
-    width: 30%;
-    min-width: 10rem;
-    max-width: 15rem;
-    border-right: 1px solid #cbcbcb;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    height: 100%;
-    .item-list {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-    }
-    // background-color: blue;
-  }
-  .main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    // background-color: yellow;
-  }
+  // background-color: yellow;
 }
 .list-header,
 .content-header {
@@ -47,6 +22,10 @@
     margin-left: 0.5rem;
   }
   button {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
     margin-right: 0.5rem;
     height: 100%;
     background-color: #d40000;
@@ -55,7 +34,7 @@
     color: #fefefe;
     box-shadow: 0 0 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
     img {
-      height: 100%;
+      height: 1.25rem;
       aspect-ratio: 1 / 1;
     }
     &:hover {
@@ -66,7 +45,9 @@
       color: #333;
       img {
         filter: invert(1);
+        cursor: not-allowed;
       }
+      cursor: not-allowed;
     }
   }
 }
@@ -134,6 +115,9 @@
     align-items: center;
     min-width: 15%;
   }
+  .back-action {
+    margin-right: 0.5rem;
+  }
 }
 .content-container {
   flex: 1;
@@ -192,9 +176,9 @@
         color: #d89a1f;
       }
       .level-admin {
-        background-color: #f9f0ff;
-        border-color: #d3adf7;
-        color: #722ed1;
+        background-color: #fff7e6;
+        border-color: #ffc069;
+        color: #d46b08;
       }
       .level-error,
       .level-crit {
@@ -203,9 +187,9 @@
         color: #f5222d;
       }
       .level-misc {
-        background-color: #f0f0f0;
-        border-color: #d9d9d9;
-        color: #595959;
+        background-color: #f9f0ff;
+        border-color: #d3adf7;
+        color: #722ed1;
       }
 
       border-bottom: 1px solid #f0f0f0;

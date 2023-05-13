@@ -1,0 +1,81 @@
+<div class="main-content">
+  <div class="content-header">
+    <span>Accounts</span>
+    <div class="table-control-end">
+      <button (click)="newAccount()" title="Create new account">
+        <img src="assets/svg/new.svg" alt="New" />
+      </button>
+    </div>
+  </div>
+  <div class="separator-container">
+    <div class="separator"></div>
+  </div>
+  <div *ngIf="accountsData != undefined; else loader" class="content-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Account Name</th>
+          <th>Email</th>
+          <th>Location</th>
+          <th class="td-center">Max Access Level</th>
+          <th>Created At</th>
+          <th class="td-center">Is Locked</th>
+          <th>Last Locked</th>
+          <th class="td-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let account of accountsData">
+          <td>{{ account.firstName }} {{ account.lastName }}</td>
+          <td>{{ account.email }}</td>
+          <td>{{ account.location }}</td>
+          <td class="td-center">
+            {{ account.maxAccessLevel == 1 ? "Admin" : "User" }}
+          </td>
+          <td>{{ account.createdAt.toLocaleString() }}</td>
+
+          <td
+            class="td-center {{
+              account.isLocked ? 'td-locked' : 'td-unlocked'
+            }}"
+          >
+            {{ account.isLocked }}
+          </td>
+          <td>
+            {{ account.lastLocked?.toLocaleString() ?? "n/a" }}
+          </td>
+          <td class="td-center item-action">
+            <button (click)="editAccount(account.id)" title="Edit account">
+              <img src="assets/svg/edit.svg" alt="Edit" />
+            </button>
+            <button
+              (click)="lockAccount(account.id)"
+              [disabled]="account.isLocked"
+              title="Lock account login restrictions"
+            >
+              <img src="assets/svg/lock.svg" alt="Lock" />
+            </button>
+            <button
+              (click)="unlockAccount(account.id)"
+              [disabled]="!account.isLocked"
+              title="Unlock account login restrictions"
+            >
+              <img src="assets/svg/unlock.svg" alt="Unlock" />
+            </button>
+            <button (click)="deleteAccount(account.id)" title="Delete Accouunt">
+              <img src="assets/svg/delete.svg" alt="Delete" />
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #loader>
+    <div class="loading-container">
+      <div class="loading">
+        <img src="assets/svg/refresh.svg" alt="" />
+        <span>Loading...</span>
+      </div>
+    </div>
+  </ng-template>
+</div>

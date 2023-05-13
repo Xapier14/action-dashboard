@@ -20,6 +20,10 @@ import { ViewerComponent } from './viewer/viewer.component';
 import { ViewIncidentComponent } from './viewer/view-incident/view-incident.component';
 import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { LogsComponent } from './dashboard/logs/logs.component';
+import { ListViewComponent } from './dashboard/accounts/list-view/list-view.component';
+import { CreateViewComponent } from './dashboard/accounts/create-view/create-view.component';
+import { ModifyViewComponent } from './dashboard/accounts/modify-view/modify-view.component';
+import { AttachmentComponent } from './viewer/view-incident/attachment/attachment.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +42,10 @@ import { LogsComponent } from './dashboard/logs/logs.component';
     ViewIncidentComponent,
     NotFoundComponent,
     LogsComponent,
+    ListViewComponent,
+    CreateViewComponent,
+    ModifyViewComponent,
+    AttachmentComponent,
   ],
   imports: [
     BrowserModule,
