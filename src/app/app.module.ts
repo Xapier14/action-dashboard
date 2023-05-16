@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -54,6 +55,7 @@ import { AttachmentComponent } from './viewer/view-incident/attachment/attachmen
     FormsModule,
     ReactiveFormsModule,
     DashboardRoutingModule,
+    LeafletModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
