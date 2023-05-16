@@ -154,14 +154,20 @@
     </div>
     <ng-template #noCampus>
       <div class="no-campus content-container">
-        <img
+        <div
+          #leafletMap
+          leaflet
+          [leafletOptions]="leafletOptions"
+          style="height: 100%; width: 100%"
+        ></div>
+        <!-- <img
           src="assets/svg/missing.svg"
           alt="Missing"
           class="no-campus-icon"
         />
         <div class="no-campus-text">
           <span>Map not yet implemented</span>
-        </div>
+        </div> -->
       </div>
     </ng-template>
   </div>
