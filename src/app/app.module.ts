@@ -25,10 +25,14 @@ import { ListViewComponent } from './dashboard/accounts/list-view/list-view.comp
 import { CreateViewComponent } from './dashboard/accounts/create-view/create-view.component';
 import { ModifyViewComponent } from './dashboard/accounts/modify-view/modify-view.component';
 import { AttachmentComponent } from './viewer/view-incident/attachment/attachment.component';
+import { AddBuildingComponent } from './dashboard/overview/add-building/add-building.component';
+import { EditBuildingComponent } from './dashboard/overview/edit-building/edit-building.component';
+import { EditIncidentComponent } from './editor/edit-incident/edit-incident.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AttachmentComponent,
     LoginComponent,
     DashboardComponent,
     DashboardNavBarComponent,
@@ -47,6 +51,9 @@ import { AttachmentComponent } from './viewer/view-incident/attachment/attachmen
     CreateViewComponent,
     ModifyViewComponent,
     AttachmentComponent,
+    AddBuildingComponent,
+    EditBuildingComponent,
+    EditIncidentComponent,
   ],
   imports: [
     BrowserModule,

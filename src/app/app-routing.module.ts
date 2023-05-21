@@ -4,6 +4,7 @@ import { NotFoundComponent } from './errors/not-found/not-found.component';
 import { UnauthorizedComponent } from './errors/unauthorized/unauthorized.component';
 import { AuthGuard } from './guard/auth.guard';
 import { LoginComponent } from './login/login.component';
+import { EditIncidentComponent } from './editor/edit-incident/edit-incident.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -22,6 +23,21 @@ const routes: Routes = [
       import('./viewer/viewer-routing.module').then(
         (m) => m.ViewerRoutingModule
       ),
+    canActivateChild: [AuthGuard],
+  },
+  {
+    path: 'editor',
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: '/dashboard/overview',
+      },
+      {
+        path: 'incident/:id',
+        component: EditIncidentComponent,
+      },
+    ],
     canActivateChild: [AuthGuard],
   },
   {

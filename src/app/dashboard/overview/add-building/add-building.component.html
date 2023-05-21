@@ -1,0 +1,142 @@
+<div class="main-content">
+  <div class="content-header">
+    <div class="back-action">
+      <button (click)="goBack()">Back</button>
+    </div>
+    <span>Add Building</span>
+  </div>
+  <div class="separator-container">
+    <div class="separator"></div>
+  </div>
+  <div class="content-container">
+    <div class="two-item">
+      <div class="item">
+        <span>Building Name</span>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          [(ngModel)]="name"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="item">
+        <span>Max Capacity</span>
+        <input
+          type="number"
+          name="maxCapacity"
+          id="maxCapacity"
+          [(ngModel)]="maxCapacity"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+    </div>
+    <div class="three-item">
+      <div class="item">
+        <span>Address</span>
+        <input
+          type="text"
+          name="address"
+          id="address"
+          [(ngModel)]="address"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="item">
+        <span>Building Marshal</span>
+        <input
+          type="text"
+          name="buildingMarshal"
+          id="buildingMarshal"
+          [(ngModel)]="buildingMarshal"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="item">
+        <span>Location</span>
+        <input
+          type="text"
+          name="location"
+          id="location"
+          [(ngModel)]="location"
+          [ngModelOptions]="{ standalone: true }"
+          [disabled]="true"
+        />
+      </div>
+    </div>
+    <div class="two-item">
+      <div class="item">
+        <span>Story Above Ground</span>
+        <input
+          type="number"
+          name="storyAboveGround"
+          id="storyAboveGround"
+          [(ngModel)]="storyAboveGround"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="item">
+        <span>Story Below Ground</span>
+        <input
+          type="number"
+          name="storyBelowGround"
+          id="storyBelowGround"
+          [(ngModel)]="storyBelowGround"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+    </div>
+    <div class="two-item">
+      <div class="item">
+        <span>Type of Construction</span>
+        <input
+          type="text"
+          name="typeOfConstruction"
+          id="typeOfConstruction"
+          list="typeOfConstructionList"
+          [(ngModel)]="typeOfConstruction"
+          [ngModelOptions]="{ standalone: true }"
+        />
+        <datalist id="typeOfConstructionList">
+          <option value="wood">Wood</option>
+          <option value="steel">Steel</option>
+          <option value="concrete">Concrete</option>
+          <option value="masonry">Masonry</option>
+        </datalist>
+      </div>
+      <div class="item">
+        <span>Primary Occupancy</span>
+        <input
+          type="text"
+          name="primaryOccupancy"
+          list="primaryOccupancyList"
+          name="primaryOccupancy"
+          id="primaryOccupancy"
+          [(ngModel)]="primaryOccupancy"
+          [ngModelOptions]="{ standalone: true }"
+        />
+        <datalist id="primaryOccupancyList">
+          <option value="singleFamily">Single Family</option>
+          <option value="multiResidential">Multi Residential</option>
+          <option value="emergencyServices">Emergency Services</option>
+          <option value="industrial">Industrial</option>
+          <option value="offices">Offices</option>
+          <option value="commercial">Commercial</option>
+          <option value="school">School</option>
+          <option value="government">Government</option>
+        </datalist>
+      </div>
+    </div>
+    <div class="action-buttons">
+      <button (click)="createBuilding()">Add Building</button>
+    </div>
+    <ng-template #loader>
+      <div class="loading-container">
+        <div class="loading">
+          <img src="assets/svg/refresh.svg" alt="" />
+          <span>Loading...</span>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

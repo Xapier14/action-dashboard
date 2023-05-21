@@ -5,10 +5,7 @@ import {
   AccountData,
   AccountsService,
 } from 'src/app/services/accounts.service';
-import {
-  Attachment,
-  AttachmentsService,
-} from 'src/app/services/attachments.service';
+import { AttachmentsService } from 'src/app/services/attachments.service';
 import { BuildingsService } from 'src/app/services/buildings.service';
 import { BuildingData } from 'src/app/services/buildings.service';
 import {
@@ -20,13 +17,6 @@ interface ObservationData {
   label: string;
   optionalLabel: string;
   value: number;
-}
-
-interface AttachmentData {
-  type: 'image' | 'video';
-  id: string;
-  thumbnailUrl: string;
-  url: string;
 }
 
 @Component({

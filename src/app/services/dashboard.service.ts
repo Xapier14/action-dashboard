@@ -11,6 +11,7 @@ import { ReportsService } from './reports.service';
 export class DashboardService {
   private locations: Map<string, LocationData> | undefined;
   private lastUpdated: string = 'Never';
+  private updatedBuildingInfo = false;
   constructor(
     private httpService: HttpService,
     private buildingsService: BuildingsService,
@@ -23,6 +24,14 @@ export class DashboardService {
     if (locationId == undefined) return true;
     return this.locations.has(locationId);
   }
+  flagUpdatedBuildingInfo() {
+    this.updatedBuildingInfo = true;
+  }
+  hasUpdatedBuildingInfo() {
+    const status = this.updatedBuildingInfo;
+    this.updatedBuildingInfo = false;
+    return status;
+  }
   getLastUpdateString(locationId?: string) {
     if (locationId == undefined) return this.lastUpdated;
     if (this.locations == undefined) return 'Never';
@@ -34,17 +43,29 @@ export class DashboardService {
     return Array.from(this.locations.values());
   }
   async updateLocationsAsync() {
-    await this.updateLocationAsync('pablo-borbon', 'Pablo Borbon');
-    await this.updateLocationAsync('alangilan', 'Alangilan');
-    await this.updateLocationAsync('nasugbu', 'ARASOF-Nasugbu');
-    await this.updateLocationAsync('balayan', 'Balayan');
-    await this.updateLocationAsync('lemery', 'Lemery');
-    await this.updateLocationAsync('mabini', 'Mabini');
-    await this.updateLocationAsync('malvar', 'JPLPC-Malvar');
-    await this.updateLocationAsync('lipa', 'Lipa');
-    await this.updateLocationAsync('rosario', 'Rosario');
-    await this.updateLocationAsync('san-juan', 'San Juan');
-    await this.updateLocationAsync('lobo', 'Lobo');
+    await Promise.all([
+      this.updateLocationAsync('pablo-borbon', 'Pablo Borbon'),
+      this.updateLocationAsync('alangilan', 'Alangilan'),
+      this.updateLocationAsync('nasugbu', 'ARASOF-Nasugbu'),
+      this.updateLocationAsync('balayan', 'Balayan'),
+      this.updateLocationAsync('lemery', 'Lemery'),
+      this.updateLocationAsync('mabini', 'Mabini'),
+      this.updateLocationAsync('malvar', 'JPLPC-Malvar'),
+      this.updateLocationAsync('lipa', 'Lipa'),
+      this.updateLocationAsync('rosario', 'Rosario'),
+      this.updateLocationAsync('san-juan', 'San Juan'),
+      this.updateLocationAsync('lobo', 'Lobo'),
+    ]);
+    // sort locations
+    if (this.locations == undefined) return;
+    const sortedLocations = new Map(
+      [...this.locations.entries()].sort((a, b) => {
+        if (a[1].locationName < b[1].locationName) return -1;
+        if (a[1].locationName > b[1].locationName) return 1;
+        return 0;
+      })
+    );
+    this.locations = sortedLocations;
   }
   async updateLocationAsync(locationId: string, locationName?: string) {
     if (this.locations == undefined) this.locations = new Map();
@@ -84,6 +105,15 @@ export class DashboardService {
         });
       })
     );
+    // sort buildings
+    if (buildingsData != undefined) {
+      buildingsData = buildingsData.sort((a, b) => {
+        if (a.buildingName < b.buildingName) return -1;
+        if (a.buildingName > b.buildingName) return 1;
+        return 0;
+      });
+    }
+
     const locName =
       locationName ?? this.locations.get(locationId)?.locationName ?? 'Unknown';
     const location = {

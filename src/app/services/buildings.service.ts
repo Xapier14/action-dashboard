@@ -3,11 +3,11 @@ import { AuthService } from './auth.service';
 import { HttpService } from './http.service';
 
 export interface BuildingData {
-  id: string;
+  id: string | undefined;
   name: string;
   location: string;
   maxCapacity: number;
-  otherInformation: string;
+  otherInformation: string | undefined;
   address: string;
   buildingMarshal: string;
   storyAboveGround: number;
@@ -121,5 +121,67 @@ export class BuildingsService {
       console.log('Error getting building info.');
       return null;
     }
+  }
+
+  async addBuildingAsync(building: BuildingData) {
+    const token = (await this.authService.getTokenAsync()) ?? '';
+    console.log(building);
+    const response = await this.httpService.postJsonAsync(
+      'buildings/add',
+      building,
+      token
+    );
+    if (!response.ok) {
+      console.log('Error adding building.');
+      return false;
+    }
+    if ((await response.json()).e == 0) {
+      await this.updateBuildingCacheAsync(building.location);
+      return true;
+    }
+    console.log('Error adding building.');
+    return false;
+  }
+
+  async editBuildingAsync(
+    building: BuildingData,
+    buildingId: string | undefined
+  ) {
+    const id = buildingId ?? building.id;
+    if (!id) return false;
+    const token = (await this.authService.getTokenAsync()) ?? '';
+    const response = await this.httpService.postJsonAsync(
+      `buildings/edit/${id}`,
+      building,
+      token
+    );
+    if (!response.ok) {
+      console.log('Error editing building.');
+      return false;
+    }
+    if ((await response.json()).e == 0) {
+      await this.updateBuildingCacheAsync(building.location);
+      return true;
+    }
+    console.log('Error editing building.');
+    return false;
+  }
+
+  async deleteBuildingAsync(buildingId: string) {
+    const token = (await this.authService.getTokenAsync()) ?? '';
+    const response = await this.httpService.deleteAsync(
+      `buildings/delete/${buildingId}`,
+      token
+    );
+    if (!response.ok) {
+      console.log('Error deleting building.');
+      return false;
+    }
+    if ((await response.json()).e == 0) {
+      await this.updateBuildingCacheAsync();
+      return true;
+    }
+    console.log('Error deleting building.');
+    return false;
   }
 }

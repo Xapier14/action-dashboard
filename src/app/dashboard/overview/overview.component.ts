@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewChecked,
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   DivIconOptions,
   LatLngBoundsExpression,
@@ -26,7 +33,7 @@ import { ReportsService } from 'src/app/services/reports.service';
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.scss'],
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent implements OnInit, AfterContentInit {
   @ViewChild('leafletMap') map: Map | undefined;
   selectedCampus: string | undefined;
   locationData: LocationData | undefined;
@@ -138,15 +145,31 @@ export class OverviewComponent implements OnInit {
     return m;
   }
 
-  constructor(private dashboardService: DashboardService) {}
+  constructor(
+    private dashboardService: DashboardService,
+    private buildingsService: BuildingsService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   async ngOnInit(): Promise<void> {
     if (!this.dashboardService.hasLocationData()) await this.updateLocations();
     let newLocations = this.dashboardService.getLocations();
     this.locations = newLocations;
+    console.log('init');
+  }
+
+  async ngAfterContentInit(): Promise<void> {
+    const locationParam = this.route.snapshot.queryParams['location'];
+    if (locationParam) {
+      this.onLocationClick(locationParam);
+    }
+    if (this.dashboardService.hasUpdatedBuildingInfo())
+      await this.updateLocations();
   }
 
   async updateLocations() {
+    console.log('update locations');
     this.locations = undefined;
     this.selectedCampus = undefined;
     this.contentTitle = undefined;
@@ -165,6 +188,7 @@ export class OverviewComponent implements OnInit {
     this.locationData = this.locations?.find(
       (location) => location.locationId === locationId
     );
+    console.log(this.locationData);
   }
 
   async onLocationClick(locationId: string | undefined) {
@@ -186,5 +210,43 @@ export class OverviewComponent implements OnInit {
     this.locationData = this.locations.find(
       (location) => location.locationId === locationId
     );
+  }
+
+  async onAddBuilding(locationId: string | undefined) {
+    if (locationId == undefined) return;
+    await this.router.navigate(['dashboard', 'building', 'add', locationId]);
+    console.log('navigated');
+  }
+
+  async onEditBuilding(buildingId: string | undefined) {
+    if (buildingId == undefined) return;
+    await this.router.navigate(['dashboard', 'building', 'edit', buildingId]);
+  }
+
+  async onDeleteBuilding(buildingId: string | undefined) {
+    if (
+      confirm(
+        'Are you sure you want to delete this building?\nThis will also delete all the reports associated with this building.'
+      )
+    ) {
+      if (buildingId == undefined) return;
+      await this.buildingsService.deleteBuildingAsync(buildingId);
+      await this.updateLocation(this.selectedCampus);
+    }
+  }
+
+  async onShowReport(id: string | undefined) {
+    if (id == undefined) return;
+    const url = this.router.serializeUrl(
+      this.router.createUrlTree([`/viewer/incident/${id}`])
+    );
+
+    window.open(url, '_blank');
+  }
+
+  generateTooltip(dateString: string | undefined): string {
+    if (dateString == undefined) return '';
+    let date = new Date(dateString);
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   }
 }

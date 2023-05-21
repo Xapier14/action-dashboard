@@ -11,6 +11,8 @@ import { LogsComponent } from './logs/logs.component';
 import { ListViewComponent } from './accounts/list-view/list-view.component';
 import { CreateViewComponent } from './accounts/create-view/create-view.component';
 import { ModifyViewComponent } from './accounts/modify-view/modify-view.component';
+import { AddBuildingComponent } from './overview/add-building/add-building.component';
+import { EditBuildingComponent } from './overview/edit-building/edit-building.component';
 
 const routes: Routes = [
   {
@@ -25,10 +27,24 @@ const routes: Routes = [
       {
         path: 'overview',
         component: OverviewComponent,
+        children: [],
       },
       {
         path: 'reports',
         component: ReportsComponent,
+      },
+      {
+        path: 'building',
+        redirectTo: 'overview',
+        pathMatch: 'full',
+      },
+      {
+        path: 'building/add/:location',
+        component: AddBuildingComponent,
+      },
+      {
+        path: 'building/edit/:id',
+        component: EditBuildingComponent,
       },
       {
         path: 'accounts',

@@ -83,8 +83,10 @@
       >
         <div class="card" style="flex-basis: 100% !important">
           <div class="card-title">
-            <img src="assets/svg/statistics.svg" />
-            <span>Statistics</span>
+            <div class="card-title-header">
+              <img src="assets/svg/statistics.svg" />
+              <span>Statistics</span>
+            </div>
           </div>
           <div class="card-divider"></div>
           <div class="card-content">
@@ -114,10 +116,30 @@
             </div>
           </div>
         </div>
-        <div class="card" *ngFor="let building of locationData?.buildings">
+        <div
+          class="card building-card"
+          *ngFor="let building of locationData?.buildings"
+        >
           <div class="card-title">
-            <img src="assets/svg/building.svg" />
-            <span>{{ building.buildingName }}</span>
+            <div class="card-title-header">
+              <img src="assets/svg/building.svg" />
+              <span>{{ building.buildingName }}</span>
+            </div>
+            <div class="card-title-action">
+              <button
+                [class]="building.lastIncidentId == undefined ? 'hidden' : ''"
+                (click)="onShowReport(building.lastIncidentId ?? '')"
+                [title]="generateTooltip(building.lastInspection)"
+              >
+                <img src="assets/svg/view.svg" />
+              </button>
+              <button (click)="onEditBuilding(building.buildingId)">
+                <img src="assets/svg/edit.svg" />
+              </button>
+              <button (click)="onDeleteBuilding(building.buildingId)">
+                <img src="assets/svg/delete.svg" />
+              </button>
+            </div>
           </div>
           <div class="card-divider"></div>
           <div class="card-content">
@@ -138,8 +160,23 @@
                 <div class="minor" *ngSwitchCase="1">Minor</div>
                 <div class="moderate" *ngSwitchCase="2">Moderate</div>
                 <div class="severe" *ngSwitchCase="3">Severe</div>
-                <img src="assets/svg/missing.svg" *ngSwitchDefault />
+                <img
+                  class="missing"
+                  src="assets/svg/missing.svg"
+                  *ngSwitchDefault
+                />
               </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="card building-card new-card"
+          (click)="onAddBuilding(selectedCampus)"
+        >
+          <div class="card-content">
+            <div class="card-content-item">
+              <img src="assets/svg/new.svg" alt="+" style="filter: invert()" />
+              <span>New Building</span>
             </div>
           </div>
         </div>

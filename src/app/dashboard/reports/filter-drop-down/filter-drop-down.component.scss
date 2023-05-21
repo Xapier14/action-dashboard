@@ -74,6 +74,10 @@ button {
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  span {
+    width: calc(100% - var(--check-size) - 0.5rem);
+    text-align: left;
+  }
   .check-container {
     width: var(--check-size);
     height: var(--check-size);

@@ -19,6 +19,9 @@ button {
 .grecaptcha-badge {
   visibility: hidden;
 }
+.hidden {
+  display: none !important;
+}
 .marker-container {
   display: flex;
   flex-direction: row;

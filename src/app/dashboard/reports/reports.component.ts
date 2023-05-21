@@ -85,16 +85,33 @@ export class ReportsComponent implements OnInit {
   async updateBuildingsFilter(locations: string[]): Promise<void> {
     this.buildings.clear();
     this.buildingsSelect = [];
+    const reverseMap = new Map(
+      Array.from(this.locations.entries()).map((x) => [x[1], x[0]])
+    );
     await Promise.all(
       locations.map(async (location) => {
         await this.buildingsService.updateBuildingCacheAsync(location);
         const buildingIds = this.buildingsService.getBuildingIdList(location);
         buildingIds.forEach((buildingId) => {
+          console.log(location);
           this.buildings.set(
-            this.buildingsService.getBuildingName(buildingId, location),
+            `${this.buildingsService.getBuildingName(
+              buildingId,
+              location
+            )} - ${reverseMap.get(location)}`,
             buildingId
           );
         });
+      })
+    );
+    // sort buildings by building name
+    this.buildings = new Map(
+      Array.from(this.buildings.entries()).sort((a, b) => {
+        if (a[0] < b[0]) {
+          return -1;
+        } else {
+          return 1;
+        }
       })
     );
     this.buildingsFilter = Array.from(this.buildings.keys());
