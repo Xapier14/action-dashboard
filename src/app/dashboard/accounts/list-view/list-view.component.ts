@@ -69,31 +69,9 @@ export class ListViewComponent implements OnInit {
     console.log('updateDataview');
     const accounts = await this.accountsService.getAccountsFromLocation();
     this.accountsData = accounts;
-    // this.logsData = undefined;
-    // let newData: LogData[] = [];
-
-    // const reports = await this.logsService.getListDataAsync();
-    // reports.forEach((report: any) => {
-    //   newData.push({
-    //     sourceIp: report.sourceIp,
-    //     dateTime: new Date(report.dateTime),
-    //     message: report.message,
-    //     level: report.level,
-    //     sessionId: report.sessionId,
-    //     userId: report.userId,
-    //     action: report.action,
-    //   });
-    // });
-    // this.currentPage = this.logsService.getCurrentPage() + 1;
-    // this.pageCount = this.logsService.getCachedMax() + 1;
-    // this.displayedItems = newData.length;
-    // this.totalItems = this.logsService.getCachedTotal();
-    // this.logsData = newData;
-    // console.log(this.reportsData);
   }
 
   async refresh(keepCurrentPage: boolean = true) {
-    // if (!keepCurrentPage) this.logsService.setCurrentPage(0);
     await this.updateDataview();
   }
 }

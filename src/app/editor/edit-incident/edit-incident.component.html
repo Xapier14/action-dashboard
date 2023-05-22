@@ -1,10 +1,18 @@
 <!-- if reportData is null then hide -->
 <div
   *ngIf="reportData && inspectorData && attachmentUrls && error == ''"
-  class="print-controls {{ saved ? 'saved-controls' : '' }}"
+  class="print-controls {{ saved && !saving ? 'saved-controls' : '' }}"
 >
   <div class="options">
-    <h2>{{ saved ? "Report Saved!" : "Editing Report" }}</h2>
+    <h2>
+      {{
+        saved && !saving
+          ? "Report Saved!"
+          : saving
+          ? "Saving Report..."
+          : "Editing Report"
+      }}
+    </h2>
   </div>
   <div class="actions">
     <button [disabled]="saved" (click)="revertChanges()">Revert Changes</button>
@@ -633,49 +641,73 @@
         <div class="values">
           <div>
             <input
-              type="checkbox"
-              disabled
-              [checked]="reportData.estimatedBuildingDamage == 0"
+              type="radio"
+              name="estimatedBuildingDamage"
+              [disabled]="saved"
+              [(ngModel)]="estimatedBuildingDamage"
+              [ngModelOptions]="{ standalone: true }"
+              [value]="0"
+              [checked]="estimatedBuildingDamage == 0"
             />
             <span>None</span>
           </div>
           <div>
             <input
-              type="checkbox"
-              disabled
-              [checked]="reportData.estimatedBuildingDamage == 1"
+              type="radio"
+              name="estimatedBuildingDamage"
+              [disabled]="saved"
+              [(ngModel)]="estimatedBuildingDamage"
+              [ngModelOptions]="{ standalone: true }"
+              [value]="1"
+              [checked]="estimatedBuildingDamage == 1"
             />
             <span>1 - 10%</span>
           </div>
           <div>
             <input
-              type="checkbox"
-              disabled
-              [checked]="reportData.estimatedBuildingDamage == 2"
+              type="radio"
+              name="estimatedBuildingDamage"
+              [disabled]="saved"
+              [(ngModel)]="estimatedBuildingDamage"
+              [ngModelOptions]="{ standalone: true }"
+              [value]="2"
+              [checked]="estimatedBuildingDamage == 2"
             />
             <span>11 - 30%</span>
           </div>
           <div>
             <input
-              type="checkbox"
-              disabled
-              [checked]="reportData.estimatedBuildingDamage == 3"
+              type="radio"
+              name="estimatedBuildingDamage"
+              [disabled]="saved"
+              [(ngModel)]="estimatedBuildingDamage"
+              [ngModelOptions]="{ standalone: true }"
+              [value]="3"
+              [checked]="estimatedBuildingDamage == 3"
             />
             <span>31 - 60%</span>
           </div>
           <div>
             <input
-              type="checkbox"
-              disabled
-              [checked]="reportData.estimatedBuildingDamage == 4"
+              type="radio"
+              name="estimatedBuildingDamage"
+              [disabled]="saved"
+              [(ngModel)]="estimatedBuildingDamage"
+              [ngModelOptions]="{ standalone: true }"
+              [value]="0"
+              [checked]="estimatedBuildingDamage == 4"
             />
             <span>61 - 99%</span>
           </div>
           <div>
             <input
-              type="checkbox"
-              disabled
-              [checked]="reportData.estimatedBuildingDamage == 5"
+              type="radio"
+              name="estimatedBuildingDamage"
+              [disabled]="saved"
+              [(ngModel)]="estimatedBuildingDamage"
+              [ngModelOptions]="{ standalone: true }"
+              [value]="5"
+              [checked]="estimatedBuildingDamage == 5"
             />
             <span>100%</span>
           </div>
@@ -683,13 +715,20 @@
       </div>
       <div class="comments">
         <span>Comments:</span>
-        <p>
-          {{
-            reportData.evaluationComment.length == 0
-              ? "-n/a-"
-              : reportData.evaluationComment
-          }}
-        </p>
+        <textarea
+          [disabled]="saved"
+          [(ngModel)]="evaluationComment"
+          [ngModelOptions]="{ standalone: true }"
+          name="evaluationComment"
+          id="evaluationComment"
+        ></textarea>
+        <!-- <input
+          type="text"
+          name="evaluationComment"
+          [disabled]="saved"
+          [(ngModel)]="evaluationComment"
+          [ngModelOptions]="{ standalone: true }"
+        /> -->
       </div>
     </div>
   </div>
@@ -708,10 +747,12 @@
           <span>
             <input
               type="checkbox"
-              name="inspected"
-              id="inspected"
-              disabled
-              [checked]="reportData.inspectedPlacard"
+              name="inspectedPlacard"
+              id="inspectedPlacard"
+              [disabled]="saved"
+              [(ngModel)]="inspectedPlacard"
+              [ngModelOptions]="{ standalone: true }"
+              [checked]="inspectedPlacard"
             />
             <label for="inspected">INSPECTED (Green placard)</label>
           </span>
@@ -722,10 +763,12 @@
           <span>
             <input
               type="checkbox"
-              name="restricted"
-              id="restricted"
-              disabled
-              [checked]="reportData.restrictedPlacard"
+              name="restrictedPlacard"
+              id="restrictedPlacard"
+              [disabled]="saved"
+              [(ngModel)]="restrictedPlacard"
+              [ngModelOptions]="{ standalone: true }"
+              [checked]="restrictedPlacard"
             />
             <label for="restricted">RESTRICTED USE (Yellow placard)</label>
           </span>
@@ -736,10 +779,12 @@
           <span>
             <input
               type="checkbox"
-              name="unsafe"
-              id="unsafe"
-              disabled
-              [checked]="reportData.unsafePlacard"
+              name="unsafePlacard"
+              id="unsafePlacard"
+              [disabled]="saved"
+              [(ngModel)]="unsafePlacard"
+              [ngModelOptions]="{ standalone: true }"
+              [checked]="unsafePlacard"
             />
             <label for="unsafe">UNSAFE (Red placard)</label>
           </span>
@@ -756,18 +801,22 @@
             type="checkbox"
             name="doNotEnter"
             id="doNotEnter"
-            disabled
-            [checked]="reportData.doNotEnter.length > 0"
+            [disabled]="saved"
+            [(ngModel)]="doNotEnter"
+            [ngModelOptions]="{ standalone: true }"
+            [checked]="doNotEnter"
           />
         </div>
         <label for="doNotEnter"
           >Do not enter or use the following areas:
         </label>
-        <p class="underline">
-          {{
-            reportData.doNotEnter.length > 0 ? reportData.doNotEnter : "-n/a-"
-          }}
-        </p>
+        <input
+          type="text"
+          name="doNotEnterText"
+          [disabled]="saved || !doNotEnter"
+          [(ngModel)]="doNotEnterText"
+          [ngModelOptions]="{ standalone: true }"
+        />
       </div>
     </div>
     <div class="row">
@@ -775,22 +824,24 @@
         <div class="checkbox-container">
           <input
             type="checkbox"
-            name="briefEntry"
-            id="briefEntry"
-            disabled
-            [checked]="reportData.briefEntryAllowed.length > 0"
+            name="briefEntryAllowed"
+            id="briefEntryAllowed"
+            [disabled]="saved"
+            [(ngModel)]="briefEntryAllowed"
+            [ngModelOptions]="{ standalone: true }"
+            [checked]="briefEntryAllowed"
           />
         </div>
-        <label for="briefEntry"
+        <label for="briefEntryAllowed"
           >Brief entry allowed for access to contents:
         </label>
-        <p class="underline">
-          {{
-            reportData.briefEntryAllowed.length > 0
-              ? reportData.briefEntryAllowed
-              : "-n/a-"
-          }}
-        </p>
+        <input
+          type="text"
+          name="briefEntryAllowedText"
+          [disabled]="saved || !briefEntryAllowed"
+          [(ngModel)]="briefEntryAllowedText"
+          [ngModelOptions]="{ standalone: true }"
+        />
       </div>
     </div>
     <div class="row">
@@ -800,8 +851,10 @@
             type="checkbox"
             name="doNotUse"
             id="doNotUse"
-            disabled
-            [checked]="reportData.doNotUse"
+            [disabled]="saved"
+            [(ngModel)]="doNotUse"
+            [ngModelOptions]="{ standalone: true }"
+            [checked]="doNotUse"
           />
         </div>
         <label for="doNotUse"
@@ -817,17 +870,20 @@
             type="checkbox"
             name="otherRestrictions"
             id="otherRestrictions"
-            disabled
-            [checked]="
-              reportData.otherRestrictions.length != 0 &&
-              reportData.otherRestrictions != '-n/a-'
-            "
+            [disabled]="saved"
+            [(ngModel)]="otherRestrictions"
+            [ngModelOptions]="{ standalone: true }"
+            [checked]="otherRestrictions"
           />
         </div>
         <label for="otherRestrictions">Other restrictions: </label>
-        <p class="underline">
-          {{ reportData.otherRestrictions }}
-        </p>
+        <input
+          type="text"
+          name="otherRestrictionsText"
+          [disabled]="saved || !otherRestrictions"
+          [(ngModel)]="otherRestrictionsText"
+          [ngModelOptions]="{ standalone: true }"
+        />
       </div>
     </div>
   </div>
@@ -842,20 +898,22 @@
             type="checkbox"
             name="barricadeComment"
             id="barricadeComment"
-            disabled
-            [checked]="reportData.barricadeComment.length != 0"
+            [disabled]="saved"
+            [(ngModel)]="barricadeComment"
+            [ngModelOptions]="{ standalone: true }"
+            [checked]="barricadeComment"
           />
         </div>
         <label for="barricadeComment"
           >Barricades needed in the following areas:
         </label>
-        <p class="underline">
-          {{
-            reportData.barricadeComment.length > 0
-              ? reportData.barricadeComment
-              : "-n/a-"
-          }}
-        </p>
+        <input
+          type="text"
+          name="barricadeCommentText"
+          [disabled]="saved || !barricadeComment"
+          [(ngModel)]="barricadeCommentText"
+          [ngModelOptions]="{ standalone: true }"
+        />
       </div>
     </div>
     <div class="row">
@@ -865,8 +923,10 @@
             type="checkbox"
             name="detailedEvaluation"
             id="detailedEvaluation"
-            disabled
-            [checked]="reportData.detailedEvaluationAreas.length != 0"
+            [disabled]="saved"
+            [(ngModel)]="detailedEvaluation"
+            [ngModelOptions]="{ standalone: true }"
+            [checked]="detailedEvaluation"
           />
         </div>
         <label for="detailedEvaluation">Detailed Evaluation recommended </label>
@@ -875,10 +935,12 @@
             <div class="checkbox-container">
               <input
                 type="checkbox"
-                name="structural"
-                id="structural"
-                disabled
-                [checked]="reportData.detailedEvaluationAreas.includes('1')"
+                name="detailedEvaluationAreas1"
+                id="detailedEvaluationAreas1"
+                [disabled]="saved || !detailedEvaluation"
+                [(ngModel)]="detailedEvaluationAreas1"
+                [ngModelOptions]="{ standalone: true }"
+                [checked]="detailedEvaluationAreas1"
               />
             </div>
             <label for="structural">Structural</label>
@@ -887,10 +949,12 @@
             <div class="checkbox-container">
               <input
                 type="checkbox"
-                name="geotechnical"
-                id="geotechnical"
-                disabled
-                [checked]="reportData.detailedEvaluationAreas.includes('2')"
+                name="detailedEvaluationAreas2"
+                id="detailedEvaluationAreas2"
+                [disabled]="saved || !detailedEvaluation"
+                [(ngModel)]="detailedEvaluationAreas2"
+                [ngModelOptions]="{ standalone: true }"
+                [checked]="detailedEvaluationAreas2"
               />
             </div>
             <label for="geotechnical">Geotechnical</label>
@@ -899,10 +963,12 @@
             <div class="checkbox-container">
               <input
                 type="checkbox"
-                name="other"
-                id="other"
-                disabled
-                [checked]="reportData.detailedEvaluationAreas.includes('3')"
+                name="detailedEvaluationAreas3"
+                id="detailedEvaluationAreas3"
+                [disabled]="saved || !detailedEvaluation"
+                [(ngModel)]="detailedEvaluationAreas3"
+                [ngModelOptions]="{ standalone: true }"
+                [checked]="detailedEvaluationAreas3"
               />
             </div>
             <label for="other">Other</label>
@@ -917,30 +983,40 @@
             type="checkbox"
             name="otherRecommendations"
             id="otherRecommendations"
-            disabled
-            [checked]="reportData.otherRecommendations.length != 0"
+            [disabled]="saved"
+            [(ngModel)]="otherRecommendations"
+            [ngModelOptions]="{ standalone: true }"
+            [checked]="otherRecommendations"
           />
         </div>
         <label for="otherRecommendations">Other recommendations:</label>
-        <p class="underline">
-          {{
-            reportData.otherRecommendations.length > 0
-              ? reportData.otherRecommendations
-              : "-n/a-"
-          }}
-        </p>
+        <input
+          type="text"
+          name="otherRecommendationsText"
+          [disabled]="saved || !otherRecommendations"
+          [(ngModel)]="otherRecommendationsText"
+          [ngModelOptions]="{ standalone: true }"
+        />
       </div>
     </div>
     <div class="row">
       <div class="item">
         <span>Comments: </span>
-        <p class="underline">
-          {{
-            reportData.furtherComments.length > 0
-              ? reportData.furtherComments
-              : "-n/a-"
-          }}
-        </p>
+
+        <textarea
+          [disabled]="saved"
+          [(ngModel)]="furtherComments"
+          [ngModelOptions]="{ standalone: true }"
+          name="furtherComments"
+          id="furtherComments"
+        ></textarea>
+        <!-- <input
+          type="text"
+          name="furtherComments"
+          [disabled]="saved"
+          [(ngModel)]="furtherComments"
+          [ngModelOptions]="{ standalone: true }"
+        /> -->
       </div>
     </div>
   </div>

@@ -23,6 +23,7 @@ import {
 export class EditIncidentComponent {
   id: string = '';
   saved: boolean = false;
+  saving: boolean = false;
   reportData: FullReportData | null = null;
   inspectorData: AccountData | null = null;
   // observationData: ObservationData[] | null = null;
@@ -37,6 +38,7 @@ export class EditIncidentComponent {
       }[]
     | null = null;
 
+  // evaluation
   collapsedStructure: number = 0;
   leaningOrOutOfPlumb: number = 0;
   damageToPrimaryStructure: number = 0;
@@ -45,6 +47,31 @@ export class EditIncidentComponent {
   damagedSubmergedFixtures: number = 0;
   proximityRiskTitle: string = '';
   proximityRisk: number = 0;
+  estimatedBuildingDamage: number = 0;
+  evaluationComment: string = '';
+
+  // posting
+  inspectedPlacard: boolean = false;
+  restrictedPlacard: boolean = false;
+  unsafePlacard: boolean = false;
+  doNotEnter: boolean = false;
+  doNotEnterText: string = '';
+  briefEntryAllowed: boolean = false;
+  briefEntryAllowedText: string = '';
+  doNotUse: boolean = false;
+  otherRestrictions: boolean = false;
+  otherRestrictionsText: string = '';
+
+  // further actions
+  barricadeComment: boolean = false;
+  barricadeCommentText: string = '';
+  detailedEvaluation: boolean = false;
+  detailedEvaluationAreas1: boolean = false;
+  detailedEvaluationAreas2: boolean = false;
+  detailedEvaluationAreas3: boolean = false;
+  otherRecommendations: boolean = false;
+  otherRecommendationsText: string = '';
+  furtherComments: string = '';
 
   constructor(
     private reportsService: ReportsService,
@@ -120,7 +147,7 @@ export class EditIncidentComponent {
       thumbnail: string;
     }[];
 
-    this.title.setTitle('Report Viewer - ACTION Dashboard Web App');
+    this.title.setTitle('Report Editor - ACTION Dashboard Web App');
   }
 
   formatDateToShortDateString(date: Date): string {
@@ -170,6 +197,8 @@ export class EditIncidentComponent {
 
   revertChanges() {
     if (!this.reportData) return;
+
+    // evaluation
     this.collapsedStructure = this.reportData.collapsedStructure;
     this.leaningOrOutOfPlumb = this.reportData.leaningOrOutOfPlumb;
     this.damageToPrimaryStructure = this.reportData.damageToPrimaryStructure;
@@ -178,9 +207,100 @@ export class EditIncidentComponent {
     this.damagedSubmergedFixtures = this.reportData.damagedSubmergedFixtures;
     this.proximityRiskTitle = this.reportData.proximityRiskTitle;
     this.proximityRisk = this.reportData.proximityRisk;
+    this.estimatedBuildingDamage = this.reportData.estimatedBuildingDamage;
+    this.evaluationComment = this.reportData.evaluationComment;
+
+    // posting
+    this.inspectedPlacard = this.reportData.inspectedPlacard;
+    this.restrictedPlacard = this.reportData.restrictedPlacard;
+    this.unsafePlacard = this.reportData.unsafePlacard;
+    this.doNotEnterText = this.reportData.doNotEnter;
+    if (this.doNotEnterText == '') this.doNotEnterText = '-n/a-';
+    this.doNotEnter =
+      this.doNotEnterText !== '-n/a-' && this.doNotEnterText !== '';
+    this.briefEntryAllowedText = this.reportData.briefEntryAllowed;
+    if (this.briefEntryAllowedText == '') this.briefEntryAllowedText = '-n/a-';
+    this.briefEntryAllowed =
+      this.briefEntryAllowedText !== '-n/a-' &&
+      this.briefEntryAllowedText !== '';
+    this.doNotUse = this.reportData.doNotUse;
+    this.otherRestrictionsText = this.reportData.otherRestrictions;
+    if (this.otherRestrictionsText === '') this.otherRestrictionsText = '-n/a-';
+    this.otherRestrictions =
+      this.otherRestrictionsText !== '-n/a-' &&
+      this.otherRestrictionsText !== '';
+    this.barricadeCommentText = this.reportData.barricadeComment;
+    if (this.barricadeCommentText === '') this.barricadeCommentText = '-n/a-';
+    this.barricadeComment =
+      this.barricadeCommentText !== '-n/a-' && this.barricadeCommentText !== '';
+    this.detailedEvaluationAreas1 =
+      this.reportData.detailedEvaluationAreas.indexOf('1') !== -1;
+    this.detailedEvaluationAreas2 =
+      this.reportData.detailedEvaluationAreas.indexOf('2') !== -1;
+    this.detailedEvaluationAreas3 =
+      this.reportData.detailedEvaluationAreas.indexOf('3') !== -1;
+    this.detailedEvaluation =
+      this.detailedEvaluationAreas1 ||
+      this.detailedEvaluationAreas2 ||
+      this.detailedEvaluationAreas3;
+    this.otherRecommendationsText = this.reportData.otherRecommendations;
+    if (this.otherRecommendationsText === '')
+      this.otherRecommendationsText = '-n/a-';
+    this.otherRecommendations =
+      this.otherRecommendationsText !== '-n/a-' &&
+      this.otherRecommendationsText !== '';
+    this.furtherComments = this.reportData.furtherComments;
   }
 
-  saveChanges() {
+  async saveChanges() {
+    if (!this.reportData) return;
+    this.saving = true;
     this.saved = true;
+    const detailedEvaluationAreas: string[] = [];
+    if (this.detailedEvaluation) {
+      if (this.detailedEvaluationAreas1) detailedEvaluationAreas.push('1');
+      if (this.detailedEvaluationAreas2) detailedEvaluationAreas.push('2');
+      if (this.detailedEvaluationAreas3) detailedEvaluationAreas.push('3');
+    }
+    const newReportData: FullReportData = {
+      ...this.reportData,
+      collapsedStructure: this.collapsedStructure,
+      leaningOrOutOfPlumb: this.leaningOrOutOfPlumb,
+      damageToPrimaryStructure: this.damageToPrimaryStructure,
+      fallingHazards: this.fallingHazards,
+      groundMovementOrSlope: this.groundMovementOrSlope,
+      damagedSubmergedFixtures: this.damagedSubmergedFixtures,
+      proximityRiskTitle: this.proximityRiskTitle,
+      proximityRisk: this.proximityRisk,
+      estimatedBuildingDamage: this.estimatedBuildingDamage,
+      evaluationComment: this.evaluationComment,
+      inspectedPlacard: this.inspectedPlacard,
+      restrictedPlacard: this.restrictedPlacard,
+      unsafePlacard: this.unsafePlacard,
+      doNotEnter: this.doNotEnter ? this.doNotEnterText : '-n/a-',
+      briefEntryAllowed: this.briefEntryAllowed
+        ? this.briefEntryAllowedText
+        : '-n/a-',
+      doNotUse: this.doNotUse,
+      otherRestrictions: this.otherRestrictions
+        ? this.otherRestrictionsText
+        : '-n/a-',
+      barricadeComment: this.barricadeComment
+        ? this.barricadeCommentText
+        : '-n/a-',
+      detailedEvaluationAreas: detailedEvaluationAreas.join(','),
+      otherRecommendations: this.otherRecommendations
+        ? this.otherRecommendationsText
+        : '-n/a-',
+      furtherComments: this.furtherComments,
+      attachments: (this.reportData.attachments as string[]).join(','),
+    };
+    const result = await this.reportsService.saveReportAsync(newReportData);
+    this.saving = false;
+    if (!result) {
+      this.saved = false;
+      alert('Failed to save report');
+      return;
+    }
   }
 }

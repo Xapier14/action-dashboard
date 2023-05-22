@@ -59,6 +59,8 @@ export class ViewIncidentComponent {
         this.router.navigate(['errors', 'notfound']);
         return;
       }
+      this.reportData.evaluationComment.replace('\n', '&#10');
+      console.log(this.reportData.evaluationComment);
 
       this.currentLoading = 'Retrieving inspector data...';
       this.inspectorData = await this.accountsService.getAccountDataAsync(

@@ -39,7 +39,6 @@ export class EditBuildingComponent {
       this.goBack();
     }
     this.buildingData = building!;
-    console.log(this.buildingData);
     await this.revertChanges();
   }
 

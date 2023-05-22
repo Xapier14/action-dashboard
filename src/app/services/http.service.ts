@@ -16,6 +16,18 @@ export class HttpService {
     }
   }
 
+  async patchJsonAsync(route: string, data: object, token?: string) {
+    const endpoint = environment.apiHost + '/' + route;
+    const headers: HeadersInit = new Headers();
+    headers.append('Content-Type', 'application/json');
+    if (token) headers.append('Authorization', token);
+    return await fetch(endpoint, {
+      method: 'PATCH',
+      headers: headers,
+      body: JSON.stringify(data),
+    });
+  }
+
   async postJsonAsync(route: string, data: object | null, token?: string) {
     const endpoint = environment.apiHost + '/' + route;
     const headers: HeadersInit = new Headers();
@@ -35,7 +47,7 @@ export class HttpService {
     }
   }
 
-  async postEncodedObjectAsync(route: string, data: object, token?: string) {
+  async postEncodedObjectAsync(route: string, data: any, token?: string) {
     let urlSearchParams = new URLSearchParams();
     Object.keys(data).forEach((key) => {
       urlSearchParams.append(key, data[key]);
@@ -80,7 +92,7 @@ export class HttpService {
     });
   }
 
-  private queryString(query: object) {
+  private queryString(query: any) {
     if (!query) return '';
     return Object.keys(query)
       .map((key) => key + '=' + query[key])

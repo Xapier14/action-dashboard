@@ -9,6 +9,7 @@ export interface FullReportData {
   location: string;
   buildingId: string;
   areasInspected: string;
+
   collapsedStructure: number;
   leaningOrOutOfPlumb: number;
   damageToPrimaryStructure: number;
@@ -19,6 +20,7 @@ export interface FullReportData {
   proximityRisk: number;
   evaluationComment: string;
   estimatedBuildingDamage: number;
+
   inspectedPlacard: boolean;
   restrictedPlacard: boolean;
   unsafePlacard: boolean;
@@ -27,10 +29,11 @@ export interface FullReportData {
   doNotUse: boolean;
   otherRestrictions: string;
   barricadeComment: string;
-  detailedEvaluationAreas: string[];
+  detailedEvaluationAreas: string[] | string;
   otherRecommendations: string;
   furtherComments: string;
-  attachments: string[];
+
+  attachments: string[] | string;
   resolved: boolean;
   severityStatus: number;
 }
@@ -216,5 +219,20 @@ export class ReportsService {
     const token = await this.authService.checkTokenFromPreferences();
     if (!token || token.sessionState != 'validSession') return;
     await this.httpService.deleteAsync(`incidents/${id}`, token.token);
+  }
+
+  async saveReportAsync(report: FullReportData, id?: string): Promise<boolean> {
+    const token = await this.authService.checkTokenFromPreferences();
+    const reportId = id ?? report.id;
+    if (!token || token.sessionState != 'validSession') return false;
+    const response = await this.httpService.patchJsonAsync(
+      `incidents/edit/${reportId}`,
+      report,
+      token.token
+    );
+    if (response.status == 200) {
+      return true;
+    }
+    return false;
   }
 }
