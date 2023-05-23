@@ -28,11 +28,11 @@ export class RecaptchaService {
     document.body.appendChild(script);
     script.onload = () => {
       this.isLoaded = true;
-      console.log('Recaptcha loaded');
+      console.log('ReCaptcha script loaded!');
     };
     script.onerror = () => {
       this.hasError = true;
-      console.error('Recaptcha failed to load');
+      console.error('ReCaptcha script failed to load');
     };
   }
 

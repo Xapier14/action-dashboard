@@ -23,12 +23,22 @@
     background-color: #b20100;
     box-shadow: 0 0 0.5rem 0.1rem rgba(0, 0, 0, 0.2);
     transition: transform 0.15s ease-in-out;
-    z-index: 2000;
+    z-index: 200000000;
   }
   .content {
     grid-row: 2;
     grid-column: 1;
     height: calc(100vh - var(--navbar-height));
+  }
+  // overlay on top of content
+  search-results {
+    position: absolute;
+    top: var(--navbar-height);
+    left: 0;
+    width: 100vw;
+    height: calc(100% - var(--navbar-height));
+    background-color: #00000066;
+    z-index: 100000000;
   }
   @media (max-width: 425px) {
     dashboard-sidemenu {
@@ -45,6 +55,9 @@
   transform: translateX(-150%);
   // no shadow
   box-shadow: none;
+}
+.hidden-search {
+  display: none;
 }
 @media (max-width: 425px) {
   .shown {

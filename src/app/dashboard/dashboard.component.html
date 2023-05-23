@@ -1,5 +1,16 @@
 <div class="main">
-  <dashboard-navbar (menuClick)="onMenuClick()"></dashboard-navbar>
+  <dashboard-navbar
+    #navbar
+    (menuClick)="onMenuClick()"
+    (searchEmit)="onSearch($event)"
+  ></dashboard-navbar>
+  <search-results
+    id="searchResults"
+    class="hidden-search"
+    (close)="onSearchClose()"
+    (clickUser)="onUserClick($event)"
+    (clickBuilding)="onBuildingClick($event)"
+  ></search-results>
   <dashboard-sidemenu
     [items]="sidemenuItems"
     (settingsClick)="onSettingsClick()"

@@ -45,13 +45,24 @@
     <div class="two-item">
       <div class="item">
         <span>Location</span>
-        <input
-          type="text"
+        <select
           name="location"
           id="location"
           [(ngModel)]="location"
           [ngModelOptions]="{ standalone: true }"
-        />
+        >
+          <option value="HQ">HQ</option>
+          <option value="alangilan">Alangilan</option>
+          <option value="nasugbu">ARASOF-Nasgubu</option>
+          <option value="balayan">Balayan</option>
+          <option value="lemery">Lemery</option>
+          <option value="mabini">Mabini</option>
+          <option value="malvar">JPLPC-Malvar</option>
+          <option value="lipa">Lipa</option>
+          <option value="rosario">Rosario</option>
+          <option value="san-juan">San Juan</option>
+          <option value="lobo">Lobo</option>
+        </select>
       </div>
       <div class="item">
         <span>Max Access Level</span>

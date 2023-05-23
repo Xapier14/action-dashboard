@@ -78,7 +78,12 @@ export class HttpService {
     });
   }
 
-  async getAsyncParams(route: string, query?: object, token?: string) {
+  async getAsyncParams(
+    route: string,
+    query?: object,
+    token?: string,
+    abortCtr?: AbortController
+  ) {
     const endpoint =
       environment.apiHost +
       '/' +
@@ -86,6 +91,13 @@ export class HttpService {
       (query ? `?${this.queryString(query)}` : '');
     const headers: HeadersInit = new Headers();
     if (token) headers.append('Authorization', token);
+    if (abortCtr) {
+      return await fetch(endpoint, {
+        method: 'GET',
+        headers: headers,
+        signal: abortCtr.signal,
+      });
+    }
     return await fetch(endpoint, {
       method: 'GET',
       headers: headers,

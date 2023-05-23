@@ -28,6 +28,7 @@ import { AttachmentComponent } from './viewer/view-incident/attachment/attachmen
 import { AddBuildingComponent } from './dashboard/overview/add-building/add-building.component';
 import { EditBuildingComponent } from './dashboard/overview/edit-building/edit-building.component';
 import { EditIncidentComponent } from './editor/edit-incident/edit-incident.component';
+import { SearchResultsComponent } from './dashboard/search-results/search-results.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { EditIncidentComponent } from './editor/edit-incident/edit-incident.comp
     AddBuildingComponent,
     EditBuildingComponent,
     EditIncidentComponent,
+    SearchResultsComponent,
   ],
   imports: [
     BrowserModule,

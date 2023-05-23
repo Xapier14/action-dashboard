@@ -156,7 +156,6 @@ export class OverviewComponent implements OnInit, AfterContentInit {
     if (!this.dashboardService.hasLocationData()) await this.updateLocations();
     let newLocations = this.dashboardService.getLocations();
     this.locations = newLocations;
-    console.log('init');
   }
 
   async ngAfterContentInit(): Promise<void> {
@@ -169,7 +168,6 @@ export class OverviewComponent implements OnInit, AfterContentInit {
   }
 
   async updateLocations() {
-    console.log('update locations');
     this.locations = undefined;
     this.selectedCampus = undefined;
     this.contentTitle = undefined;
@@ -188,7 +186,6 @@ export class OverviewComponent implements OnInit, AfterContentInit {
     this.locationData = this.locations?.find(
       (location) => location.locationId === locationId
     );
-    console.log(this.locationData);
   }
 
   async onLocationClick(locationId: string | undefined) {
@@ -215,7 +212,6 @@ export class OverviewComponent implements OnInit, AfterContentInit {
   async onAddBuilding(locationId: string | undefined) {
     if (locationId == undefined) return;
     await this.router.navigate(['dashboard', 'building', 'add', locationId]);
-    console.log('navigated');
   }
 
   async onEditBuilding(buildingId: string | undefined) {

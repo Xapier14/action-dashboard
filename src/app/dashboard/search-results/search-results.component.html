@@ -1,0 +1,62 @@
+<div class="shadow" (click)="clickOutside($event)">
+  <div class="search-container">
+    <div class="body">
+      <h3>Search Results</h3>
+      <div *ngIf="!searching; else loader" class="split-categories">
+        <div class="users">
+          <h4>Users</h4>
+          <div *ngIf="results.users.length > 0; else noData" class="users-list">
+            <button
+              *ngFor="let user of results.users"
+              class="user"
+              (click)="userClick(user.id)"
+            >
+              <span class="user-fullname">{{ user.fullName }}</span>
+              <span class="user-email">{{ user.email }}</span>
+              <span class="user-location">{{
+                translateLocationCode(user.location)
+              }}</span>
+            </button>
+          </div>
+        </div>
+        <div class="buildings">
+          <h4>Buildings</h4>
+          <div
+            *ngIf="results.buildings.length > 0; else noData"
+            class="buildings-list"
+          >
+            <button
+              *ngFor="let building of results.buildings"
+              class="building"
+              (click)="buildingClick(building.id)"
+            >
+              <span class="building-name">{{ building.name }}</span>
+              <span class="building-location">{{
+                translateLocationCode(building.location)
+              }}</span>
+              <!-- <span class="building-address">{{ building.address }}</span>
+              <span class="building-marshal">{{
+                building.buildingMarshal
+              }}</span> -->
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #loader>
+  <div class="loading-container">
+    <div class="loading">
+      <img src="assets/svg/refresh.svg" alt="" />
+      <span>Loading...</span>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #noData>
+  <div class="no-results">
+    <span>No results found</span>
+  </div>
+</ng-template>

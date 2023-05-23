@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { DashboardSideMenuComponent } from './dashboard-side-menu/dashboard-side-menu.component';
+import { SearchService } from '../services/search.service';
+import { DashboardNavBarComponent } from './dashboard-nav-bar/dashboard-nav-bar.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,7 +11,8 @@ import { DashboardSideMenuComponent } from './dashboard-side-menu/dashboard-side
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  @ViewChild('sidemenu') sidemenu: any;
+  @ViewChild('sidemenu') sidemenu: DashboardSideMenuComponent | undefined;
+  @ViewChild('navbar') navbar: DashboardNavBarComponent | undefined;
   sidemenuVisible: boolean = false;
   sidemenuItems = [
     {
@@ -39,7 +42,11 @@ export class DashboardComponent implements OnInit {
     },
   ];
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private searchService: SearchService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -56,6 +63,28 @@ export class DashboardComponent implements OnInit {
   onSettingsClick() {
     console.log('settings clicked');
     this.sidemenuVisible = false;
+  }
+
+  async onSearch(query: string) {
+    const searchElement = document.getElementById('searchResults');
+    if (searchElement) searchElement.classList.remove('hidden-search');
+    await this.searchService.searchAsync(query);
+  }
+
+  onSearchClose() {
+    const searchElement = document.getElementById('searchResults');
+    if (searchElement) searchElement.classList.add('hidden-search');
+    this.searchService.cancelSearch();
+  }
+
+  onUserClick(id: string) {
+    this.router.navigate([`/dashboard/accounts/edit/${id}`]);
+    this.navbar?.clear();
+  }
+
+  onBuildingClick(id: string) {
+    this.router.navigate([`/dashboard/building/edit/${id}`]);
+    this.navbar?.clear();
   }
 
   async onLogoutClick() {
