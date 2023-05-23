@@ -43,19 +43,26 @@ export class DashboardService {
     return Array.from(this.locations.values());
   }
   async updateLocationsAsync() {
-    await Promise.all([
-      this.updateLocationAsync('pablo-borbon', 'Pablo Borbon'),
-      this.updateLocationAsync('alangilan', 'Alangilan'),
-      this.updateLocationAsync('nasugbu', 'ARASOF-Nasugbu'),
-      this.updateLocationAsync('balayan', 'Balayan'),
-      this.updateLocationAsync('lemery', 'Lemery'),
-      this.updateLocationAsync('mabini', 'Mabini'),
-      this.updateLocationAsync('malvar', 'JPLPC-Malvar'),
-      this.updateLocationAsync('lipa', 'Lipa'),
-      this.updateLocationAsync('rosario', 'Rosario'),
-      this.updateLocationAsync('san-juan', 'San Juan'),
-      this.updateLocationAsync('lobo', 'Lobo'),
-    ]);
+    try {
+      await Promise.all([
+        this.updateLocationAsync('pablo-borbon', 'Pablo Borbon'),
+        this.updateLocationAsync('alangilan', 'Alangilan'),
+        this.updateLocationAsync('nasugbu', 'ARASOF-Nasugbu'),
+        this.updateLocationAsync('balayan', 'Balayan'),
+        this.updateLocationAsync('lemery', 'Lemery'),
+        this.updateLocationAsync('mabini', 'Mabini'),
+        this.updateLocationAsync('malvar', 'JPLPC-Malvar'),
+        this.updateLocationAsync('lipa', 'Lipa'),
+        this.updateLocationAsync('rosario', 'Rosario'),
+        this.updateLocationAsync('san-juan', 'San Juan'),
+        this.updateLocationAsync('lobo', 'Lobo'),
+      ]);
+    } catch (e) {
+      console.error(e);
+      alert('Error updating location data. Please login again.');
+      this.authService.logout();
+      return;
+    }
     // sort locations
     if (this.locations == undefined) return;
     const sortedLocations = new Map(
@@ -76,35 +83,44 @@ export class DashboardService {
     let maxCapacity = 0;
     let reports = 0;
     let buildingsData: BuildingData[] | undefined = [];
-    await Promise.all(
-      buildings.map(async (building) => {
-        const buildingStatus = await this.buildingsService.getBuildingInfoAsync(
-          building
+    while (true) {
+      try {
+        await Promise.all(
+          buildings.map(async (building) => {
+            const buildingStatus =
+              await this.buildingsService.getBuildingInfoAsync(building);
+            if (status == undefined) status = buildingStatus.lastStatus;
+            else {
+              if (buildingStatus.lastStatus > status)
+                status = buildingStatus.lastStatus;
+            }
+            const buildingReports = await this.reportsService.countReportsAsync(
+              locationId,
+              building
+            );
+            reports += buildingReports;
+            maxCapacity += buildingStatus.maxCapacity;
+            // console.log(buildingStatus);
+            buildingsData!.push({
+              buildingName: buildingStatus.name,
+              buildingId: buildingStatus.id,
+              maxCapacity: buildingStatus.maxCapacity,
+              status: buildingStatus.lastStatus,
+              reports: buildingReports,
+              lastIncidentId: buildingStatus.lastIncidentId,
+              lastInspection: buildingStatus.lastInspection,
+              otherInformation: buildingStatus.otherInformation,
+            });
+          })
         );
-        if (status == undefined) status = buildingStatus.lastStatus;
-        else {
-          if (buildingStatus.lastStatus > status)
-            status = buildingStatus.lastStatus;
-        }
-        const buildingReports = await this.reportsService.countReportsAsync(
-          locationId,
-          building
-        );
-        reports += buildingReports;
-        maxCapacity += buildingStatus.maxCapacity;
-        // console.log(buildingStatus);
-        buildingsData!.push({
-          buildingName: buildingStatus.name,
-          buildingId: buildingStatus.id,
-          maxCapacity: buildingStatus.maxCapacity,
-          status: buildingStatus.lastStatus,
-          reports: buildingReports,
-          lastIncidentId: buildingStatus.lastIncidentId,
-          lastInspection: buildingStatus.lastInspection,
-          otherInformation: buildingStatus.otherInformation,
-        });
-      })
-    );
+        break;
+      } catch (e) {
+        console.error(e);
+        alert('Error updating location data. Please login again.');
+        this.authService.logout();
+        return;
+      }
+    }
     // sort buildings
     if (buildingsData != undefined) {
       buildingsData = buildingsData.sort((a, b) => {
