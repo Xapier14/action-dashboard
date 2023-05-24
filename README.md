@@ -1,10 +1,14 @@
 # ActionDashboard
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.2.8.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.4.
 
 ![Login](.github/screenshots/login.png? "Login Screen")
 ![Dashboard](.github/screenshots/dashboard.png? "Dashboard Location Map")
 ![Campus Overview](.github/screenshots/campus-overview.png? "Alangilan Campus Overview")
+![Reports](.github/screenshots/reports.png? "Reports")
+![Report Viewer](.github/screenshots/report-viewer.png? "Report Viewer")
+![Print Preview](.github/screenshots/print-preview.png? "Print Preview")
+![Accounts](.github/screenshots/accounts.png? "Accounts")
 
 ## Development server
 
