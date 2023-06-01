@@ -12,6 +12,7 @@ export class DashboardService {
   private locations: Map<string, LocationData> | undefined;
   private lastUpdated: string = 'Never';
   private updatedBuildingInfo = false;
+  private hasError = false;
   constructor(
     private httpService: HttpService,
     private buildingsService: BuildingsService,
@@ -44,6 +45,7 @@ export class DashboardService {
   }
   async updateLocationsAsync() {
     try {
+      this.hasError = false;
       await Promise.all([
         this.updateLocationAsync('pablo-borbon', 'Pablo Borbon'),
         this.updateLocationAsync('alangilan', 'Alangilan'),
@@ -58,8 +60,9 @@ export class DashboardService {
         this.updateLocationAsync('lobo', 'Lobo'),
       ]);
     } catch (e) {
+      console.error('Error updating all location data');
       console.error(e);
-      alert('Error updating location data. Please login again.');
+      // alert('Error updating location data. Please login again.');
       this.authService.logout();
       return;
     }
@@ -75,6 +78,10 @@ export class DashboardService {
     this.locations = sortedLocations;
   }
   async updateLocationAsync(locationId: string, locationName?: string) {
+    if (this.hasError) {
+      console.log('Skipping update location due to error');
+      return;
+    }
     if (this.locations == undefined) this.locations = new Map();
     if (!this.locations.has(locationId) && locationName == undefined) return;
     await this.buildingsService.updateBuildingCacheAsync(locationId);
@@ -115,9 +122,13 @@ export class DashboardService {
         );
         break;
       } catch (e) {
+        this.hasError = true;
+        console.error(`Error updating location ${locationId} data.`);
         console.error(e);
-        alert('Error updating location data. Please login again.');
-        this.authService.logout();
+        if (e != undefined) {
+          // alert('Error updating location data. Please login again.');
+          this.authService.logout();
+        }
         return;
       }
     }
