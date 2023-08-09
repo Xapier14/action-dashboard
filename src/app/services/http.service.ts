@@ -9,7 +9,9 @@ export class HttpService {
 
   async testConnection() {
     try {
-      const res = await fetch(environment.apiHost.replace('/api/v1', ''));
+      const res = await fetch(environment.apiHost.replace('/api/v1', ''), {
+        redirect: 'follow',
+      });
       return res.status === 200;
     } catch (e) {
       return false;
