@@ -43,6 +43,7 @@ export class RecaptchaService {
   async showBadge(): Promise<void> {
     // wait
     while (!this.isLoaded && !this.hasError) {
+      console.log("waiting for recaptcha to load...")
       await sleep(300);
     }
     const divs = document.body.getElementsByTagName('div');
