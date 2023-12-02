@@ -110,6 +110,7 @@ export class EditBuildingComponent {
       lastIncidentId: undefined,
       lastInspection: undefined,
       lastStatus: undefined,
+      inventoryCount: undefined,
     };
 
     if (!(await this.buildingService.editBuildingAsync(data, undefined))) {

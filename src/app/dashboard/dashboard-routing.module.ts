@@ -13,6 +13,9 @@ import { CreateViewComponent } from './accounts/create-view/create-view.componen
 import { ModifyViewComponent } from './accounts/modify-view/modify-view.component';
 import { AddBuildingComponent } from './overview/add-building/add-building.component';
 import { EditBuildingComponent } from './overview/edit-building/edit-building.component';
+import { BuildingInventoryComponent } from './overview/building-inventory/building-inventory.component';
+import { AddItemComponent } from './overview/building-inventory/add-item/add-item.component';
+import { EditItemComponent } from './overview/building-inventory/edit-item/edit-item.component';
 
 const routes: Routes = [
   {
@@ -45,6 +48,18 @@ const routes: Routes = [
       {
         path: 'building/edit/:id',
         component: EditBuildingComponent,
+      },
+      {
+        path: 'building/inventory/:location/:id',
+        component: BuildingInventoryComponent,
+      },
+      {
+        path: 'building/inventory/:location/:id/add',
+        component: AddItemComponent,
+      },
+      {
+        path: 'building/inventory/:location/:id/edit/:itemCode',
+        component: EditItemComponent,
       },
       {
         path: 'accounts',

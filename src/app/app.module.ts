@@ -29,6 +29,10 @@ import { AddBuildingComponent } from './dashboard/overview/add-building/add-buil
 import { EditBuildingComponent } from './dashboard/overview/edit-building/edit-building.component';
 import { EditIncidentComponent } from './editor/edit-incident/edit-incident.component';
 import { SearchResultsComponent } from './dashboard/search-results/search-results.component';
+import { BuildingInventoryComponent } from './dashboard/overview/building-inventory/building-inventory.component';
+import { AddItemComponent } from './dashboard/overview/building-inventory/add-item/add-item.component';
+import { EditItemComponent } from './dashboard/overview/building-inventory/edit-item/edit-item.component';
+import { ViewInventoryComponent } from './viewer/view-inventory/view-inventory.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +60,10 @@ import { SearchResultsComponent } from './dashboard/search-results/search-result
     EditBuildingComponent,
     EditIncidentComponent,
     SearchResultsComponent,
+    BuildingInventoryComponent,
+    AddItemComponent,
+    EditItemComponent,
+    ViewInventoryComponent,
   ],
   imports: [
     BrowserModule,

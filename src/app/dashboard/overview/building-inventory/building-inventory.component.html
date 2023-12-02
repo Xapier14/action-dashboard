@@ -1,0 +1,60 @@
+<div class="main-content">
+  <div class="content-header">
+    <div class="back-action">
+      <button (click)="goBack()">Back</button>
+    </div>
+    <span>{{ buildingName }}</span>
+    <div *ngIf="buildingName != undefined" class="action-headers">
+      <button (click)="print()" title="Print">
+        <img src="assets/svg/print.svg" alt="Print" />
+      </button>
+      <button (click)="addItem()" title="Add Item">
+        <img src="assets/svg/new.svg" alt="Add" />
+      </button>
+    </div>
+  </div>
+  <div class="separator-container">
+    <div class="separator"></div>
+  </div>
+  <div
+    *ngIf="inventoryData != undefined && buildingName != undefined; else loader"
+    class="content-container"
+  >
+    <table>
+      <thead>
+        <tr>
+          <th>Item Code</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th class="td-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="inventoryData.length == 0">
+          <td colspan="4" class="td-center">No items found</td>
+        </tr>
+        <tr *ngFor="let item of inventoryData">
+          <td>{{ item.itemCode }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.description }}</td>
+          <td class="td-center item-action">
+            <button (click)="editItem(item)" title="Edit Item">
+              <img src="assets/svg/edit.svg" alt="Edit" />
+            </button>
+            <button (click)="deleteItem(item)" title="Delete Item">
+              <img src="assets/svg/delete.svg" alt="Delete" />
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #loader>
+    <div class="loading-container">
+      <div class="loading">
+        <img src="assets/svg/refresh.svg" alt="" />
+        <span>Loading...</span>
+      </div>
+    </div>
+  </ng-template>
+</div>

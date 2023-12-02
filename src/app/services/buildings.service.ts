@@ -17,6 +17,13 @@ export interface BuildingData {
   lastStatus: number | undefined;
   lastInspection: Date | undefined;
   lastIncidentId: string | undefined;
+  inventoryCount: number | undefined;
+}
+
+export interface InventoryItem {
+  itemCode: string;
+  name: string;
+  description: string | undefined;
 }
 
 @Injectable({
@@ -74,6 +81,65 @@ export class BuildingsService {
       // );
     } else {
       console.log('Error updating building cache.');
+    }
+  }
+
+  async addInventoryItemAsync(buildingId: string, item: InventoryItem) {
+    const token = (await this.authService.getTokenAsync()) ?? '';
+    const response = await this.httpService.postJsonAsync(
+      `buildings/inventory/add/${buildingId}`,
+      item,
+      token
+    );
+    try {
+      const data = await response.json();
+      if (data.e == 0) {
+        return [true, ''];
+      }
+      console.log('Error adding inventory item.');
+      return [false, data.status];
+    } catch (e) {
+      console.log(e);
+      return [false, 'Unknown error.'];
+    }
+  }
+
+  async editInventoryItemAsync(buildingId: string, item: InventoryItem) {
+    const token = (await this.authService.getTokenAsync()) ?? '';
+    const response = await this.httpService.postJsonAsync(
+      `buildings/inventory/edit/${buildingId}/${item.itemCode}`,
+      item,
+      token
+    );
+    try {
+      const data = await response.json();
+      if (data.e == 0) {
+        return [true, ''];
+      }
+      console.log('Error editing inventory item.');
+      return [false, data.status];
+    } catch (e) {
+      console.log(e);
+      return [false, 'Unknown error.'];
+    }
+  }
+
+  async deleteInventoryItemAsync(buildingId: string, itemCode: string) {
+    const token = (await this.authService.getTokenAsync()) ?? '';
+    const response = await this.httpService.deleteAsync(
+      `buildings/inventory/delete/${buildingId}/${itemCode}`,
+      token
+    );
+    try {
+      const data = await response.json();
+      if (data.e == 0) {
+        return [true, ''];
+      }
+      console.log('Error deleting inventory item.');
+      return [false, data.status];
+    } catch (e) {
+      console.log(e);
+      return [false, 'Unknown error.'];
     }
   }
 
@@ -183,5 +249,24 @@ export class BuildingsService {
     }
     console.log('Error deleting building.');
     return false;
+  }
+
+  async getBuildingInventoryAsync(
+    buildingId: string
+  ): Promise<InventoryItem[]> {
+    const token: string = (await this.authService.getTokenAsync()) ?? '';
+    const response = await (
+      await this.httpService.getAsyncParams(
+        `buildings/inventory/${buildingId}`,
+        undefined,
+        token
+      )
+    ).json();
+    if (response.e == 0) {
+      return response.items;
+    } else {
+      console.log('Error getting building inventory.');
+      return [];
+    }
   }
 }
