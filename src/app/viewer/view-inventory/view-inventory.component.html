@@ -1,0 +1,658 @@
+<!-- if reportData is null then hide -->
+<div
+  *ngIf="buildingData && inventoryData && error == ''"
+  class="print-controls"
+>
+  <div class="options">
+    <h2>Print Preview</h2>
+    <div class="option-item">
+      <label for="items-per-page">Items per page:</label>
+      <input
+        type="number"
+        name="items-per-page"
+        id="items-per-page"
+        [value]="itemsPerPage"
+        (change)="updateItemsPerPage($event)"
+      />
+    </div>
+    <div class="option-item">
+      <label for="items-per-page">Set to 22 for US Letter (8.5" x 11").</label>
+    </div>
+    <!-- 
+    <div class="option-item">
+      <input
+        type="checkbox"
+        name="show-images-only"
+        id="show-images-only"
+        checked="true"
+        (change)="updateHideNonImagesOption($event)"
+      />
+      <label for="show-images-only">Hide non-images with print?</label>
+    </div> -->
+  </div>
+  <div class="actions">
+    <button (click)="print()">Print</button>
+  </div>
+</div>
+<div
+  *ngIf="buildingData && inventoryData && error == ''; else loading"
+  class="document"
+>
+  <div class="document-header">
+    <h1>Building Inventory</h1>
+  </div>
+  <!-- building description -->
+  <div class="document-section" id="description-group">
+    <div id="block-container">
+      <div id="left-block">
+        <h2>Building Description</h2>
+        <div class="row">
+          <span class="item"
+            >Building Name:
+            <span class="value">{{ buildingData.name }}</span></span
+          >
+        </div>
+        <div class="row">
+          <span class="item"
+            >Address:
+            <p class="value">
+              <span id="u1">
+                <span id="u2">
+                  {{ buildingData.address }}
+                </span>
+              </span>
+            </p>
+          </span>
+        </div>
+        <div class="row">
+          <div class="item">
+            Building Marshal:
+            <span class="value">
+              {{ buildingData.buildingMarshal }}
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="item">
+            Number of story above ground:
+            <span class="value">
+              {{ buildingData.storyAboveGround }}
+            </span>
+          </div>
+          <div class="item">
+            below ground:
+            <span class="value">
+              {{ buildingData.storyBelowGround }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div id="right-block">
+        <div class="check-type-container">
+          <h2>Type of Construction</h2>
+          <div class="checklist-container two-split">
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.typeOfConstruction == 'wood'"
+                  />
+                  <label for="i">Wood Frame</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.typeOfConstruction == 'steel'"
+                  />
+                  <label for="i">Steel Frame</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.typeOfConstruction == 'concrete'"
+                  />
+                  <label for="i">Concrete Frame</label>
+                </div>
+              </div>
+            </div>
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.typeOfConstruction == 'masonry'"
+                  />
+                  <label for="i">Masonry</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="
+                      isOtherConstructionType(buildingData.typeOfConstruction)
+                    "
+                  />
+                  <label for="i"
+                    >Other:
+                    <p class="value">
+                      <span id="u1">
+                        <span id="u2">
+                          {{
+                            isOtherConstructionType(
+                              buildingData.typeOfConstruction
+                            )
+                              ? buildingData.typeOfConstruction
+                              : "-n/a-"
+                          }}
+                        </span>
+                      </span>
+                    </p>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="check-type-container">
+          <h2>Primary Occupancy</h2>
+          <div class="checklist-container three-split">
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.primaryOccupancy == 'singleFamily'"
+                  />
+                  <label for="i">Single Family</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="
+                      buildingData.primaryOccupancy == 'multiResidential'
+                    "
+                  />
+                  <label for="i">Multi-residential</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="
+                      buildingData.primaryOccupancy == 'emergencyServices'
+                    "
+                  />
+                  <label for="i">Emergency Services</label>
+                </div>
+              </div>
+            </div>
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.primaryOccupancy == 'industrial'"
+                  />
+                  <label for="i">Industrial</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.primaryOccupancy == 'offices'"
+                  />
+                  <label for="i">Offices</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.primaryOccupancy == 'commercial'"
+                  />
+                  <label for="i">Commercial</label>
+                </div>
+              </div>
+            </div>
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.primaryOccupancy == 'school'"
+                  />
+                  <label for="i">School</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.primaryOccupancy == 'government'"
+                  />
+                  <label for="i">Government</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="
+                      isOtherOccupancyType(buildingData.primaryOccupancy)
+                    "
+                  />
+                  <label for="i"
+                    >Other:
+                    <p class="value">
+                      <span id="u1">
+                        <span id="u2">
+                          {{
+                            isOtherOccupancyType(buildingData.primaryOccupancy)
+                              ? buildingData.primaryOccupancy
+                              : "-n/a-"
+                          }}
+                        </span>
+                      </span>
+                    </p>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="document-section" id="inventory-group">
+    <h2>Inventory</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Item Code</th>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of inventoryData">
+          <td>{{ item.itemCode }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ACTUAL PRINTING ELEMENTS -->
+<div class="document print-document" *ngFor="let page of pageData">
+  <div class="document-header">
+    <h1>Building Inventory</h1>
+  </div>
+  <!-- building description -->
+  <div
+    *ngIf="buildingData != undefined"
+    class="document-section"
+    id="description-group"
+  >
+    <div id="block-container">
+      <div id="left-block">
+        <h2>Building Description</h2>
+        <div class="row">
+          <span class="item"
+            >Building Name:
+            <span class="value">{{ buildingData.name }}</span></span
+          >
+        </div>
+        <div class="row">
+          <span class="item"
+            >Address:
+            <p class="value">
+              <span id="u1">
+                <span id="u2">
+                  {{ buildingData.address }}
+                </span>
+              </span>
+            </p>
+          </span>
+        </div>
+        <div class="row">
+          <div class="item">
+            Building Marshal:
+            <span class="value">
+              {{ buildingData.buildingMarshal }}
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="item">
+            Number of story above ground:
+            <span class="value">
+              {{ buildingData.storyAboveGround }}
+            </span>
+          </div>
+          <div class="item">
+            below ground:
+            <span class="value">
+              {{ buildingData.storyBelowGround }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div id="right-block">
+        <div class="check-type-container">
+          <h2>Type of Construction</h2>
+          <div class="checklist-container two-split">
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.typeOfConstruction == 'wood'"
+                  />
+                  <label for="i">Wood Frame</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.typeOfConstruction == 'steel'"
+                  />
+                  <label for="i">Steel Frame</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.typeOfConstruction == 'concrete'"
+                  />
+                  <label for="i">Concrete Frame</label>
+                </div>
+              </div>
+            </div>
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.typeOfConstruction == 'masonry'"
+                  />
+                  <label for="i">Masonry</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="
+                      isOtherConstructionType(buildingData.typeOfConstruction)
+                    "
+                  />
+                  <label for="i"
+                    >Other:
+                    <p class="value">
+                      <span id="u1">
+                        <span id="u2">
+                          {{
+                            isOtherConstructionType(
+                              buildingData.typeOfConstruction
+                            )
+                              ? buildingData.typeOfConstruction
+                              : "-n/a-"
+                          }}
+                        </span>
+                      </span>
+                    </p>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="check-type-container">
+          <h2>Primary Occupancy</h2>
+          <div class="checklist-container three-split">
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.primaryOccupancy == 'singleFamily'"
+                  />
+                  <label for="i">Single Family</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="
+                      buildingData.primaryOccupancy == 'multiResidential'
+                    "
+                  />
+                  <label for="i">Multi-residential</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="
+                      buildingData.primaryOccupancy == 'emergencyServices'
+                    "
+                  />
+                  <label for="i">Emergency Services</label>
+                </div>
+              </div>
+            </div>
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.primaryOccupancy == 'industrial'"
+                  />
+                  <label for="i">Industrial</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.primaryOccupancy == 'offices'"
+                  />
+                  <label for="i">Offices</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.primaryOccupancy == 'commercial'"
+                  />
+                  <label for="i">Commercial</label>
+                </div>
+              </div>
+            </div>
+            <div class="checksplit-container">
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.primaryOccupancy == 'school'"
+                  />
+                  <label for="i">School</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="buildingData.primaryOccupancy == 'government'"
+                  />
+                  <label for="i">Government</label>
+                </div>
+              </div>
+              <div class="item">
+                <div>
+                  <input
+                    type="checkbox"
+                    name="i"
+                    id="i"
+                    disabled
+                    [checked]="
+                      isOtherOccupancyType(buildingData.primaryOccupancy)
+                    "
+                  />
+                  <label for="i"
+                    >Other:
+                    <p class="value">
+                      <span id="u1">
+                        <span id="u2">
+                          {{
+                            isOtherOccupancyType(buildingData.primaryOccupancy)
+                              ? buildingData.primaryOccupancy
+                              : "-n/a-"
+                          }}
+                        </span>
+                      </span>
+                    </p>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="document-section" id="inventory-group">
+    <h2>Inventory</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Item Code</th>
+          <th>Name</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of page.items">
+          <td>{{ item.itemCode }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.description }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <span id="page-number"
+    >Page {{ page.pageNumber }} of {{ pageData!.length }}</span
+  >
+</div>
+
+<ng-template #loading>
+  <div *ngIf="error.length == 0" class="loading">
+    <img src="assets/svg/refresh.svg" alt="" />
+    <h2>Loading...</h2>
+    <h3>{{ currentLoading }}</h3>
+  </div>
+  <div *ngIf="error.length > 0" class="error">
+    <img src="assets/svg/error.svg" alt="" />
+    <h2>An error occurred while loading the report. Please try again later.</h2>
+    <h3>{{ error }}</h3>
+  </div>
+</ng-template>
+<ng-template #noAttachments> No Attachments. </ng-template>

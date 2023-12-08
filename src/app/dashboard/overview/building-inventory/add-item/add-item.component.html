@@ -1,0 +1,56 @@
+<div class="main-content">
+  <div class="content-header">
+    <div class="back-action">
+      <button (click)="goBack()">Back</button>
+    </div>
+    <span>Add Item</span>
+  </div>
+  <div class="separator-container">
+    <div class="separator"></div>
+  </div>
+  <div class="content-container">
+    <div class="three-item">
+      <div class="item">
+        <span>Item Code</span>
+        <input
+          type="text"
+          name="itemCode"
+          id="itemCode"
+          [(ngModel)]="itemCode"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="item">
+        <span>Name</span>
+        <input
+          type="text"
+          name="name"
+          id="name"
+          [(ngModel)]="name"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+      <div class="item">
+        <span>Description</span>
+        <input
+          type="text"
+          name="description"
+          id="description"
+          [(ngModel)]="description"
+          [ngModelOptions]="{ standalone: true }"
+        />
+      </div>
+    </div>
+    <div class="action-buttons">
+      <button (click)="addItem()">Add Item</button>
+    </div>
+    <ng-template #loader>
+      <div class="loading-container">
+        <div class="loading">
+          <img src="assets/svg/refresh.svg" alt="" />
+          <span>Loading...</span>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

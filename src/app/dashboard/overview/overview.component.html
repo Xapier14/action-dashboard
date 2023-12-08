@@ -133,10 +133,22 @@
               >
                 <img src="assets/svg/view.svg" />
               </button>
-              <button (click)="onEditBuilding(building.buildingId)">
+              <button
+                (click)="onViewInventory(building.buildingId)"
+                title="View building inventory"
+              >
+                <img src="assets/svg/list.svg" />
+              </button>
+              <button
+                (click)="onEditBuilding(building.buildingId)"
+                title="Edit building information"
+              >
                 <img src="assets/svg/edit.svg" />
               </button>
-              <button (click)="onDeleteBuilding(building.buildingId)">
+              <button
+                (click)="onDeleteBuilding(building.buildingId)"
+                title="Delete building data"
+              >
                 <img src="assets/svg/delete.svg" />
               </button>
             </div>
@@ -165,6 +177,12 @@
                   src="assets/svg/missing.svg"
                   *ngSwitchDefault
                 />
+              </div>
+            </div>
+            <div class="card-content-item">
+              <div class="card-content-item-title">Inventory</div>
+              <div class="card-content-item-value">
+                {{ building.inventoryCount }}
               </div>
             </div>
           </div>

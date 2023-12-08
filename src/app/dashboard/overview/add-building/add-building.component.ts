@@ -90,6 +90,7 @@ export class AddBuildingComponent {
       lastStatus: undefined,
       lastIncidentId: undefined,
       lastInspection: undefined,
+      inventoryCount: undefined,
     };
     const result = this.buildingsService.addBuildingAsync(data);
     if (!result) {

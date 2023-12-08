@@ -353,6 +353,17 @@ export class OverviewComponent implements OnInit, AfterContentInit {
     await this.router.navigate(['dashboard', 'building', 'add', locationId]);
   }
 
+  async onViewInventory(buildingId: string | undefined) {
+    if (buildingId == undefined) return;
+    await this.router.navigate([
+      'dashboard',
+      'building',
+      'inventory',
+      this.selectedCampus,
+      buildingId,
+    ]);
+  }
+
   async onEditBuilding(buildingId: string | undefined) {
     if (buildingId == undefined) return;
     await this.router.navigate(['dashboard', 'building', 'edit', buildingId]);

@@ -319,7 +319,7 @@
                     name="i"
                     id="i"
                     disabled
-                    [checked]="buildingData?.primaryOccupancy == 'goverment'"
+                    [checked]="buildingData?.primaryOccupancy == 'government'"
                   />
                   <label for="i">Government</label>
                 </div>
@@ -694,7 +694,7 @@
               [disabled]="saved"
               [(ngModel)]="estimatedBuildingDamage"
               [ngModelOptions]="{ standalone: true }"
-              [value]="0"
+              [value]="4"
               [checked]="estimatedBuildingDamage == 4"
             />
             <span>61 - 99%</span>
@@ -1056,7 +1056,7 @@
   </div>
   <div *ngIf="error.length > 0" class="error">
     <img src="assets/svg/error.svg" alt="" />
-    <h2>An error occured while loading the report. Please try again later.</h2>
+    <h2>An error occurred while loading the report. Please try again later.</h2>
     <h3>{{ error }}</h3>
   </div>
 </ng-template>

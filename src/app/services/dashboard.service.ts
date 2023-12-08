@@ -117,6 +117,7 @@ export class DashboardService {
               lastIncidentId: buildingStatus.lastIncidentId,
               lastInspection: buildingStatus.lastInspection,
               otherInformation: buildingStatus.otherInformation,
+              inventoryCount: buildingStatus.inventoryCount,
             });
           })
         );
@@ -178,4 +179,5 @@ export interface BuildingData {
   lastIncidentId: string | undefined;
   lastInspection: string | undefined;
   otherInformation: string;
+  inventoryCount: number;
 }
