@@ -15,7 +15,7 @@ const routes: Routes = [
     component: ViewIncidentComponent,
   },
   {
-    path: 'inventory/:building',
+    path: 'inventory/:buildingId',
     component: ViewInventoryComponent,
   },
 ];
