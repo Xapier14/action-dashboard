@@ -9,8 +9,11 @@ export class HttpService {
 
   async testConnection() {
     try {
+      const headers: HeadersInit = new Headers();
+      headers.append('License-Token', environment.licenseToken);
       const res = await fetch(environment.apiHost.replace('/api/v1', '/'), {
         redirect: 'follow',
+        headers: headers,
       });
       return res.status === 200;
     } catch (e) {
@@ -21,6 +24,7 @@ export class HttpService {
   async patchJsonAsync(route: string, data: object, token?: string) {
     const endpoint = environment.apiHost + '/' + route;
     const headers: HeadersInit = new Headers();
+    headers.append('License-Token', environment.licenseToken);
     headers.append('Content-Type', 'application/json');
     if (token) headers.append('Authorization', token);
     return await fetch(endpoint, {
@@ -33,6 +37,7 @@ export class HttpService {
   async postJsonAsync(route: string, data: object | null, token?: string) {
     const endpoint = environment.apiHost + '/' + route;
     const headers: HeadersInit = new Headers();
+    headers.append('License-Token', environment.licenseToken);
     headers.append('Content-Type', 'application/json');
     if (token) headers.append('Authorization', token);
     if (data) {
@@ -60,6 +65,7 @@ export class HttpService {
   async postEncodedAsync(route: string, data: URLSearchParams, token?: string) {
     const endpoint = environment.apiHost + '/' + route;
     const headers: HeadersInit = new Headers();
+    headers.append('License-Token', environment.licenseToken);
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
     if (token) headers.append('Authorization', token);
     return await fetch(endpoint, {
@@ -73,6 +79,7 @@ export class HttpService {
     const endpoint =
       environment.apiHost + '/' + route + (data ? `?${data}` : '');
     const headers: HeadersInit = new Headers();
+    headers.append('License-Token', environment.licenseToken);
     if (token) headers.append('Authorization', token);
     return await fetch(endpoint, {
       method: 'GET',
@@ -92,6 +99,7 @@ export class HttpService {
       route +
       (query ? `?${this.queryString(query)}` : '');
     const headers: HeadersInit = new Headers();
+    headers.append('License-Token', environment.licenseToken);
     if (token) headers.append('Authorization', token);
     if (abortCtr) {
       return await fetch(endpoint, {
@@ -126,6 +134,7 @@ export class HttpService {
   async deleteAsync(route: string, token?: string) {
     const endpoint = environment.apiHost + '/' + route;
     const headers: HeadersInit = new Headers();
+    headers.append('License-Token', environment.licenseToken);
     if (token) headers.append('Authorization', token);
     return await fetch(endpoint, {
       method: 'DELETE',

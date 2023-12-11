@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -28,12 +29,14 @@ export class AuthService {
       }
       return response;
     } catch (error) {
-      return { e: 400, status: 'A network error occured.' };
+      return { e: 400, status: 'A network error occurred.' };
     }
   }
 
   async checkToken(token: string, clearIfInvalid: boolean = false) {
     try {
+      console.log('Checking token...');
+      console.log(window.atob(environment.licenseToken));
       const response = await (
         await this.httpService.getAsync('check', undefined, token)
       ).json();
