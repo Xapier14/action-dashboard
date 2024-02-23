@@ -35,6 +35,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    // disable
+    this.connectionStatus = 'Site is disabled due to unauthorized access.';
+    this.statusCode = 'error';
+    this.serverNotAvailable = true;
+
+    return;
     const connected = await this.httpService.testConnection();
     if (connected) {
       this.connectionStatus = 'Waiting for reCAPTCHA to load...';
